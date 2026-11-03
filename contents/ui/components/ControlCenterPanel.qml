@@ -21,7 +21,7 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         cornerRadius: 34
         roundness: 3.0
-        glassBlurRadius: 16
+        glassBlurRadius: 8
         glassRefractionThickness: 0
         glassTintStrength: 0
         glassSpecStrength: 0

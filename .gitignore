@@ -1,4 +1,6 @@
 dist/
+.build/
+contents/ui/native/libcontrolcenterblurplugin.so
 __pycache__/
 .pytest_cache/
 work/

@@ -5,6 +5,7 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
 import "components"
+import "native" as ControlCenterNative
 
 PlasmoidItem {
     id: root
@@ -47,6 +48,24 @@ PlasmoidItem {
         visible: root.panelVisible
         onVisibleChanged: root.panelVisible = visible
 
-        mainItem: ControlCenterPanel { }
+        mainItem: Item {
+            width: 365
+            height: 544
+
+            ControlCenterPanel {
+                x: 60
+                y: 0
+                useLiquidGlass: false
+            }
+        }
+    }
+
+    ControlCenterNative.BlurBehindRegion {
+        window: popup
+        maskSource: Qt.resolvedUrl("components/icons/control-center-blur-window-region.png")
+        // KWin exposes a binary blur region (not per-window blur strength).
+        // Keep only the strongest, narrow halo pixels to avoid a heavy wash.
+        alphaThreshold: 35
+        enabled: popup.visible
     }
 }
