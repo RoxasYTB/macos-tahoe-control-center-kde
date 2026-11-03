@@ -12,8 +12,28 @@ Window {
     height: 544
     visible: trayController.popupVisible
     color: "transparent"
-    flags: Qt.Popup | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    // A managed tool window stays composited by KWin, so its live backdrop
+    // blur/refracting glass effect can sample the windows beneath it.
+    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     title: qsTr("Control Center")
+
+    Timer {
+        id: dismissOutsideClick
+        interval: 100
+        onTriggered: {
+            if (popup.visible && !popup.active) {
+                popup.close()
+            }
+        }
+    }
+
+    onActiveChanged: {
+        if (visible && !active) {
+            dismissOutsideClick.start()
+        } else {
+            dismissOutsideClick.stop()
+        }
+    }
 
     ControlCenterPanel {
         x: 0

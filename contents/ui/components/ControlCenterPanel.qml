@@ -219,6 +219,7 @@ Item {
         badgeColor: Qt.rgba(1, 1, 1, 0.16)
         title: "Focus"
         subtitle: ""
+        disabled: true
         foreground: root.foreground
         tileFill: Qt.rgba(1, 1, 1, 0)
         Accessible.name: "Focus"
