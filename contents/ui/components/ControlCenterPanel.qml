@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 Item {
     id: root
@@ -10,43 +9,6 @@ Item {
     property color foreground: "#f8f5ff"
     property Item backdropOverride: null
     property bool useLiquidGlass: true
-
-    // Untinted backdrop diffusion lives outside the glass silhouettes only.
-    // The expanded surface lets each radial halo continue past the panel
-    // bounds; transparent mask holes preserve the unblurred source behind
-    // each independent Liquid Glass control.
-    GlassCard {
-        x: -60; y: -60; width: 412; height: 604
-        backdropOverride: root.backdropOverride
-        useLiquidGlass: root.useLiquidGlass
-        cornerRadius: 34
-        roundness: 3.0
-        glassBlurRadius: 8
-        glassRefractionThickness: 0
-        glassTintStrength: 0
-        glassSpecStrength: 0
-        fillColor: Qt.rgba(1, 1, 1, 0)
-        borderColor: Qt.rgba(1, 1, 1, 0)
-        borderWidth: 0
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            maskEnabled: true
-            maskSource: blurHaloMask
-            maskThresholdMin: 0
-            maskThresholdMax: 1
-            maskSpreadAtMin: 0
-            maskSpreadAtMax: 1
-        }
-    }
-
-    Image {
-        id: blurHaloMask
-        x: -60; y: -60; width: root.width + 120; height: root.height + 120
-        source: Qt.resolvedUrl("icons/control-center-blur-halo-mask.png")
-        fillMode: Image.Stretch
-        smooth: true
-        visible: false
-    }
 
     QuickTile {
         x: 0; y: 0; width: 140; height: 62

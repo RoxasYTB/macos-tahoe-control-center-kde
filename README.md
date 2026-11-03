@@ -1,25 +1,47 @@
-# Tahoe Control Center for KDE Plasma
+# Tahoe Control Center for KDE
 
-A visual-first, standalone Plasma 6 applet built against the supplied macOS Tahoe Control Center reference. Geometry and icon placement are being iterated against the screenshot; the current rendering is not yet a 1:1 match. Device actions remain inert. The LiquidGlass renderer is in use, but its blur and refraction still need tuning against the reference.
+A visual-first KDE desktop application based on the supplied macOS Tahoe Control Center reference. A small C++ tray host opens the QML-rendered Control Center as a native popup window; this avoids Plasma applet popup anchoring. Geometry and icon placement are still being compared against the reference, and device actions remain inert.
 
 The glass renderer adapts the GPL-3.0 LiquidGlass component from [liquidglass-kde-widgets](https://github.com/jaxparrow07/liquidglass-kde-widgets). See [`NOTICE`](NOTICE) for the exact source revision.
 
+## Build and run the application
+
+Requires Qt 6.6+, Qt Quick, Qt Widgets, KF6 WindowSystem development files, CMake, a C++ compiler and KDE Plasma.
+
+Build and launch a temporary live preview:
+
+```sh
+./build-app.sh
+./.build/app/tahoe-control-center --show
+```
+
+Run hidden in the system tray:
+
+```sh
+./.build/app/tahoe-control-center
+```
+
+Install into `~/.local`:
+
+```sh
+./install-app.sh
+```
+
+The installed launcher is `~/.local/bin/tahoe-control-center`; its desktop entry is `~/.local/share/applications/control-center.desktop`. The installer also adds a user-session autostart entry so the tray icon is available after login. Click it to open or close the popup. Escape or clicking outside closes it.
+
+To remove the user-local app, stop it and remove `~/.local/bin/tahoe-control-center`, `~/.local/share/applications/control-center.desktop`, `~/.local/share/icons/hicolor/512x512/apps/control-centre-iconscout-white.png`, and `~/.config/autostart/tahoe-control-center.desktop` (or the matching path under `XDG_CONFIG_HOME`).
+
+The `.plasmoid` packaging command below remains for compatibility with older installations; the standalone application is the current runtime path.
+
 ## Build
 
-Requires Plasma 6, Qt 6, KF6 WindowSystem development files, CMake and a C++
-compiler, plus `kpackagetool6`. The native bridge applies KWin's live blur
-behind a narrow region around (and outside) the capsules; the region does not
-include the capsule surfaces. KWin exposes blur as an on/off region, so its
-strength follows the compositor's blur setting.
+The legacy plasmoid still uses Plasma's blur region. The standalone app avoids
+KWin Acrylic Glass behind its popup: it captures the screen area immediately
+before opening, keeps that image hidden as a shader source, and draws only the
+independent LiquidGlass cards over the live desktop. This includes foreground
+windows such as Chrome; the capture refreshes each time the popup is reopened.
 
-The production popup does not sample or draw the wallpaper. Its backdrop is
-the actual compositor scene, including windows such as Chrome. Ordinary QML
-cannot refract arbitrary windows behind a Plasma popup; the current production
-cards therefore keep their tinted appearance without wallpaper-based
-refraction. The standalone visual preview still samples its supplied static
-reference image.
-
-To build the installable package:
+To build the legacy applet package:
 
 ```sh
 ./package.sh
@@ -36,4 +58,4 @@ The resulting `.plasmoid` is written under `dist/`. Installing it is not part of
 - Symbols use the bundled Cupertino Icons font directly wherever a glyph matches the reference. Project SVGs cover Tahoe-specific symbols; the screenshot glyph adapts Cupertino's `camera_viewfinder` SVG to the reference. Their shapes and colors do not depend on the installed KDE icon theme. Source and license details are in [`NOTICE`](NOTICE) and `contents/ui/components/icons/CUPERTINO-ICONS-LICENSE.txt`.
 - Cupertino Icons are Flutter's independently licensed, Apple-styled icon set, not official Apple SF Symbols. The font is from [Flutter's Cupertino Icons package](https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons), version 2.0.0, under MIT.
 - Official Apple SF Symbols and Apple Design Resources are not bundled. Apple's [Apple Design Resources License](https://developer.apple.com/support/downloads/terms/apple-design-resources/Apple-Design-Resources-License-20230621-English.pdf) limits them to UI mockups for software running only on Apple operating systems and prohibits embedding them in software. To keep this KDE applet distributable, its close-match glyphs use the MIT Cupertino set and project-drawn SVGs.
-- Each card uses its own LiquidGlass surface in the visual preview. Production rendering avoids wallpaper sampling until compositor-backed refraction is implemented.
+- Each card uses its own LiquidGlass surface. The standalone app uses a hidden per-open desktop capture as its refraction source and leaves the gaps between cards transparent.

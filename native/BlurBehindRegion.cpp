@@ -109,9 +109,12 @@ void BlurBehindRegion::apply()
         return;
     }
 
-    const QString path = m_maskSource.isLocalFile()
-        ? m_maskSource.toLocalFile()
-        : QString();
+    QString path;
+    if (m_maskSource.isLocalFile()) {
+        path = m_maskSource.toLocalFile();
+    } else if (m_maskSource.scheme() == QStringLiteral("qrc")) {
+        path = QStringLiteral(":") + m_maskSource.path();
+    }
     QImage mask(path);
     if (mask.isNull()) {
         KWindowEffects::enableBlurBehind(m_window, false);

@@ -325,7 +325,7 @@ Item {
         sourceItem: glass.solidMode ? null : glass.wallpaperItem
         live: !glass.solidMode
               && (glass.realtimeRefraction || glass._wallpaperTransition)
-        hideSource: false
+        hideSource: glass.backdropOverride !== null
         recursive: false
         smooth: true
         // Mipmap the full-res capture so the crop pass (which minifies a
@@ -339,6 +339,13 @@ Item {
         textureMirroring: ShaderEffectSource.MirrorVertically
 
         onSourceItemChanged: scheduleUpdate()
+        Connections {
+            target: glass.backdropOverride
+            ignoreUnknownSignals: true
+            function onSourceChanged() {
+                wallpaperTex.scheduleUpdate()
+            }
+        }
         Connections {
             target: glass
             function onWidthChanged()  { if (!glass.solidMode && !glass.realtimeRefraction) wallpaperTex.scheduleUpdate() }

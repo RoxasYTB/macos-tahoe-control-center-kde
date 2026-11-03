@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Tahoe Control Center
+Comment=macOS Tahoe-style quick controls for KDE Plasma
+Exec=tahoe-control-center
+Icon=control-centre-iconscout-white
+Terminal=false
+Categories=Utility;System;
+StartupNotify=false

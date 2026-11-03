@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Tahoe Control Center
+Comment=Start the Control Center tray icon
+Exec=tahoe-control-center
+Icon=control-centre-iconscout-white
+Terminal=false
+NoDisplay=true
+X-KDE-autostart-phase=1
