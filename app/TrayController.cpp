@@ -72,8 +72,8 @@ void TrayController::positionWindow()
     m_window->setScreen(screen);
     const QRect available = screen->availableGeometry();
     const int rightEdge = available.x() + available.width() - 1;
-    // The 60 px left inset places the panel's right edge 13 px from the
-    // display edge, matching the design reference at 1920 x 1080.
+    // The popup is panel-sized, so this keeps the panel's right edge 12 px
+    // from the display edge, matching the design reference.
     const int x = rightEdge - m_window->width();
     const int y = trayGeometry.isValid() && !trayGeometry.isEmpty()
         ? trayGeometry.y() + trayGeometry.height() + 5

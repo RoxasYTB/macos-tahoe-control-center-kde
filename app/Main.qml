@@ -6,7 +6,9 @@ import "../contents/ui/components"
 Window {
     id: popup
 
-    width: 365
+    // Keep only the 12 px reference inset on the right. The former 60 px
+    // empty gutter was inherited from the plasmoid's wider popup window.
+    width: 304
     height: 544
     visible: trayController.popupVisible
     color: "transparent"
@@ -14,14 +16,14 @@ Window {
     title: qsTr("Control Center")
 
     ControlCenterPanel {
-        x: 60
+        x: 0
         y: 0
         useLiquidGlass: false
     }
 
     BlurBehindRegion {
         window: popup
-        maskSource: Qt.resolvedUrl("../contents/ui/components/icons/control-center-blur-window-region.png")
+        maskSource: Qt.resolvedUrl("qrc:/app/control-center-blur-window-region.png")
         alphaThreshold: 8
         enabled: popup.visible
     }

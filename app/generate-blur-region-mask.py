@@ -12,24 +12,24 @@ from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "contents/ui/components/icons/control-center-blur-window-region.png"
-WIDTH, HEIGHT = 365, 544
+OUTPUT = ROOT / "app/control-center-blur-window-region.png"
+WIDTH, HEIGHT = 304, 544
 SCALE = 4
 
-# Window coordinates include the 60 px left inset of ControlCenterPanel.
+# Window coordinates match the right-aligned standalone panel.
 CARDS = (
-    (60, 0, 140, 62, 31),       # Wi-Fi
-    (212, 0, 140, 139, 33),     # Media
-    (60, 75, 140, 64, 32),      # Bluetooth
-    (60, 151, 140, 62, 31),     # AirDrop
-    (212, 151, 64, 64, 32),     # Stage Manager
-    (288, 151, 64, 64, 32),     # Screen Mirroring
-    (60, 228, 64, 64, 32),      # Appearance
-    (136, 228, 64, 64, 32),     # Screenshot
-    (212, 228, 140, 64, 32),    # Focus
-    (60, 303, 292, 64, 29),     # Display
-    (60, 378, 292, 64, 29),     # Sound
-    (159, 457, 94, 25, 12),     # Edit Controls
+    (0, 0, 140, 62, 31),        # Wi-Fi
+    (152, 0, 140, 139, 33),     # Media
+    (0, 75, 140, 64, 32),       # Bluetooth
+    (0, 151, 140, 62, 31),      # AirDrop
+    (152, 151, 64, 64, 32),     # Stage Manager
+    (228, 151, 64, 64, 32),     # Screen Mirroring
+    (0, 228, 64, 64, 32),       # Appearance
+    (76, 228, 64, 64, 32),      # Screenshot
+    (152, 228, 140, 64, 32),    # Focus
+    (0, 303, 292, 64, 29),      # Display
+    (0, 378, 292, 64, 29),      # Sound
+    (99, 457, 94, 25, 12),      # Edit Controls
 )
 
 

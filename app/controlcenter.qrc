@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/">
     <file alias="app/Main.qml">Main.qml</file>
+    <file alias="app/control-center-blur-window-region.png">control-center-blur-window-region.png</file>
     <file alias="contents/ui/components/ControlCenterPanel.qml">../contents/ui/components/ControlCenterPanel.qml</file>
     <file alias="contents/ui/components/GlassCard.qml">../contents/ui/components/GlassCard.qml</file>
     <file alias="contents/ui/components/LiquidGlass.qml">../contents/ui/components/LiquidGlass.qml</file>
