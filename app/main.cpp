@@ -8,6 +8,7 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QSystemTrayIcon>
+#include <QTimer>
 #include <QUrl>
 #include <QDebug>
 #include <qqml.h>
@@ -30,6 +31,9 @@ int main(int argc, char *argv[])
     const QCommandLineOption showOption(QStringList{QStringLiteral("show")},
                                         QStringLiteral("Open the Control Center immediately."));
     parser.addOption(showOption);
+    const QCommandLineOption stayOpenOption(QStringList{QStringLiteral("stay-open")},
+                                            QStringLiteral("Keep the popup open when it loses activation for visual debugging."));
+    parser.addOption(stayOpenOption);
     parser.process(app);
 
     QSystemTrayIcon trayIcon(QIcon(QStringLiteral(":/contents/ui/components/icons/control-centre-iconscout-white.png")));
@@ -50,19 +54,20 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    window->setProperty("stayOpen", parser.isSet(stayOpenOption));
+
     controller.setWindow(window);
-    QObject::connect(&trayIcon, &QSystemTrayIcon::activated, &controller,
-                     [&controller](QSystemTrayIcon::ActivationReason reason) {
-        if (reason == QSystemTrayIcon::Trigger) {
-            controller.toggleWindow();
-        }
+    trayIcon.setVisible(true);
+    QTimer::singleShot(500, &app, [&trayIcon, &controller] {
+        QObject::connect(&trayIcon, &QSystemTrayIcon::activated, &controller,
+                         [&controller](QSystemTrayIcon::ActivationReason reason) {
+            if (reason == QSystemTrayIcon::Trigger) {
+                controller.toggleWindow();
+            }
+        });
     });
 
-    trayIcon.setVisible(true);
-    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        qWarning() << "No system tray is available; opening the Control Center window.";
-        controller.toggleWindow();
-    } else if (parser.isSet(showOption)) {
+    if (parser.isSet(showOption)) {
         controller.toggleWindow();
     }
 

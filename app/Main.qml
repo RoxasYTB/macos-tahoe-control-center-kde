@@ -12,6 +12,7 @@ Window {
     height: 544
     visible: trayController.popupVisible
     color: "transparent"
+    property bool stayOpen: false
     // A managed tool window stays composited by KWin, so its live backdrop
     // blur/refracting glass effect can sample the windows beneath it.
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -28,7 +29,7 @@ Window {
     }
 
     onActiveChanged: {
-        if (visible && !active) {
+        if (visible && !active && !stayOpen) {
             dismissOutsideClick.start()
         } else {
             dismissOutsideClick.stop()
@@ -45,7 +46,9 @@ Window {
         window: popup
         maskSource: Qt.resolvedUrl("qrc:/app/control-center-blur-window-region.png")
         alphaThreshold: 8
-        enabled: popup.visible
+        // The native helper applies/removes the property on visibleChanged;
+        // keep it enabled so QML binding order cannot race the QWindow map.
+        enabled: true
     }
 
     Shortcut {

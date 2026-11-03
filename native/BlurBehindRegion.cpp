@@ -2,9 +2,73 @@
 
 #include <KWindowEffects>
 
+#include <QGuiApplication>
 #include <QImage>
 #include <QRegion>
 #include <QTimer>
+#include <QVector>
+#include <QtGui/qguiapplication_platform.h>
+
+#include <cstdlib>
+#include <xcb/xcb.h>
+
+namespace {
+
+void setX11BlurBehindRegion(QWindow *window, const QRegion &region)
+{
+#if QT_CONFIG(xcb)
+    if (!window || QGuiApplication::platformName() != QStringLiteral("xcb")) {
+        return;
+    }
+
+    auto *x11 = qGuiApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (!x11 || !x11->connection()) {
+        return;
+    }
+
+    const xcb_window_t windowId = window->winId();
+    xcb_connection_t *connection = x11->connection();
+    constexpr char blurAtomName[] = "_KDE_NET_WM_BLUR_BEHIND_REGION";
+    constexpr char cardinalAtomName[] = "CARDINAL";
+
+    const auto internAtom = [connection](const char *name, uint16_t length) {
+        const auto cookie = xcb_intern_atom(connection, false, length, name);
+        return xcb_intern_atom_reply(connection, cookie, nullptr);
+    };
+    auto *blurAtom = internAtom(blurAtomName, sizeof(blurAtomName) - 1);
+    auto *cardinalAtom = internAtom(cardinalAtomName, sizeof(cardinalAtomName) - 1);
+    if (!blurAtom || !cardinalAtom) {
+        std::free(blurAtom);
+        std::free(cardinalAtom);
+        return;
+    }
+
+    if (region.isEmpty()) {
+        xcb_delete_property(connection, windowId, blurAtom->atom);
+    } else {
+        const qreal scale = window->devicePixelRatio();
+        QVector<uint32_t> values;
+        values.reserve(region.rectCount() * 4);
+        for (const QRect &rect : region) {
+            values << uint32_t(qRound(rect.x() * scale))
+                   << uint32_t(qRound(rect.y() * scale))
+                   << uint32_t(qRound(rect.width() * scale))
+                   << uint32_t(qRound(rect.height() * scale));
+        }
+        xcb_change_property(connection, XCB_PROP_MODE_REPLACE, windowId,
+                            blurAtom->atom, cardinalAtom->atom, 32,
+                            uint32_t(values.size()), values.constData());
+    }
+    xcb_flush(connection);
+    std::free(blurAtom);
+    std::free(cardinalAtom);
+#else
+    Q_UNUSED(window)
+    Q_UNUSED(region)
+#endif
+}
+
+}
 
 BlurBehindRegion::BlurBehindRegion(QObject *parent)
     : QObject(parent)
@@ -15,6 +79,7 @@ BlurBehindRegion::~BlurBehindRegion()
 {
     if (m_window) {
         KWindowEffects::enableBlurBehind(m_window, false);
+        setX11BlurBehindRegion(m_window, {});
     }
 }
 
@@ -31,6 +96,7 @@ void BlurBehindRegion::setWindow(QQuickWindow *window)
 
     if (m_window) {
         KWindowEffects::enableBlurBehind(m_window, false);
+        setX11BlurBehindRegion(m_window, {});
     }
 
     m_window = window;
@@ -106,6 +172,7 @@ void BlurBehindRegion::apply()
 
     if (!m_enabled || !m_window->isVisible()) {
         KWindowEffects::enableBlurBehind(m_window, false);
+        setX11BlurBehindRegion(m_window, {});
         return;
     }
 
@@ -118,6 +185,7 @@ void BlurBehindRegion::apply()
     QImage mask(path);
     if (mask.isNull()) {
         KWindowEffects::enableBlurBehind(m_window, false);
+        setX11BlurBehindRegion(m_window, {});
         return;
     }
 
@@ -148,8 +216,10 @@ void BlurBehindRegion::apply()
 
     if (region.isEmpty()) {
         KWindowEffects::enableBlurBehind(m_window, false);
+        setX11BlurBehindRegion(m_window, {});
         return;
     }
 
     KWindowEffects::enableBlurBehind(m_window, true, region);
+    setX11BlurBehindRegion(m_window, region);
 }
