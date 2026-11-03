@@ -14,7 +14,7 @@ Item {
         x: 0; y: 0; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         glassRefractionScale: 65
         glassRefractionThickness: 25
         iconName: "cupertino-font-wifi"
@@ -36,7 +36,7 @@ Item {
         x: 0; y: 77; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         glassRefractionThickness: 25
         iconName: "cupertino-font-bluetooth"
         iconColor: "#007aff"
@@ -63,7 +63,7 @@ Item {
         glassRefractionScale: 45
         glassBlurRadius: 8
         glassBlurAlgorithm: 1
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         iconName: "airdrop-muted"
         iconBadge: true
         badgeSize: 36
@@ -89,7 +89,7 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         glassBlurRadius: 8
         glassRefractionThickness: 25
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         glassChromaStrength: 0.0
         cornerRadius: 33
         roundness: 3.0
@@ -146,7 +146,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         glassBodyGlowStrength: 0.0
         iconSize: 33.5
         iconHeight: 35.2
@@ -164,7 +164,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "screen-mirroring"
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         iconSize: 27.3
         iconOffsetX: 0
         iconOffsetY: 2
@@ -233,7 +233,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         title: "Display"
         titleOffsetY: 4
         titlePixelSize: 12.25
@@ -248,7 +248,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         title: "Sound"
         titleOffsetY: 3
         sound: true
@@ -264,7 +264,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.0
+        glassTintStrength: 1.0
         cornerRadius: 12.5
         roundness: 2.0
         fillColor: Qt.rgba(1, 1, 1, 0.06)
