@@ -239,8 +239,8 @@ Item {
         titlePixelSize: 12.25
         titleLetterSpacing: 0.15
         value: 1
-        trackColor: Qt.rgba(1, 1, 1, 0.24)
-        levelColor: Qt.rgba(1, 1, 1, 0.24)
+        trackColor: Qt.rgba(1, 1, 1, 0.14)
+        levelColor: Qt.rgba(1, 1, 1, 0.14)
         foreground: root.foreground
     }
     SliderCard {
