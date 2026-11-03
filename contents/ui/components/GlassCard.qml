@@ -1,0 +1,71 @@
+import QtQuick
+
+Item {
+    id: root
+
+    property real cornerRadius: 18
+    property real roundness: 2.5
+    property color fillColor: Qt.rgba(0.38, 0.25, 0.56, 0.34)
+    property color borderColor: Qt.rgba(1, 1, 1, 0.34)
+    property real borderWidth: 1
+    property bool disabled: false
+    property bool useLiquidGlass: true
+    property Item backdropOverride: null
+    property bool solidMode: false
+    property color solidColor: "#ffffff"
+    // Regular Liquid Glass needs enough background diffusion to keep labels
+    // legible over the high-contrast Tahoe wallpaper.
+    property real glassBlurRadius: 24
+    property int glassBlurAlgorithm: 1
+    property real glassTintStrength: 0.50
+    property real glassRefractionThickness: 35
+    property real glassRefractionScale: 75
+    property real glassChromaStrength: 0.08
+    property real glassSpecStrength: 0.30
+    default property alias contentData: content.data
+
+    SquircleSurface {
+        anchors.fill: parent
+        visible: !root.useLiquidGlass
+        radius: root.cornerRadius
+        fillColor: root.solidMode ? root.solidColor : root.fillColor
+        strokeColor: root.borderColor
+        strokeWidth: root.borderWidth
+        cornerExponent: root.roundness
+    }
+
+    Loader {
+        anchors.fill: parent
+        active: root.useLiquidGlass
+        source: active ? Qt.resolvedUrl("LiquidGlass.qml") : ""
+        onLoaded: {
+            // Keep the glass item bound to its card. One-time assignments
+            // capture QML defaults if the Loader completes before the
+            // parent's geometry settles (notably cornerRadius=18), making
+            // capsules render as small rounded rectangles.
+            item.radius = Qt.binding(function() { return root.cornerRadius; });
+            item.roundness = Qt.binding(function() { return root.roundness; });
+            item.solidMode = Qt.binding(function() { return root.solidMode; });
+            item.solidColor = Qt.binding(function() { return root.solidColor; });
+            item.backdropOverride = Qt.binding(function() { return root.backdropOverride; });
+            item.blurRadius = Qt.binding(function() { return root.glassBlurRadius; });
+            item.blurAlgorithm = Qt.binding(function() { return root.glassBlurAlgorithm; });
+            item.refractThickness = Qt.binding(function() { return root.glassRefractionThickness; });
+            item.refractScale = Qt.binding(function() { return root.glassRefractionScale; });
+            item.tint = Qt.binding(function() {
+                return Qt.rgba(root.fillColor.r, root.fillColor.g,
+                               root.fillColor.b, 1);
+            });
+            item.tintAlpha = Qt.binding(function() { return root.fillColor.a * root.glassTintStrength; });
+            item.chromaStrength = Qt.binding(function() { return root.glassChromaStrength; });
+            item.specStrength = Qt.binding(function() { return root.glassSpecStrength; });
+        }
+    }
+
+    Item {
+        id: content
+        anchors.fill: parent
+        opacity: root.disabled ? 0.82 : 1
+    }
+
+}

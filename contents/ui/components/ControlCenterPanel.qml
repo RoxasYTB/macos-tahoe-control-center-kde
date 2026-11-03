@@ -1,0 +1,294 @@
+import QtQuick
+
+Item {
+    id: root
+    width: 292
+    height: 484
+    implicitWidth: width
+    implicitHeight: height
+    property color foreground: "#f8f5ff"
+    property Item backdropOverride: null
+    property bool useLiquidGlass: true
+
+    // A very light, untinted backdrop diffusion keeps the wallpaper quiet
+    // in the gaps between Tahoe's separate glass controls. Each control
+    // still draws its own independent Liquid Glass surface above this.
+    GlassCard {
+        x: 0; y: 0; width: 292; height: 484
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        cornerRadius: 34
+        roundness: 3.0
+        glassBlurRadius: 16
+        glassRefractionThickness: 0
+        glassTintStrength: 0
+        glassSpecStrength: 0
+        fillColor: Qt.rgba(1, 1, 1, 0)
+        borderColor: Qt.rgba(1, 1, 1, 0)
+        borderWidth: 0
+    }
+
+    QuickTile {
+        x: 0; y: 0; width: 140; height: 62
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassTintStrength: 0.40
+        glassRefractionThickness: 25
+        iconName: "cupertino-font-wifi"
+        iconColor: "#007aff"
+        iconBadge: true
+        badgeSize: 36
+        badgeIconSize: 22
+        badgeIconOffsetX: -1
+        badgeIconOffsetY: 0.5
+        labelOffsetX: -1
+        labelOffsetY: 1
+        active: true
+        title: "Wi-Fi"
+        subtitle: "SannWifi-\nFreebox"
+        foreground: root.foreground
+        badgeColor: "#ffffff"
+    }
+    QuickTile {
+        x: 0; y: 75; width: 140; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassTintStrength: 0.40
+        glassRefractionThickness: 25
+        iconName: "cupertino-font-bluetooth"
+        iconColor: "#007aff"
+        iconBadge: true
+        badgeSize: 36
+        badgeIconSize: 22
+        badgeIconOffsetX: -1.95
+        badgeIconOffsetY: 1.05
+        labelOffsetX: -1
+        labelOffsetY: 1
+        active: true
+        title: "Bluetooth"
+        subtitle: "On"
+        foreground: root.foreground
+        badgeColor: "#ffffff"
+        tileFill: Qt.rgba(0.47, 0.25, 0.66, 0.92)
+    }
+    QuickTile {
+        x: 0; y: 151; width: 140; height: 62
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        roundness: 2.0
+        glassRefractionThickness: 30
+        glassRefractionScale: 110
+        glassBlurRadius: 24
+        glassBlurAlgorithm: 1
+        glassTintStrength: 0.13
+        iconName: "airdrop-muted"
+        iconBadge: true
+        badgeSize: 36
+        badgeIconSize: 22
+        badgeLeftMargin: 15
+        badgeIconOffsetX: -1
+        badgeIconOffsetY: -0.5
+        labelOffsetX: -1
+        labelOffsetY: 1
+        title: "AirDrop"
+        subtitle: "Off"
+        disabled: true
+        foreground: root.foreground
+        secondaryForeground: Qt.rgba(1, 1, 1, 0.68)
+        badgeColor: Qt.rgba(0.76, 0.78, 0.82, 0.14)
+        tileFill: Qt.rgba(0.73, 0.46, 0.68, 0.82)
+    }
+
+    GlassCard {
+        x: 152; y: 0; width: 140; height: 139
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassBlurRadius: 24
+        glassRefractionThickness: 25
+        glassTintStrength: 0.40
+        glassChromaStrength: 0.0
+        cornerRadius: 33
+        roundness: 3.0
+        fillColor: Qt.rgba(0.40, 0.23, 0.58, 0.84)
+        borderColor: Qt.rgba(1, 1, 1, 0.35)
+
+        SquircleSurface {
+            x: 14; y: 12; width: 42; height: 42
+            radius: 14
+            cornerExponent: 3.0
+            fillColor: Qt.rgba(1, 1, 1, 0.10)
+            strokeColor: Qt.rgba(1, 1, 1, 0.04)
+            strokeWidth: 0.5
+        }
+        Text {
+            x: 14; y: 71; width: parent.width - 26
+            text: "Not Playing"
+            color: root.foreground
+            font.family: "SF Pro Text"
+            font.pixelSize: 12
+            font.weight: Font.DemiBold
+            elide: Text.ElideRight
+            renderType: Text.QtRendering
+        }
+        Row {
+            x: 10; y: 96; width: parent.width - 20; height: 26
+            Repeater {
+                model: ["cupertino-font-backward_fill", "cupertino-font-play_fill", "cupertino-font-forward_fill"]
+                delegate: Item {
+                    id: mediaControl
+                    required property string modelData
+                    width: 40
+                    height: 26
+                    MacIcon {
+                        anchors.centerIn: parent
+                        width: mediaControl.modelData === "cupertino-font-play_fill" ? 21 : 21
+                        height: mediaControl.modelData === "cupertino-font-play_fill" ? 21 : 11
+                        stretch: mediaControl.modelData !== "cupertino-font-play_fill"
+                        glyphScale: mediaControl.modelData === "cupertino-font-play_fill" ? 1.35 : 2.0
+                        iconName: mediaControl.modelData
+                        opacity: mediaControl.modelData === "cupertino-font-play_fill" ? 0.61 : 0.40
+                        transform: Translate {
+                            x: mediaControl.modelData === "cupertino-font-play_fill" ? 2 : (mediaControl.modelData === "cupertino-font-forward_fill" ? 1 : 0)
+                            y: mediaControl.modelData === "cupertino-font-play_fill" ? 1 : 2
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    QuickTile {
+        x: 152; y: 151; width: 64; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        iconName: "stage-manager"
+        glassTintStrength: 0.30
+        iconSize: 33.5
+        iconHeight: 35.2
+        iconOffsetX: -1
+        iconOffsetY: 1.5
+        circular: true
+        compact: true
+        active: true
+        title: ""
+        foreground: root.foreground
+        Accessible.name: "Stage Manager"
+    }
+    QuickTile {
+        x: 228; y: 151; width: 64; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        iconName: "screen-mirroring"
+        glassTintStrength: 0.60
+        iconSize: 27.3
+        iconOffsetX: 0
+        iconOffsetY: 2
+        circular: true
+        compact: true
+        title: ""
+        foreground: root.foreground
+        Accessible.name: "Screen Mirroring"
+    }
+
+    QuickTile {
+        x: 0; y: 228; width: 64; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        iconName: "appearance"
+        iconSize: 27.25
+        iconOffsetX: -0.3
+        circular: true
+        compact: true
+        appearanceControl: true
+        solidMode: true
+        title: ""
+        foreground: "#000000"
+        Accessible.name: "Appearance"
+    }
+    QuickTile {
+        x: 76; y: 228; width: 64; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassRefractionThickness: 25
+        iconName: "screenshot"
+        iconSize: 25
+        iconHeight: 25
+        iconOffsetX: 0.6
+        iconOffsetY: -1
+        circular: true
+        compact: true
+        title: ""
+        foreground: root.foreground
+        Accessible.name: "Screenshot"
+    }
+    QuickTile {
+        x: 152; y: 228; width: 140; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        iconName: "cupertino-font-moon_fill"
+        iconBadge: true
+        badgeSize: 40
+        badgeIconSize: 21
+        badgeLeftMargin: 8
+        badgeIconOffsetX: 4.5
+        badgeIconOffsetY: -0.5
+        badgeBackgroundOffsetX: 5
+        labelOffsetX: 2
+        badgeColor: Qt.rgba(1, 1, 1, 0.16)
+        title: "Focus"
+        subtitle: ""
+        foreground: root.foreground
+        tileFill: Qt.rgba(0.34, 0.23, 0.52, 0.84)
+        Accessible.name: "Focus"
+    }
+
+    SliderCard {
+        x: 0; y: 303; width: 292; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassRefractionThickness: 25
+        glassTintStrength: 0.40
+        title: "Display"
+        titleOffsetY: 4
+        titlePixelSize: 12.25
+        titleLetterSpacing: 0.15
+        value: 1
+        trackColor: Qt.rgba(1, 1, 1, 0.24)
+        levelColor: Qt.rgba(1, 1, 1, 0.24)
+        foreground: root.foreground
+    }
+    SliderCard {
+        x: 0; y: 378; width: 292; height: 64
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassRefractionThickness: 25
+        glassTintStrength: 0.40
+        title: "Sound"
+        titleOffsetY: 3
+        sound: true
+        value: 0.664
+        trackColor: Qt.rgba(1, 1, 1, 0.24)
+        levelColor: "#ffffff"
+        foreground: root.foreground
+    }
+
+    GlassCard {
+        x: 99; y: 457; width: 94; height: 25
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        glassRefractionThickness: 25
+        glassTintStrength: 0.30
+        cornerRadius: 12.5
+        roundness: 2.0
+        fillColor: Qt.rgba(0.47, 0.34, 0.66, 0.88)
+        borderColor: Qt.rgba(1, 1, 1, 0.32)
+        Text {
+            anchors.centerIn: parent
+            text: "Edit Controls"
+            color: root.foreground
+            font.family: "SF Pro Text"
+            font.pixelSize: 11
+            Accessible.name: text
+        }
+    }
+}

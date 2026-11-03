@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <mask id="frontScreenCutout" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white"/>
+      <rect x="6.0" y="7.0" width="15.4" height="14.0" rx="2.1" fill="black"/>
+    </mask>
+  </defs>
+  <g transform="translate(12 0) scale(1.1 1) translate(-12 0)">
+    <rect x="2.0" y="2.4" width="15.2" height="11.8" rx="1.5" stroke-width="1.7" mask="url(#frontScreenCutout)"/>
+    <rect x="6.0" y="7.0" width="15.4" height="14.0" rx="2.1" stroke-width="1.7"/>
+  </g>
+</svg>

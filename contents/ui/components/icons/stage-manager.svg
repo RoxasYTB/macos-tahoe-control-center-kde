@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f28bf0" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Frame corner positions fitted to the macOS Control Center glyph. -->
+  <rect x="8.6" y="6.75" width="13.1" height="11.81" rx="2.4" stroke-width="1.5" opacity=".92"/>
+  <!-- The three dots use their own vertical spacing in the reference. -->
+  <g fill="#ffffff" stroke="none">
+    <rect x="2.8" y="6.0" width="3.1" height="3.2" rx=".65"/>
+    <rect x="2.8" y="10.7" width="3.1" height="3.5" rx=".65"/>
+    <rect x="2.8" y="16.1" width="3.1" height="3.2" rx=".65"/>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+This project bundles the LiquidGlass QML component and GLSL shaders from
+liquidglass-kde-widgets by jaxparrow07, commit
+0d1b9fe34ca3d21fc6f31b599990490d637ce8f8 (GPL-3.0-only).
+
+The upstream files are preserved under contents/ui/components/ and
+contents/ui/components/shaders/. The Control Center layout and its card
+components are separate work. The wallpaper transition handler uses the
+lexical ShaderEffectSource id directly, since the upstream root item does not
+expose that child id as a property. The upstream attribution and GPL-3.0
+license remain applicable to the bundled files.
+
+
+Cupertino Icons font asset, version 2.0.0, maintained by the Flutter project:
+https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons
+https://pub.dev/packages/cupertino_icons
+
+The bundled `CupertinoIcons.ttf` is rendered directly for the Wi-Fi, Bluetooth,
+media, window arrangement, Focus, brightness, and volume glyphs. The
+Control-Center-specific AirDrop, Stage Manager, Screen Mirroring, Appearance,
+audio-output, and applet symbols are project-created SVGs, covered by this
+repository's GPL-3.0 license.
+Copyright (c) 2016 Vladimir Kharlampidi; MIT License. The license text is
+provided in contents/ui/components/icons/CUPERTINO-ICONS-LICENSE.txt.
+
+The screenshot glyph at `contents/ui/components/icons/screenshot.svg` adapts
+the `camera_viewfinder` vector from Cupertino Icons SVG 0.1.0, which exports
+the Cupertino Icons font glyph. Its viewBox and upper/lower corner colors were
+modified for the supplied Tahoe reference. Source:
+https://github.com/ayuka-bg/cupertino-icons-svg
+The Cupertino Icons copyright and MIT terms above apply.
+
+Akar Icons `airplay-audio.svg` by Arturo Wibawa, adapted from commit
+a88023a51bfc3cb86c3bbb3db8fce39b1a58729b:
+https://github.com/artcoholic/akar-icons/tree/a88023a51bfc3cb86c3bbb3db8fce39b1a58729b
+Copyright (c) 2020 Arturo Wibawa; MIT License. The license text is provided in
+contents/ui/components/icons/AKAR-ICONS-LICENSE.txt.
