@@ -38,10 +38,18 @@ Item {
     property real refractScale: 65
     property color tint: "#ffffff"
     property real tintAlpha: 0.10
-    property real chromaStrength: 0.30
+    property real chromaStrength: 0.0
 
     // Blur spread in widget pixels; 0 = disabled.
     property real blurRadius: 6
+    // Blend the very light blur back into the live, crisp sample. This keeps
+    // labels legible without washing out the refraction underneath the pane.
+    property real innerBlurMix: 0.10
+    // Progressive blur outside the silhouette, measured in surface pixels.
+    property real outerBlurRadius: 6
+    property real outerBlurStrength: 0.20
+    property real edgeLightStrength: 0.08
+    property real rimStrength: 0.18
     // 0 = Dual Kawase (fast), 1 = Gaussian (smoother, heavier).
     property int blurAlgorithm: 0
 
@@ -250,6 +258,8 @@ Item {
     onHeightChanged: markDirty()
     onBlurRadiusChanged: markDirty()
     onBlurAlgorithmChanged: markDirty()
+    onInnerBlurMixChanged: markDirty()
+    onOuterBlurRadiusChanged: markDirty()
     onSolidModeChanged: markDirty()
     onWallpaperItemChanged: {
         markDirty()
@@ -676,6 +686,30 @@ Item {
         textureSize: glass._gaussHalfSize
     }
 
+    // --- Progressive exterior blur halo ---
+    // This is sampled from the same captured wallpaper as the glass, but is
+    // drawn outside the capsule with a smooth distance falloff. The quad is
+    // expanded only by the falloff radius, so neighboring surfaces stay clear.
+    ShaderEffect {
+        id: outerHalo
+        x: -glass.outerBlurRadius
+        y: -glass.outerBlurRadius
+        width: glass.width + glass.outerBlurRadius * 2
+        height: glass.height + glass.outerBlurRadius * 2
+        visible: !glass.solidMode && glass.active
+                 && glass.outerBlurRadius > 0 && glass.outerBlurStrength > 0
+        fragmentShader: Qt.resolvedUrl("shaders/glass_halo.frag.qsb")
+        property variant backdrop: wallpaperTex
+        property size size: Qt.size(glass._widgetW, glass._widgetH)
+        property real radius: glass.radius
+        property real roundness: glass.roundness
+        property real haloMargin: glass.outerBlurRadius
+        property real haloBlurRadius: Math.min(glass.outerBlurRadius, 6)
+        property real haloStrength: glass.outerBlurStrength
+        property vector2d uvOffset: glass._uvOff
+        property vector2d uvScale: glass._uvSc
+    }
+
     // --- Glass shader (refraction + chroma + tint + specular + mask) ---
     //
     // When blur is active, backdrop is the blurred crop in widget-local
@@ -692,6 +726,7 @@ Item {
         property variant backdrop: glass._blurActive
             ? (glass.blurAlgorithm === 1 ? gaussianVTex : up1Tex)
             : wallpaperTex
+        property variant crispBackdrop: glass._blurActive ? cropTex : wallpaperTex
         property size size: Qt.size(glass._widgetW, glass._widgetH)
         property real radius: glass.radius
         property real roundness: glass.roundness
@@ -709,12 +744,17 @@ Item {
         property vector2d mousePos: Qt.vector2d(glass._mouseU, glass._mouseV)
         property real mouseFade: glass._mouseFade
         property real specStrength: glass.specEnabled ? glass.specStrength : 0.0
+        property real innerBlurMix: glass._blurActive ? glass.innerBlurMix : 0.0
+        property real edgeLightStrength: glass.edgeLightStrength
+        property real rimStrength: glass.rimStrength
         property vector4d overlayDarken: glass.overlayDarken
 
         property vector2d uvOffset: glass._blurActive
             ? Qt.vector2d(0, 0) : glass._uvOff
         property vector2d uvScale: glass._blurActive
             ? Qt.vector2d(1, 1) : glass._uvSc
+        property vector2d crispUvOffset: glass._blurActive ? Qt.vector2d(0, 0) : glass._uvOff
+        property vector2d crispUvScale: glass._blurActive ? Qt.vector2d(1, 1) : glass._uvSc
     }
 
     // --- Fallback ---

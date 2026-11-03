@@ -1,0 +1,13 @@
+[
+  {"name":"baseline-6px","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"halo-4px","parameters":{"glassOuterBlurRadius":4,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"halo-12px","parameters":{"glassOuterBlurRadius":12,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"halo-soft","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.12,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"halo-strong","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.35,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"inside-6pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.06,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"inside-22pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.22,"glassEdgeLightStrength":0.08,"glassRimStrength":0.18}},
+  {"name":"light-5pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.05,"glassRimStrength":0.18}},
+  {"name":"light-20pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.20,"glassRimStrength":0.18}},
+  {"name":"rim-12pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.12}},
+  {"name":"rim-38pct","parameters":{"glassOuterBlurRadius":6,"glassOuterBlurStrength":0.20,"glassInnerBlurMix":0.10,"glassEdgeLightStrength":0.08,"glassRimStrength":0.38}}
+]

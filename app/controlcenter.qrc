@@ -44,5 +44,7 @@
     <file alias="contents/ui/components/shaders/kawase_up.frag.qsb">../contents/ui/components/shaders/kawase_up.frag.qsb</file>
     <file alias="contents/ui/components/shaders/liquidglass.frag">../contents/ui/components/shaders/liquidglass.frag</file>
     <file alias="contents/ui/components/shaders/liquidglass.frag.qsb">../contents/ui/components/shaders/liquidglass.frag.qsb</file>
+    <file alias="contents/ui/components/shaders/glass_halo.frag">../contents/ui/components/shaders/glass_halo.frag</file>
+    <file alias="contents/ui/components/shaders/glass_halo.frag.qsb">../contents/ui/components/shaders/glass_halo.frag.qsb</file>
   </qresource>
 </RCC>

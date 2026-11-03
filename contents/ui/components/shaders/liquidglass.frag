@@ -40,9 +40,15 @@ layout(std140, binding = 0) uniform buf {
     float mouseFade;         // 0..1 hover fade
     float specStrength;      // 0..1 intensity
     vec4  overlayDarken;     // rgb = target blend color, a = band height (0 = off)
+    float innerBlurMix;      // 0 = crisp backdrop, 1 = current light blur
+    float edgeLightStrength;
+    float rimStrength;
+    vec2 crispUvOffset;
+    vec2 crispUvScale;
 };
 
 layout(binding = 1) uniform sampler2D backdrop;
+layout(binding = 2) uniform sampler2D crispBackdrop;
 
 // --- Shape SDF: superellipse-cornered rounded rect (squircle) ---
 
@@ -118,6 +124,17 @@ vec3 sampleBackdrop(vec2 localUV) {
     return texture(backdrop, wpUV).rgb;
 }
 
+vec3 sampleCrispBackdrop(vec2 localUV) {
+    vec2 wpUV = clamp(crispUvOffset + localUV * crispUvScale, vec2(0.0), vec2(1.0));
+    return texture(crispBackdrop, wpUV).rgb;
+}
+
+vec3 sampleGlassBackdrop(vec2 localUV) {
+    vec3 crisp = sampleCrispBackdrop(localUV);
+    vec3 lightlyBlurred = sampleBackdrop(localUV);
+    return mix(crisp, lightlyBlurred, clamp(innerBlurMix, 0.0, 1.0));
+}
+
 // Free-following border specular. A primary highlight tracks the
 // cursor (or rests at TL); a secondary highlight appears at the
 // antipodal point at reduced intensity. Both attenuate exponentially
@@ -184,7 +201,7 @@ void main() {
 
     if (!canRefract || depthPx >= refractThickness) {
         // Interior: flat glass (pass-through + tint), no refraction.
-        col = sampleBackdrop(uv);
+        col = sampleGlassBackdrop(uv);
         col = mix(col, tintColor, tintAlpha);
     } else {
         // --- Edge band: Snell on a dome ---
@@ -204,9 +221,9 @@ void main() {
         float chromaPx = chromaStrength * refractThickness * 0.35 * edgeWeight;
         vec2 chromaUV = -ndir * chromaPx / size;
 
-        col.r = sampleBackdrop(uv + displaceUV + chromaUV).r;
-        col.g = sampleBackdrop(uv + displaceUV).g;
-        col.b = sampleBackdrop(uv + displaceUV - chromaUV).b;
+        col.r = sampleGlassBackdrop(uv + displaceUV + chromaUV).r;
+        col.g = sampleGlassBackdrop(uv + displaceUV).g;
+        col.b = sampleGlassBackdrop(uv + displaceUV - chromaUV).b;
 
         col = mix(col, tintColor, tintAlpha);
 
@@ -221,12 +238,21 @@ void main() {
     col += edgeSpec(ndir, depthPx);
     col += cornerSpec(p, depthPx);
 
-    // A restrained white contour is part of the glass surface itself.
-    // Keep it off opaque/solid controls, whose edge is defined by their
-    // own shape and fill rather than by the Liquid Glass treatment.
+    // A directional rim: the upper-left side catches light while the
+    // opposing lower-right side stays slightly shaded. This replaces the
+    // even outline that made the older glass read like a stroked card.
+    float rim = 1.0 - smoothstep(0.25, 1.85, max(depthPx, 0.0));
+    vec2 rimLight = normalize(vec2(-0.48, -0.88));
+    float lightFacing = pow(max(dot(ndir, rimLight), 0.0), 1.35);
+    float shadowFacing = pow(max(dot(ndir, -rimLight), 0.0), 1.15);
+    col += vec3(1.0, 0.99, 0.97) * rim * lightFacing * edgeLightStrength;
+    col *= 1.0 - rim * shadowFacing * rimStrength * 0.18;
+
+    // A restrained contour remains visible on the illuminated side only.
+    // Keep it off opaque/solid controls, whose edge is defined by their fill.
     if (tintAlpha < 0.99 && specStrength > 0.0) {
         float contour = 1.0 - smoothstep(0.15, 1.35, max(depthPx, 0.0));
-        col = mix(col, vec3(1.0), contour * 0.36);
+        col = mix(col, vec3(1.0), contour * lightFacing * (0.12 + edgeLightStrength * 0.22));
     }
 
     // Final AA mask at the silhouette. ~1px feather centered exactly
