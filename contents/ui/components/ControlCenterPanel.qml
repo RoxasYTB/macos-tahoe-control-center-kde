@@ -146,6 +146,7 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
         glassTintStrength: 0.0
+        glassBodyGlowStrength: 0.08
         iconSize: 33.5
         iconHeight: 35.2
         iconOffsetX: -1
