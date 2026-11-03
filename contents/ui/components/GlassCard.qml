@@ -26,7 +26,7 @@ Item {
     property real glassOuterBlurStrength: 0.20
     property real glassInnerBlurMix: 1.0
     property real glassEdgeLightStrength: 0.0
-    property real glassRimStrength: 0.22
+    property real glassRimStrength: 0.0
     property real glassBodyGlowStrength: 0.0
     default property alias contentData: content.data
 
@@ -83,7 +83,9 @@ Item {
                               root.borderColor.b, root.borderColor.a * 0.66)
         strokeWidth: root.borderWidth
         cornerExponent: root.roundness
-        directionalStroke: true
+        // Keep the capsule edge neutral. Directional contour lighting reads
+        // as a reflection, which this visual pass intentionally omits.
+        directionalStroke: false
     }
 
     Item {
