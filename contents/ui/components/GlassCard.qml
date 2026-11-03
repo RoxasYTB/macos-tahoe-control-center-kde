@@ -21,13 +21,13 @@ Item {
     property real glassRefractionThickness: 35
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
-    property real glassSpecStrength: 0.30
+    property real glassSpecStrength: 0.0
     property real glassOuterBlurRadius: 6
     property real glassOuterBlurStrength: 0.20
     property real glassInnerBlurMix: 1.0
-    property real glassEdgeLightStrength: 0.15
+    property real glassEdgeLightStrength: 0.0
     property real glassRimStrength: 0.22
-    property real glassBodyGlowStrength: 0.24
+    property real glassBodyGlowStrength: 0.0
     default property alias contentData: content.data
 
     SquircleSurface {
