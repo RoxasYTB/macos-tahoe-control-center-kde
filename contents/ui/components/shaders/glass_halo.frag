@@ -27,7 +27,14 @@ float squircleSdf(vec2 p) {
     vec2 q = abs(p) - b + vec2(r);
     vec2 qPos = max(q, vec2(0.0));
     float arc = pow(pow(qPos.x, n) + pow(qPos.y, n), 1.0 / n);
-    return min(max(q.x, q.y), 0.0) + arc - r;
+    float d = min(max(q.x, q.y), 0.0) + arc - r;
+    // Normalize the corner distance so haloMargin stays measured in screen
+    // pixels around squircles, as it is along straight edges and pill ends.
+    if (qPos.x > 0.0 && qPos.y > 0.0) {
+        vec2 grad = pow(qPos / max(arc, 1e-4), vec2(n - 1.0));
+        d /= max(length(grad), 1e-3);
+    }
+    return d;
 }
 
 vec3 sampleWallpaper(vec2 localPx) {
@@ -41,7 +48,7 @@ void main() {
     vec2 localPx = qt_TexCoord0 * expandedSize - vec2(haloMargin);
     vec2 p = localPx - size * 0.5;
     float d = squircleSdf(p);
-    if (d <= 0.5 || d >= haloMargin) {
+    if (d <= 0.0 || d >= haloMargin) {
         fragColor = vec4(0.0);
         return;
     }
@@ -56,7 +63,10 @@ void main() {
     blur += sampleWallpaper(localPx + vec2(0.0,  blurPx)) * 0.15;
     blur += sampleWallpaper(localPx + vec2(0.0, -blurPx)) * 0.15;
 
-    float falloff = 1.0 - smoothstep(0.5, haloMargin, d);
-    float alpha = clamp(haloStrength * falloff, 0.0, 1.0);
+    // Ease in from the silhouette, then fade smoothly to zero at the outer
+    // radius. This avoids the old alpha jump at d=0.5 px.
+    float edgeFade = smoothstep(0.0, 1.0, d);
+    float outerFade = 1.0 - smoothstep(1.0, haloMargin, d);
+    float alpha = clamp(haloStrength * edgeFade * outerFade, 0.0, 1.0);
     fragColor = vec4(blur * alpha, alpha) * qt_Opacity;
 }
