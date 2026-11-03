@@ -13,9 +13,9 @@ Item {
     property Item backdropOverride: null
     property bool solidMode: false
     property color solidColor: "#ffffff"
-    // Keep capsule interiors crisp; the separate masked halo supplies the
-    // subtle accessibility blur outside the individual glass surfaces.
-    property real glassBlurRadius: 6
+    // Keep a restrained live backdrop blur inside each capsule; the masked
+    // outer halo adds a separate progressive accessibility-softening band.
+    property real glassBlurRadius: 8
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0
     property real glassRefractionThickness: 35
@@ -24,9 +24,10 @@ Item {
     property real glassSpecStrength: 0.30
     property real glassOuterBlurRadius: 6
     property real glassOuterBlurStrength: 0.20
-    property real glassInnerBlurMix: 0.10
-    property real glassEdgeLightStrength: 0.08
-    property real glassRimStrength: 0.18
+    property real glassInnerBlurMix: 1.0
+    property real glassEdgeLightStrength: 0.15
+    property real glassRimStrength: 0.22
+    property real glassBodyGlowStrength: 0.24
     default property alias contentData: content.data
 
     SquircleSurface {
@@ -62,6 +63,7 @@ Item {
             item.innerBlurMix = Qt.binding(function() { return root.glassInnerBlurMix; });
             item.edgeLightStrength = Qt.binding(function() { return root.glassEdgeLightStrength; });
             item.rimStrength = Qt.binding(function() { return root.glassRimStrength; });
+            item.bodyGlowStrength = Qt.binding(function() { return root.glassBodyGlowStrength; });
             item.tint = Qt.binding(function() {
                 return Qt.rgba(root.fillColor.r, root.fillColor.g,
                                root.fillColor.b, 1);

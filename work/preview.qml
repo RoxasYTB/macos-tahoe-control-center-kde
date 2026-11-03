@@ -36,7 +36,7 @@ Window {
 
     ControlCenterPanel {
         id: controlCenter
-        x: 1608
+        x: 1615
         y: 41
         width: 292
         height: 484
@@ -59,10 +59,16 @@ Window {
             item.glassRefractionScale = profileScale !== undefined ? profileScale : renderRefractionScale
         if (item.glassRefractionThickness !== undefined && renderRefractionThickness > 0)
             item.glassRefractionThickness = renderRefractionThickness
-        if (item.glassBlurRadius !== undefined)
+        if (item.glassBlurRadius !== undefined && renderMaterialParameters.glassBlurRadius === undefined)
             item.glassBlurRadius = renderBlurRadius
-        if (item.glassChromaStrength !== undefined)
+        if (item.glassChromaStrength !== undefined && renderMaterialParameters.glassChromaStrength === undefined)
             item.glassChromaStrength = renderChromaStrength
+        // Material-sweep values win over global CLI defaults. Apply these
+        // last so per-candidate blur, tint and reflection settings survive.
+        for (const propertyName in renderMaterialParameters) {
+            if (item[propertyName] !== undefined)
+                item[propertyName] = renderMaterialParameters[propertyName]
+        }
         if (item.children) {
             for (let i = 0; i < item.children.length; ++i)
                 applyGlassParameters(item.children[i])

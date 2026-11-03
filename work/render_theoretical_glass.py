@@ -12,6 +12,7 @@ import datetime as dt
 import json
 import os
 import pathlib
+import re
 import subprocess
 
 from PIL import Image, ImageDraw, ImageFont
@@ -24,7 +25,7 @@ BUILD = REPO / "work" / "build"
 RENDERER = BUILD / "controlcenter_visual_preview"
 REFERENCE = ROOT / "outputs" / "control-center-reference-1920x1080.png"
 DEFAULT_WALLPAPER = pathlib.Path("/home/yohan/Images/Wallpaper/4.jpg")
-PANEL_CROP = (1608, 41, 1900, 525)
+PANEL_CROP = (1615, 41, 1907, 525)
 
 
 def parse_args() -> argparse.Namespace:
@@ -86,7 +87,17 @@ def render(renderer: pathlib.Path, env: dict[str, str], wallpaper: pathlib.Path,
         command += ["--profile", str(profile)]
     if material:
         command += ["--material", str(material)]
-    subprocess.run(command, cwd=REPO, env=env, check=True, timeout=35)
+    result = subprocess.run(command, cwd=REPO, env=env, check=True, timeout=35,
+                            capture_output=True, text=True)
+    diagnostics = result.stdout + "\n" + result.stderr
+    shader_failures = re.findall(
+        r"^(?:.*(?:Failed to build graphics pipeline state|Failed to link shader program|"
+        r"No GLSL shader code found|Shader baking failed).*)$",
+        diagnostics, flags=re.MULTILINE,
+    )
+    if shader_failures:
+        details = "\n".join(dict.fromkeys(shader_failures))
+        raise RuntimeError(f"Le rendu a échoué malgré la capture PNG :\n{details}")
     image = Image.open(output)
     if image.size != (1920, 1080):
         raise RuntimeError(f"Taille inattendue pour {output}: {image.size}")
@@ -182,7 +193,7 @@ def main() -> int:
                     for scale in scales for thickness in thicknesses for ior in iors]
         for index, (scale, thickness, ior, material_config) in enumerate(variants, 1):
             band_label = f"bande {thickness:g}px" if thickness is not None else "largeurs QML"
-            label = material_config.get('name', f"variante {index}")
+            label = f"{material_config.get('name', f'variante {index}')} · réfraction {scale:g}"
             thickness_label = f"{thickness:g}" if thickness is not None else "qml-default"
             filename = f"{index:02d}-{material_config.get('name', 'variant')}-scale-{scale:g}-thickness-{thickness_label}-ior-{ior:g}.png"
             path = batch_dir / filename

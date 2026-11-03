@@ -45,6 +45,7 @@ layout(std140, binding = 0) uniform buf {
     float rimStrength;
     vec2 crispUvOffset;
     vec2 crispUvScale;
+    float bodyGlowStrength;
 };
 
 layout(binding = 1) uniform sampler2D backdrop;
@@ -247,6 +248,15 @@ void main() {
     float shadowFacing = pow(max(dot(ndir, -rimLight), 0.0), 1.15);
     col += vec3(1.0, 0.99, 0.97) * rim * lightFacing * edgeLightStrength;
     col *= 1.0 - rim * shadowFacing * rimStrength * 0.18;
+
+    // Broad interior reflection gives the capsule its softly illuminated
+    // volume; the thin edge rim alone reads like a flat stroked button.
+    vec2 halfSize = size * 0.5;
+    vec2 glowCenter = vec2(-halfSize.x * 0.28, -halfSize.y * 0.62);
+    vec2 glowRadius = max(vec2(halfSize.x * 0.95, halfSize.y * 1.65), vec2(1.0));
+    float bodyGlow = exp(-length((p - glowCenter) / glowRadius) * 1.8);
+    float interior = 1.0 - smoothstep(-0.25, 1.0, d);
+    col += vec3(1.0) * bodyGlow * interior * bodyGlowStrength;
 
     // A restrained contour remains visible on the illuminated side only.
     // Keep it off opaque/solid controls, whose edge is defined by their fill.

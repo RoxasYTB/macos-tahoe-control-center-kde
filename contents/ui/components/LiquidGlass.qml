@@ -50,6 +50,7 @@ Item {
     property real outerBlurStrength: 0.20
     property real edgeLightStrength: 0.08
     property real rimStrength: 0.18
+    property real bodyGlowStrength: 0.08
     // 0 = Dual Kawase (fast), 1 = Gaussian (smoother, heavier).
     property int blurAlgorithm: 0
 
@@ -260,6 +261,7 @@ Item {
     onBlurAlgorithmChanged: markDirty()
     onInnerBlurMixChanged: markDirty()
     onOuterBlurRadiusChanged: markDirty()
+    onBodyGlowStrengthChanged: markDirty()
     onSolidModeChanged: markDirty()
     onWallpaperItemChanged: {
         markDirty()
@@ -747,6 +749,7 @@ Item {
         property real innerBlurMix: glass._blurActive ? glass.innerBlurMix : 0.0
         property real edgeLightStrength: glass.edgeLightStrength
         property real rimStrength: glass.rimStrength
+        property real bodyGlowStrength: glass.bodyGlowStrength
         property vector4d overlayDarken: glass.overlayDarken
 
         property vector2d uvOffset: glass._blurActive

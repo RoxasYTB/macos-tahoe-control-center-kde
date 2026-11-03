@@ -51,7 +51,7 @@ Item {
         subtitle: "On"
         foreground: root.foreground
         badgeColor: "#ffffff"
-        tileFill: Qt.rgba(1, 1, 1, 0)
+        tileFill: Qt.rgba(1, 1, 1, 0.06)
     }
     QuickTile {
         x: 0; y: 151; width: 140; height: 62
@@ -59,8 +59,8 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         roundness: 2.0
         glassRefractionThickness: 30
-        glassRefractionScale: 110
-        glassBlurRadius: 6
+        glassRefractionScale: 45
+        glassBlurRadius: 8
         glassBlurAlgorithm: 1
         glassTintStrength: 0.0
         iconName: "airdrop-muted"
@@ -78,20 +78,21 @@ Item {
         foreground: root.foreground
         secondaryForeground: Qt.rgba(1, 1, 1, 0.68)
         badgeColor: Qt.rgba(0.76, 0.78, 0.82, 0.14)
-        tileFill: Qt.rgba(1, 1, 1, 0)
+        tileFill: Qt.rgba(1, 1, 1, 0.06)
     }
 
     GlassCard {
+        objectName: "Media"
         x: 152; y: 0; width: 140; height: 139
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassBlurRadius: 6
+        glassBlurRadius: 8
         glassRefractionThickness: 25
         glassTintStrength: 0.0
         glassChromaStrength: 0.0
         cornerRadius: 33
         roundness: 3.0
-        fillColor: Qt.rgba(1, 1, 1, 0)
+        fillColor: Qt.rgba(1, 1, 1, 0.06)
         borderColor: Qt.rgba(1, 1, 1, 0.35)
 
         SquircleSurface {
@@ -221,7 +222,7 @@ Item {
         subtitle: ""
         disabled: true
         foreground: root.foreground
-        tileFill: Qt.rgba(1, 1, 1, 0)
+        tileFill: Qt.rgba(1, 1, 1, 0.06)
         Accessible.name: "Focus"
     }
 
@@ -256,6 +257,7 @@ Item {
     }
 
     GlassCard {
+        objectName: "Edit Controls"
         x: 99; y: 457; width: 94; height: 25
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -263,7 +265,7 @@ Item {
         glassTintStrength: 0.0
         cornerRadius: 12.5
         roundness: 2.0
-        fillColor: Qt.rgba(1, 1, 1, 0)
+        fillColor: Qt.rgba(1, 1, 1, 0.06)
         borderColor: Qt.rgba(1, 1, 1, 0.32)
         Text {
             anchors.centerIn: parent
