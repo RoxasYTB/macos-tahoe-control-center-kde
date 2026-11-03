@@ -22,8 +22,10 @@ Item {
         iconBadge: true
         badgeSize: 36
         badgeIconSize: 22
-        badgeIconOffsetX: -1
-        badgeIconOffsetY: 0.5
+        badgeBackgroundOffsetX: -2
+        badgeBackgroundOffsetY: 1
+        badgeIconOffsetX: -2.1
+        badgeIconOffsetY: 2.4
         labelOffsetX: -1
         labelOffsetY: 1
         active: true
@@ -43,8 +45,9 @@ Item {
         iconBadge: true
         badgeSize: 36
         badgeIconSize: 22
-        badgeIconOffsetX: -1.95
-        badgeIconOffsetY: 1.05
+        badgeBackgroundOffsetX: -2
+        badgeIconOffsetX: -2.65
+        badgeIconOffsetY: 0.6
         labelOffsetX: -1
         labelOffsetY: 1
         active: true
@@ -176,12 +179,13 @@ Item {
     }
 
     QuickTile {
-        x: 0; y: 229; width: 64; height: 64
+        x: -1; y: 230; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "appearance"
         iconSize: 27.25
-        iconOffsetX: -0.3
+        iconOffsetX: 1.8
+        iconOffsetY: 0.6
         circular: true
         compact: true
         appearanceControl: true
@@ -196,10 +200,10 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
         iconName: "screenshot"
-        iconSize: 25
-        iconHeight: 25
-        iconOffsetX: 0.6
-        iconOffsetY: -1
+        iconSize: 27.5
+        iconHeight: 27.5
+        iconOffsetX: -1.5
+        iconOffsetY: 1.0
         circular: true
         compact: true
         title: ""

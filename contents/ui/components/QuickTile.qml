@@ -17,6 +17,7 @@ GlassCard {
     property real badgeIconOffsetY: 0
     property real badgeLeftMargin: 15
     property real badgeBackgroundOffsetX: 0
+    property real badgeBackgroundOffsetY: 0
     property real iconOffsetX: 0
     property real iconOffsetY: 0
     property real labelOffsetX: 0
@@ -65,7 +66,10 @@ GlassCard {
                     radius: width / 2
                     color: root.badgeColor
                     visible: root.badgeColor.a > 0
-                    transform: Translate { x: root.badgeBackgroundOffsetX }
+                    transform: Translate {
+                        x: root.badgeBackgroundOffsetX
+                        y: root.badgeBackgroundOffsetY
+                    }
                 }
                 MacIcon {
                     x: (parent.width - width) / 2 + root.badgeIconOffsetX
