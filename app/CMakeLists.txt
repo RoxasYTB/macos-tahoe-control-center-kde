@@ -13,6 +13,8 @@ add_executable(tahoe-control-center
     main.cpp
     TrayController.cpp
     TrayController.h
+    ../native/BlurBehindRegion.cpp
+    ../native/BlurBehindRegion.h
     controlcenter.qrc
 )
 

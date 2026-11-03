@@ -17,7 +17,7 @@ Item {
     // subtle accessibility blur outside the individual glass surfaces.
     property real glassBlurRadius: 6
     property int glassBlurAlgorithm: 1
-    property real glassTintStrength: 0.50
+    property real glassTintStrength: 0.0
     property real glassRefractionThickness: 35
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.08

@@ -3,36 +3,30 @@
 #include <QObject>
 #include <QPointer>
 #include <QQuickWindow>
-#include <QScreen>
 #include <QSystemTrayIcon>
-#include <QTemporaryDir>
-#include <QUrl>
 
 class TrayController final : public QObject
 {
     Q_OBJECT
 
 public:
-    Q_PROPERTY(QUrl backdropUrl READ backdropUrl NOTIFY backdropUpdated)
+    Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
 
     explicit TrayController(QSystemTrayIcon *trayIcon, QObject *parent = nullptr);
     void setWindow(QQuickWindow *window);
-    QUrl backdropUrl() const;
+    bool popupVisible() const;
 
 Q_SIGNALS:
-    void backdropUpdated();
+    void popupVisibleChanged();
 
 public Q_SLOTS:
     void toggleWindow();
+    void setPopupVisible(bool visible);
 
 private:
     void positionWindow();
-    void captureBackdrop();
 
     QSystemTrayIcon *m_trayIcon = nullptr;
     QPointer<QQuickWindow> m_window;
-    QPointer<QScreen> m_screen;
-    QUrl m_backdropUrl;
-    quint64 m_backdropFrame = 0;
-    QTemporaryDir m_backdropDirectory;
+    bool m_popupVisible = false;
 };

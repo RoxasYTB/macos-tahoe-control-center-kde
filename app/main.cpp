@@ -1,4 +1,5 @@
 #include "TrayController.h"
+#include "../native/BlurBehindRegion.h"
 
 #include <QCommandLineParser>
 #include <QApplication>
@@ -9,11 +10,14 @@
 #include <QSystemTrayIcon>
 #include <QUrl>
 #include <QDebug>
+#include <qqml.h>
 
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(controlcenter);
     QQuickWindow::setDefaultAlphaBuffer(true);
+    qmlRegisterType<BlurBehindRegion>("Tahoe.ControlCenter.Native", 1, 0,
+                                      "BlurBehindRegion");
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("Tahoe Control Center"));
     QCoreApplication::setApplicationVersion(QStringLiteral("0.1.0"));

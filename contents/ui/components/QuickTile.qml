@@ -29,8 +29,7 @@ GlassCard {
     property color foreground: "#ffffff"
     property color secondaryForeground: Qt.rgba(1, 1, 1, 0.76)
     property color badgeColor: Qt.rgba(1, 1, 1, 0)
-    property color tileFill: active ? Qt.rgba(0.43, 0.22, 0.65, 0.88)
-                                    : Qt.rgba(0.31, 0.19, 0.47, 0.82)
+    property color tileFill: Qt.rgba(1, 1, 1, 0)
     property color tileBorder: Qt.rgba(1, 1, 1, 0.38)
 
     cornerRadius: circular ? width / 2 : (height / 2)

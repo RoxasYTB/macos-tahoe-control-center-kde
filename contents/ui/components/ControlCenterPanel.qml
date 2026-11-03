@@ -14,7 +14,7 @@ Item {
         x: 0; y: 0; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassTintStrength: 0.40
+        glassTintStrength: 0.0
         glassRefractionThickness: 25
         iconName: "cupertino-font-wifi"
         iconColor: "#007aff"
@@ -35,7 +35,7 @@ Item {
         x: 0; y: 75; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassTintStrength: 0.40
+        glassTintStrength: 0.0
         glassRefractionThickness: 25
         iconName: "cupertino-font-bluetooth"
         iconColor: "#007aff"
@@ -51,7 +51,7 @@ Item {
         subtitle: "On"
         foreground: root.foreground
         badgeColor: "#ffffff"
-        tileFill: Qt.rgba(0.47, 0.25, 0.66, 0.92)
+        tileFill: Qt.rgba(1, 1, 1, 0)
     }
     QuickTile {
         x: 0; y: 151; width: 140; height: 62
@@ -62,7 +62,7 @@ Item {
         glassRefractionScale: 110
         glassBlurRadius: 6
         glassBlurAlgorithm: 1
-        glassTintStrength: 0.13
+        glassTintStrength: 0.0
         iconName: "airdrop-muted"
         iconBadge: true
         badgeSize: 36
@@ -78,7 +78,7 @@ Item {
         foreground: root.foreground
         secondaryForeground: Qt.rgba(1, 1, 1, 0.68)
         badgeColor: Qt.rgba(0.76, 0.78, 0.82, 0.14)
-        tileFill: Qt.rgba(0.73, 0.46, 0.68, 0.82)
+        tileFill: Qt.rgba(1, 1, 1, 0)
     }
 
     GlassCard {
@@ -87,11 +87,11 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         glassBlurRadius: 6
         glassRefractionThickness: 25
-        glassTintStrength: 0.40
+        glassTintStrength: 0.0
         glassChromaStrength: 0.0
         cornerRadius: 33
         roundness: 3.0
-        fillColor: Qt.rgba(0.40, 0.23, 0.58, 0.84)
+        fillColor: Qt.rgba(1, 1, 1, 0)
         borderColor: Qt.rgba(1, 1, 1, 0.35)
 
         SquircleSurface {
@@ -144,7 +144,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
-        glassTintStrength: 0.30
+        glassTintStrength: 0.0
         iconSize: 33.5
         iconHeight: 35.2
         iconOffsetX: -1
@@ -161,7 +161,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "screen-mirroring"
-        glassTintStrength: 0.60
+        glassTintStrength: 0.0
         iconSize: 27.3
         iconOffsetX: 0
         iconOffsetY: 2
@@ -220,7 +220,7 @@ Item {
         title: "Focus"
         subtitle: ""
         foreground: root.foreground
-        tileFill: Qt.rgba(0.34, 0.23, 0.52, 0.84)
+        tileFill: Qt.rgba(1, 1, 1, 0)
         Accessible.name: "Focus"
     }
 
@@ -229,7 +229,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.40
+        glassTintStrength: 0.0
         title: "Display"
         titleOffsetY: 4
         titlePixelSize: 12.25
@@ -244,7 +244,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.40
+        glassTintStrength: 0.0
         title: "Sound"
         titleOffsetY: 3
         sound: true
@@ -259,10 +259,10 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
-        glassTintStrength: 0.30
+        glassTintStrength: 0.0
         cornerRadius: 12.5
         roundness: 2.0
-        fillColor: Qt.rgba(0.47, 0.34, 0.66, 0.88)
+        fillColor: Qt.rgba(1, 1, 1, 0)
         borderColor: Qt.rgba(1, 1, 1, 0.32)
         Text {
             anchors.centerIn: parent
