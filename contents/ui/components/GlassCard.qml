@@ -40,17 +40,6 @@ Item {
         cornerExponent: root.roundness
     }
 
-    SquircleSurface {
-        anchors.fill: parent
-        visible: root.useLiquidGlass && !root.solidMode
-        radius: root.cornerRadius
-        fillColor: Qt.rgba(0, 0, 0, 0)
-        strokeColor: Qt.rgba(root.borderColor.r, root.borderColor.g,
-                              root.borderColor.b, root.borderColor.a * 0.66)
-        strokeWidth: root.borderWidth
-        cornerExponent: root.roundness
-    }
-
     Loader {
         anchors.fill: parent
         active: root.useLiquidGlass
@@ -83,6 +72,18 @@ Item {
             item.chromaStrength = Qt.binding(function() { return root.glassChromaStrength; });
             item.specStrength = Qt.binding(function() { return root.glassSpecStrength; });
         }
+    }
+
+    SquircleSurface {
+        anchors.fill: parent
+        visible: root.useLiquidGlass && !root.solidMode
+        radius: root.cornerRadius
+        fillColor: Qt.rgba(0, 0, 0, 0)
+        strokeColor: Qt.rgba(root.borderColor.r, root.borderColor.g,
+                              root.borderColor.b, root.borderColor.a * 0.66)
+        strokeWidth: root.borderWidth
+        cornerExponent: root.roundness
+        directionalStroke: true
     }
 
     Item {
