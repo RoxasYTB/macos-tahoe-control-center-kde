@@ -13,9 +13,9 @@ Item {
     property Item backdropOverride: null
     property bool solidMode: false
     property color solidColor: "#ffffff"
-    // Regular Liquid Glass needs enough background diffusion to keep labels
-    // legible over the high-contrast Tahoe wallpaper.
-    property real glassBlurRadius: 24
+    // Keep capsule interiors crisp; the separate masked halo supplies the
+    // subtle accessibility blur outside the individual glass surfaces.
+    property real glassBlurRadius: 4
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.50
     property real glassRefractionThickness: 35
