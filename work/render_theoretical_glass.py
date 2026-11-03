@@ -25,7 +25,8 @@ BUILD = REPO / "work" / "build"
 RENDERER = BUILD / "controlcenter_visual_preview"
 REFERENCE = ROOT / "outputs" / "control-center-reference-1920x1080.png"
 DEFAULT_WALLPAPER = pathlib.Path("/home/yohan/Images/Wallpaper/4.jpg")
-PANEL_CROP = (1615, 41, 1907, 525)
+# Include the full Edit Controls capsule (reference y=505..529).
+PANEL_CROP = (1615, 41, 1907, 530)
 
 
 def parse_args() -> argparse.Namespace:

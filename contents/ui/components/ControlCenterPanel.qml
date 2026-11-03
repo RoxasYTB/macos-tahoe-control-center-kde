@@ -3,7 +3,7 @@ import QtQuick
 Item {
     id: root
     width: 292
-    height: 484
+    height: 489
     implicitWidth: width
     implicitHeight: height
     property color foreground: "#f8f5ff"
@@ -33,7 +33,7 @@ Item {
         badgeColor: "#ffffff"
     }
     QuickTile {
-        x: 0; y: 75; width: 140; height: 64
+        x: 0; y: 77; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 0.0
@@ -55,7 +55,7 @@ Item {
         tileFill: Qt.rgba(1, 1, 1, 0.06)
     }
     QuickTile {
-        x: 0; y: 151; width: 140; height: 62
+        x: 0; y: 153; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         roundness: 2.0
@@ -142,7 +142,7 @@ Item {
     }
 
     QuickTile {
-        x: 152; y: 151; width: 64; height: 64
+        x: 152; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
@@ -160,7 +160,7 @@ Item {
         Accessible.name: "Stage Manager"
     }
     QuickTile {
-        x: 228; y: 151; width: 64; height: 64
+        x: 228; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "screen-mirroring"
@@ -176,7 +176,7 @@ Item {
     }
 
     QuickTile {
-        x: 0; y: 228; width: 64; height: 64
+        x: 0; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "appearance"
@@ -191,7 +191,7 @@ Item {
         Accessible.name: "Appearance"
     }
     QuickTile {
-        x: 76; y: 228; width: 64; height: 64
+        x: 76; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -207,7 +207,7 @@ Item {
         Accessible.name: "Screenshot"
     }
     QuickTile {
-        x: 152; y: 228; width: 140; height: 64
+        x: 152; y: 229; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "cupertino-font-moon_fill"
@@ -229,7 +229,7 @@ Item {
     }
 
     SliderCard {
-        x: 0; y: 303; width: 292; height: 64
+        x: 0; y: 306; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -244,7 +244,7 @@ Item {
         foreground: root.foreground
     }
     SliderCard {
-        x: 0; y: 378; width: 292; height: 64
+        x: 0; y: 383; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -260,7 +260,7 @@ Item {
 
     GlassCard {
         objectName: "Edit Controls"
-        x: 99; y: 457; width: 94; height: 25
+        x: 99; y: 464; width: 94; height: 25
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
