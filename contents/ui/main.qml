@@ -13,8 +13,9 @@ PlasmoidItem {
     property bool panelVisible: false
     preferredRepresentation: compactRepresentation
     activationTogglesExpanded: false
+    Plasmoid.icon: "control-centre-iconscout-white"
     Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
-    Plasmoid.status: panelVisible ? PlasmaCore.Types.RequiresAttentionStatus : PlasmaCore.Types.PassiveStatus
+    Plasmoid.status: panelVisible ? PlasmaCore.Types.RequiresAttentionStatus : PlasmaCore.Types.ActiveStatus
     toolTipMainText: i18n("Control Center")
     toolTipSubText: i18n("Quick settings")
 
@@ -24,10 +25,18 @@ PlasmoidItem {
         display: PlasmaComponents.AbstractButton.IconOnly
         Accessible.name: i18n("Control Center")
         onClicked: popup.visible = !popup.visible
-        contentItem: MacIcon {
-            iconName: "control-center-white"
-            width: 19
-            height: 19
+        contentItem: Item {
+            width: 24
+            height: 24
+
+            Image {
+                anchors.fill: parent
+                source: Qt.resolvedUrl("components/icons/control-centre-iconscout-white.png")
+                sourceSize.width: 512
+                sourceSize.height: 512
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+            }
         }
     }
 
@@ -37,12 +46,11 @@ PlasmoidItem {
         implicitHeight: 1
     }
 
-    PlasmaCore.AppletPopup {
+    PlasmaCore.Dialog {
         id: popup
-        visualParent: root
-        popupDirection: Qt.BottomEdge
-        margin: 0
-        appletInterface: root
+        type: PlasmaCore.Dialog.PopupMenu
+        x: root.screenGeometry.x + root.screenGeometry.width - width - 12
+        y: root.screenGeometry.y + 40
         backgroundHints: PlasmaCore.Dialog.NoBackground
         hideOnWindowDeactivate: true
         visible: root.panelVisible

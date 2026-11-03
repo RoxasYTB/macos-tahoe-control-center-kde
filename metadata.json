@@ -7,8 +7,11 @@
         "Category": "System Information",
         "License": "GPL-3.0",
         "Website": "https://github.com/RoxasYTB/macos-tahoe-contro-center-kde",
-        "EnabledByDefault": true
+        "EnabledByDefault": true,
+        "Icon": "control-centre-iconscout-white"
     },
     "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "Hardware",
     "X-Plasma-API-Minimum-Version": "6.6"
 }

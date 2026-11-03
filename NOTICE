@@ -29,6 +29,12 @@ modified for the supplied Tahoe reference. Source:
 https://github.com/ayuka-bg/cupertino-icons-svg
 The Cupertino Icons copyright and MIT terms above apply.
 
+The panel widget uses the Control Centre icon, asset 1569043 from IconScout:
+https://cdn.iconscout.com/icon/free/png-512/free-control-centre-icon-svg-download-png-1569043.png?f=webp&w=256
+The original WebP and a white PNG recolor are bundled for the Plasma panel.
+The recolor preserves the source alpha and silhouette. IconScout license
+terms: https://iconscout.com/licenses
+
 Akar Icons `airplay-audio.svg` by Arturo Wibawa, adapted from commit
 a88023a51bfc3cb86c3bbb3db8fce39b1a58729b:
 https://github.com/artcoholic/akar-icons/tree/a88023a51bfc3cb86c3bbb3db8fce39b1a58729b
