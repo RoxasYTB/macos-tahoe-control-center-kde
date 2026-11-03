@@ -45,7 +45,8 @@ Item {
         visible: root.useLiquidGlass && !root.solidMode
         radius: root.cornerRadius
         fillColor: Qt.rgba(0, 0, 0, 0)
-        strokeColor: root.borderColor
+        strokeColor: Qt.rgba(root.borderColor.r, root.borderColor.g,
+                              root.borderColor.b, root.borderColor.a * 0.66)
         strokeWidth: root.borderWidth
         cornerExponent: root.roundness
     }
