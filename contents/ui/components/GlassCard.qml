@@ -40,6 +40,16 @@ Item {
         cornerExponent: root.roundness
     }
 
+    SquircleSurface {
+        anchors.fill: parent
+        visible: root.useLiquidGlass && !root.solidMode
+        radius: root.cornerRadius
+        fillColor: Qt.rgba(0, 0, 0, 0)
+        strokeColor: root.borderColor
+        strokeWidth: root.borderWidth
+        cornerExponent: root.roundness
+    }
+
     Loader {
         anchors.fill: parent
         active: root.useLiquidGlass
