@@ -15,7 +15,7 @@ Item {
     property color solidColor: "#ffffff"
     // Keep capsule interiors crisp; the separate masked halo supplies the
     // subtle accessibility blur outside the individual glass surfaces.
-    property real glassBlurRadius: 4
+    property real glassBlurRadius: 6
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.50
     property real glassRefractionThickness: 35
