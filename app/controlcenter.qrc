@@ -19,8 +19,6 @@
     <file alias="contents/ui/components/icons/bluetooth-blue.svg">../contents/ui/components/icons/bluetooth-blue.svg</file>
     <file alias="contents/ui/components/icons/brightness-high.svg">../contents/ui/components/icons/brightness-high.svg</file>
     <file alias="contents/ui/components/icons/brightness-low.svg">../contents/ui/components/icons/brightness-low.svg</file>
-    <file alias="contents/ui/components/icons/control-center-blur-halo-mask.png">../contents/ui/components/icons/control-center-blur-halo-mask.png</file>
-    <file alias="contents/ui/components/icons/control-center-blur-window-region.png">../contents/ui/components/icons/control-center-blur-window-region.png</file>
     <file alias="contents/ui/components/icons/control-center-white.svg">../contents/ui/components/icons/control-center-white.svg</file>
     <file alias="contents/ui/components/icons/control-center.svg">../contents/ui/components/icons/control-center.svg</file>
     <file alias="contents/ui/components/icons/control-centre-iconscout-white.png">../contents/ui/components/icons/control-centre-iconscout-white.png</file>
