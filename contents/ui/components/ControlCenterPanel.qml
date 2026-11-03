@@ -11,11 +11,12 @@ Item {
     property Item backdropOverride: null
     property bool useLiquidGlass: true
 
-    // A very light, untinted backdrop diffusion keeps the wallpaper quiet
-    // in the gaps between Tahoe's separate glass controls. Each control
-    // still draws its own independent Liquid Glass surface above this.
+    // Untinted backdrop diffusion lives outside the glass silhouettes only.
+    // The expanded surface lets each radial halo continue past the panel
+    // bounds; transparent mask holes preserve the unblurred source behind
+    // each independent Liquid Glass control.
     GlassCard {
-        x: 0; y: 0; width: 292; height: 484
+        x: -60; y: -60; width: 412; height: 604
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         cornerRadius: 34
@@ -40,9 +41,8 @@ Item {
 
     Image {
         id: blurHaloMask
-        width: root.width
-        height: root.height
-        source: Qt.resolvedUrl("icons/control-center-blur-halos.svg")
+        x: -60; y: -60; width: root.width + 120; height: root.height + 120
+        source: Qt.resolvedUrl("icons/control-center-blur-halo-mask.png")
         fillMode: Image.Stretch
         smooth: true
         visible: false
