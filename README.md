@@ -36,11 +36,13 @@ The `.plasmoid` packaging command below remains for compatibility with older ins
 ## Build
 
 The legacy plasmoid still uses Plasma's blur region. The standalone app sends
-KWin a mask made from the individual cards, with a six-pixel feather around
-each one. The compositor supplies the current scene behind those regions on
-every frame; the app does not take or reuse a screenshot. There is no shared
-blur region behind the popup, so the gaps between cards stay clear. Acrylic
-Glass supplies the live refraction when that KWin effect is enabled.
+KWin a binary mask made from the individual card footprints. The compositor
+supplies its current scene behind those regions; the app does not take or reuse
+a screenshot. The blur API cannot express a progressive per-pixel falloff, so
+the mask does not provide a feathered transition. There is no shared blur
+region behind the popup, so the gaps between cards stay clear. A live,
+progressive refraction shader still needs to be implemented in the compositor;
+the standalone app cannot sample desktop pixels through its own window.
 
 To build the legacy applet package:
 
@@ -59,4 +61,4 @@ The resulting `.plasmoid` is written under `dist/`. Installing it is not part of
 - Symbols use the bundled Cupertino Icons font directly wherever a glyph matches the reference. Project SVGs cover Tahoe-specific symbols; the screenshot glyph adapts Cupertino's `camera_viewfinder` SVG to the reference. Their shapes and colors do not depend on the installed KDE icon theme. Source and license details are in [`NOTICE`](NOTICE) and `contents/ui/components/icons/CUPERTINO-ICONS-LICENSE.txt`.
 - Cupertino Icons are Flutter's independently licensed, Apple-styled icon set, not official Apple SF Symbols. The font is from [Flutter's Cupertino Icons package](https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons), version 2.0.0, under MIT.
 - Official Apple SF Symbols and Apple Design Resources are not bundled. Apple's [Apple Design Resources License](https://developer.apple.com/support/downloads/terms/apple-design-resources/Apple-Design-Resources-License-20230621-English.pdf) limits them to UI mockups for software running only on Apple operating systems and prohibits embedding them in software. To keep this KDE applet distributable, its close-match glyphs use the MIT Cupertino set and project-drawn SVGs.
-- Each card has a transparent QML surface and its own area in the KWin blur mask; the compositor provides the live backdrop and the gaps between cards remain clear.
+- Each card has a transparent QML surface and its own area in the KWin blur mask; the compositor provides the live backdrop and the gaps between cards remain clear. KWin's region API is binary and does not provide a progressive blur falloff.

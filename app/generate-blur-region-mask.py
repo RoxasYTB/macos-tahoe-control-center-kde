@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-"""Regenerate the per-card, six-pixel KWin blur region mask."""
+"""Regenerate the per-card KWin blur region mask.
+
+KWin's blur-behind API accepts a binary region, so this mask cannot encode a
+progressive blur falloff. It marks the card footprints only; a future KWin
+scene effect must implement any soft, live blur transition.
+"""
 
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,15 +42,12 @@ def main() -> None:
         draw.rounded_rectangle(box, radius=radius * SCALE, fill=255)
 
     core = core.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
-    halo = core.filter(ImageFilter.GaussianBlur(radius=3.0))
-    halo = halo.point(lambda alpha: round(alpha * 0.25))
-    alpha = ImageChops.lighter(core, halo)
 
     mask = Image.new("RGBA", (WIDTH, HEIGHT), (255, 255, 255, 0))
-    mask.putalpha(alpha)
+    mask.putalpha(core)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     mask.save(OUTPUT, optimize=True)
-    print(f"Wrote {OUTPUT} ({WIDTH}x{HEIGHT}, 6 px feather)")
+    print(f"Wrote {OUTPUT} ({WIDTH}x{HEIGHT}, binary card regions)")
 
 
 if __name__ == "__main__":
