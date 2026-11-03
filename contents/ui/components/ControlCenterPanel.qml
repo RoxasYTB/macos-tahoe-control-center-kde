@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 
 Item {
     id: root
@@ -26,6 +27,25 @@ Item {
         fillColor: Qt.rgba(1, 1, 1, 0)
         borderColor: Qt.rgba(1, 1, 1, 0)
         borderWidth: 0
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            maskEnabled: true
+            maskSource: blurHaloMask
+            maskThresholdMin: 0
+            maskThresholdMax: 1
+            maskSpreadAtMin: 0
+            maskSpreadAtMax: 1
+        }
+    }
+
+    Image {
+        id: blurHaloMask
+        width: root.width
+        height: root.height
+        source: Qt.resolvedUrl("icons/control-center-blur-halos.svg")
+        fillMode: Image.Stretch
+        smooth: true
+        visible: false
     }
 
     QuickTile {
