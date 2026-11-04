@@ -53,12 +53,13 @@ GlassCard {
                 id: leadingIcon
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 0.5
+                anchors.verticalCenterOffset: root.sound ? 0.9 : 0.5
                 width: root.sound ? 20 : 17
                 height: root.sound ? 20 : 17
                 iconName: root.sound ? "volume-low" : "brightness-low"
                 glyphColor: root.sound ? root.foreground : "#a193a0"
-                transform: Translate { x: root.sound ? -0.5 : 0 }
+                scale: root.sound ? 1.0 : 1.25
+                transform: Translate { x: root.sound ? -0.5 : -1; y: root.sound ? 0 : 2 }
             }
 
             Item {
@@ -97,7 +98,7 @@ GlassCard {
                 iconName: "brightness-high"
                 glyphColor: root.foreground
                 scale: 0.82
-                transform: Translate { x: -2; y: 1 }
+                transform: Translate { x: -2; y: 3 }
             }
 
             MacIcon {
