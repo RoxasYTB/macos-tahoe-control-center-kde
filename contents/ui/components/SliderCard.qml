@@ -16,7 +16,7 @@ GlassCard {
 
     cornerRadius: 29
     // Match the screenshot-fitted squircle profile used by LiquidGlass.
-    roundness: 3.0
+    roundness: 2.5
     glassBlurRadius: 8
     fillColor: Qt.rgba(1, 1, 1, 0.06)
     borderColor: Qt.rgba(1, 1, 1, 0.36)
