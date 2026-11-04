@@ -114,14 +114,16 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Wi-Fi"
-        disabled: !root.controlController || !root.controlController.wifiAvailable
+        // Keep details reachable when the adapter is absent so the popup can
+        // explain the unavailable state; only its power switch is disabled.
+        disabled: root.controlController === null
         subtitle: root.controlController && root.controlController.wifiAvailable
             ? (root.controlController.wifiEnabled
                ? (root.controlController.wifiNetworkName.length
                   ? root.controlController.wifiNetworkName : qsTr("On"))
                : qsTr("Off"))
             : qsTr("Unavailable")
-        interactive: root.controlController !== null && root.controlController.wifiAvailable
+        interactive: root.controlController !== null
         onActivated: wifiDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
@@ -156,13 +158,13 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Bluetooth"
-        disabled: !root.controlController || !root.controlController.bluetoothAvailable
+        disabled: root.controlController === null
         subtitle: root.controlController
             ? (root.controlController.bluetoothAvailable
                 ? (root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off"))
                 : qsTr("Unavailable"))
             : qsTr("Unavailable")
-        interactive: root.controlController !== null && root.controlController.bluetoothAvailable
+        interactive: root.controlController !== null
         onActivated: bluetoothDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
