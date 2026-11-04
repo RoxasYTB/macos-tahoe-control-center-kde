@@ -362,6 +362,7 @@ Window {
                                             Drag.active: dragHandler.active
                                             Drag.hotSpot.x: width / 2
                                             Drag.hotSpot.y: 30
+                                            Drag.keys: ["text/plain"]
                                             Drag.mimeData: ({ "text/plain": tile.modelData.name })
                                             Drag.dragType: Drag.Automatic
                                             DragHandler { id: dragHandler; acceptedButtons: Qt.LeftButton; target: null }
@@ -393,7 +394,7 @@ Window {
                                 Row {
                                     id: ccRow; height: parent.height; spacing: 5
                                     Repeater {
-                                model: root.draftControlCenterItems
+                                        model: root.draftControlCenterItems
                                         delegate: Rectangle {
                                             id: ccChip
                                             required property string modelData
@@ -403,26 +404,25 @@ Window {
                                             color: "#4d8b48b6"
                                             Text { id: ccLabel; anchors.centerIn: parent; text: ccChip.modelData + " ×"; color: "white"; font.pixelSize: 9 }
                                             Drag.active: ccDrag.active
+                                            Drag.dragType: Drag.Automatic
                                             Drag.keys: ["selected-control"]
-                                            Drag.mimeData: ({ "text/plain": ccChip.modelData })
+                                            Drag.mimeData: ({ "text/plain": ccChip.modelData,
+                                                              "application/x-tahoe-selected-control": ccChip.modelData })
                                             DragHandler { id: ccDrag; target: null }
                                             TapHandler { onTapped: root.removeFrom("control", ccChip.modelData) }
                                             DropArea {
-                                                anchors.fill: parent; keys: ["selected-control"]
-                                                onDropped: if (drop.hasText) root.moveWithin("control", drop.text, ccChip.modelData)
+                                                anchors.fill: parent; keys: ["selected-control", "text/plain"]
+                                                onDropped: function(drop) {
+                                                    if (!drop.hasText) return
+                                                    if (drop.formats.indexOf("application/x-tahoe-selected-control") >= 0)
+                                                        root.moveWithin("control", drop.text, ccChip.modelData)
+                                                    else
+                                                        root.addTo("control", drop.text)
+                                                }
                                             }
                                         }
                                     }
-                                    DropArea {
-                                        width: 45; height: parent.height; keys: ["text/plain"]
-                                        onDropped: if (drop.hasText) root.addTo("control", drop.text)
-                                    }
                                 }
-                            }
-                            DropArea {
-                                visible: false
-                                keys: ["text/plain"]
-                                onDropped: if (drop.hasText) root.addTo("control", drop.text)
                             }
                         }
                         RowLayout {
@@ -443,26 +443,34 @@ Window {
                                             color: "#4d3766a5"
                                             Text { id: mbLabel; anchors.centerIn: parent; text: mbChip.modelData + " ×"; color: "white"; font.pixelSize: 9 }
                                             Drag.active: mbDrag.active
+                                            Drag.dragType: Drag.Automatic
                                             Drag.keys: ["selected-menu-control"]
-                                            Drag.mimeData: ({ "text/plain": mbChip.modelData })
+                                            Drag.mimeData: ({ "text/plain": mbChip.modelData,
+                                                              "application/x-tahoe-selected-menu-control": mbChip.modelData })
                                             DragHandler { id: mbDrag; target: null }
                                             TapHandler { onTapped: root.removeFrom("menu", mbChip.modelData) }
                                             DropArea {
-                                                anchors.fill: parent; keys: ["selected-menu-control"]
-                                                onDropped: if (drop.hasText) root.moveWithin("menu", drop.text, mbChip.modelData)
+                                                anchors.fill: parent; keys: ["selected-menu-control", "text/plain"]
+                                                onDropped: function(drop) {
+                                                    if (!drop.hasText) return
+                                                    if (drop.formats.indexOf("application/x-tahoe-selected-menu-control") >= 0)
+                                                        root.moveWithin("menu", drop.text, mbChip.modelData)
+                                                    else
+                                                        root.addTo("menu", drop.text)
+                                                }
                                             }
                                         }
                                     }
                                     DropArea {
                                         width: 45; height: parent.height; keys: ["text/plain"]
-                                        onDropped: if (drop.hasText) root.addTo("menu", drop.text)
+                                        onDropped: function(drop) { if (drop.hasText) root.addTo("menu", drop.text) }
                                     }
                                 }
                             }
                             DropArea {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 keys: ["text/plain"]
-                                onDropped: if (drop.hasText) root.addTo("menu", drop.text)
+                                onDropped: function(drop) { if (drop.hasText) root.addTo("menu", drop.text) }
                             }
                         }
                     }

@@ -89,6 +89,15 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 
 **Verification:** Save a changed layout, close/reopen the editor and app, and confirm it persists. Exercise drag cancellation, dropping on invalid targets, empty search, no-results search, duplicate drops and Done with no changes.
 
+#### Current isolated interaction checks — 4 November 2026
+
+- In Xvfb with a temporary `XDG_CONFIG_HOME`, dragged a catalog tile into the Control Center chips and into Menu Bar; each appeared in the saved settings after Done.
+- Clicked the AirDrop chip and confirmed it was removed from the saved Control Center list.
+- Dragged Bluetooth before AirDrop and confirmed the changed order in `controlCenterItems` after Done.
+- Dragged Run Shortcut before Scene or Accessory and confirmed the changed order in `menuBarItems` after Done.
+- Relaunched the app with each temporary settings directory and captured the editor; both changed chip orders were restored on startup.
+- These checks used `/tmp/tahoe-*-config*`; the user's real KDE settings were not read or changed.
+
 ### Task 6: Verify and checkpoint the Control Center work
 
 **Files:**
