@@ -68,6 +68,25 @@ Popup {
                 enabled: root.controlController !== null && root.controlController.bluetoothAvailable
                 onClicked: if (root.controlController) root.controlController.toggleBluetooth()
                 Accessible.name: qsTr("Bluetooth power")
+                indicator: Rectangle {
+                    implicitWidth: 48
+                    implicitHeight: 28
+                    x: bluetoothPower.leftPadding
+                    y: (bluetoothPower.height - height) / 2
+                    radius: height / 2
+                    color: bluetoothPower.checked ? "#0a84ff" : Qt.rgba(1, 1, 1, 0.22)
+                    opacity: bluetoothPower.enabled ? 1 : 0.55
+
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        x: bluetoothPower.checked ? parent.width - width - 2 : 2
+                        y: 2
+                        radius: width / 2
+                        color: "#ffffff"
+                        Behavior on x { NumberAnimation { duration: 130; easing.type: Easing.OutCubic } }
+                    }
+                }
             }
         }
 

@@ -69,6 +69,25 @@ Popup {
                 enabled: root.controlController !== null && root.controlController.wifiAvailable
                 onClicked: if (root.controlController) root.controlController.toggleWifi()
                 Accessible.name: qsTr("Wi-Fi power")
+                indicator: Rectangle {
+                    implicitWidth: 48
+                    implicitHeight: 28
+                    x: wifiPower.leftPadding
+                    y: (wifiPower.height - height) / 2
+                    radius: height / 2
+                    color: wifiPower.checked ? "#0a84ff" : Qt.rgba(1, 1, 1, 0.22)
+                    opacity: wifiPower.enabled ? 1 : 0.55
+
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        x: wifiPower.checked ? parent.width - width - 2 : 2
+                        y: 2
+                        radius: width / 2
+                        color: "#ffffff"
+                        Behavior on x { NumberAnimation { duration: 130; easing.type: Easing.OutCubic } }
+                    }
+                }
             }
         }
 

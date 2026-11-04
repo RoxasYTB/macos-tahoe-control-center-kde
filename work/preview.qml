@@ -11,7 +11,19 @@ Window {
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     title: "Control Center visual comparison"
     readonly property var materialOverrides: JSON.parse(renderMaterialParametersJson)
-    readonly property var previewBluetoothController: ({
+    // Screenshot fixture only: these values are read from the supplied
+    // macOS reference captures. The installed app always uses live system
+    // state from SystemControlController instead.
+    readonly property var previewController: ({
+        wifiAvailable: true,
+        wifiEnabled: true,
+        wifiNetworkName: "SannWifi-Freebox",
+        wifiNetworkSecured: true,
+        wifiOtherNetworks: [],
+        refreshWifiNetworks: function() {},
+        toggleWifi: function() {},
+        openWifiSettings: function() {},
+        bluetoothAvailable: true,
         bluetoothEnabled: true,
         bluetoothDevices: [
             {address: "ref-bv5300", name: "BV5300 Pro", connected: true},
@@ -22,7 +34,9 @@ Window {
         refreshBluetoothDevices: function() {},
         toggleBluetooth: function() {},
         toggleBluetoothDevice: function() {},
-        openBluetoothSettings: function() {}
+        openBluetoothSettings: function() {},
+        mediaAvailable: false,
+        brightnessAvailable: false
     })
 
     // LiquidGlass uses ShaderEffectSource.hideSource for its backdrop. Keep
@@ -57,7 +71,7 @@ Window {
         backdropOverride: previewWallpaper
         useLiquidGlass: true
         opacity: 1
-        controlController: renderState === "bluetooth-menu" ? previewBluetoothController : null
+        controlController: preview.previewController
     }
 
     function applyGlassParameters(item) {
