@@ -521,7 +521,7 @@ Window {
                             text: qsTr("Done")
                             onClicked: root.applyAndClose()
                             background: Rectangle { radius: 15; color: "#4783ff" }
-                            contentItem: Text { text: parent.text; color: "white"; font.pixelSize: 12; font.weight: Font.DemiBold; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+                            contentItem: Text { text: doneButton.text; color: "white"; font.pixelSize: 12; font.weight: Font.DemiBold; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
                         }
                     }
                 }

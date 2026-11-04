@@ -44,4 +44,4 @@ Cette dernière référence relève de `macos-tahoe-liquid-kde`, tandis que l’
 - La petite capture de survol reçue dans `/tmp` a été copiée dans `docs/reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png` pour préserver le détail de la flèche.
 - Ces captures servent de références de travail. Ne pas les intégrer comme illustrations produit ou captures publiques du thème sans décision distincte de Yohan.
 - Les images montrent des détails variables du bureau (fond, widgets, applications et date/heure). Utiliser les menus et contrôles décrits ci-dessus comme critères pertinents; ne pas recopier ces détails personnels dans les interfaces. Le fond d’écran est un contexte de comparaison : les surfaces en verre doivent réfracter le contenu réellement visible derrière elles, jamais une capture pré-calculée.
-- Les cinq captures d’écran et le crop de survol ont été revérifiés avec leurs dimensions et empreintes SHA-256 le 4 novembre 2026; les sources n’ont pas été modifiées.
+- Les cinq captures d’écran et le crop de survol ont été revérifiés avec leurs dimensions et empreintes SHA-256 le 4 novembre 2026; les sources correspondent à l’inventaire.
