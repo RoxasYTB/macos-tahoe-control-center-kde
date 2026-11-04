@@ -12,7 +12,6 @@
 #include <QSharedPointer>
 #include <QTimer>
 #include <QVariant>
-#include <algorithm>
 
 namespace {
 
@@ -180,29 +179,32 @@ void SystemControlController::refreshBluetoothDevices()
         process->deleteLater();
         if (--snapshot->pending != 0) return;
         QHash<QString, QString> names;
+        QStringList deviceOrder;
         QSet<QString> connectedAddresses;
         const QRegularExpression row(QStringLiteral("^Device\\s+([0-9A-Fa-f:]{17})\\s+(.+)$"));
         for (const QString &line : QString::fromUtf8(snapshot->paired).split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
             const auto match = row.match(line.trimmed());
-            if (match.hasMatch()) names.insert(match.captured(1), match.captured(2).trimmed());
+            if (match.hasMatch()) {
+                const QString address = match.captured(1);
+                if (!names.contains(address)) deviceOrder.push_back(address);
+                names.insert(address, match.captured(2).trimmed());
+            }
         }
         for (const QString &line : QString::fromUtf8(snapshot->connected).split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
             const auto match = row.match(line.trimmed());
             if (match.hasMatch()) {
-                names.insert(match.captured(1), match.captured(2).trimmed());
-                connectedAddresses.insert(match.captured(1));
+                const QString address = match.captured(1);
+                if (!names.contains(address)) deviceOrder.push_back(address);
+                names.insert(address, match.captured(2).trimmed());
+                connectedAddresses.insert(address);
             }
         }
         QVariantList devices;
-        for (auto it = names.cbegin(); it != names.cend(); ++it) {
-            devices.push_back(QVariantMap{{QStringLiteral("address"), it.key()},
-                                          {QStringLiteral("name"), it.value()},
-                                          {QStringLiteral("connected"), connectedAddresses.contains(it.key())}});
+        for (const QString &address : deviceOrder) {
+            devices.push_back(QVariantMap{{QStringLiteral("address"), address},
+                                          {QStringLiteral("name"), names.value(address)},
+                                          {QStringLiteral("connected"), connectedAddresses.contains(address)}});
         }
-        std::sort(devices.begin(), devices.end(), [](const QVariant &a, const QVariant &b) {
-            return a.toMap().value(QStringLiteral("name")).toString().localeAwareCompare(
-                       b.toMap().value(QStringLiteral("name")).toString()) < 0;
-        });
         if (m_bluetoothDevices != devices) {
             m_bluetoothDevices = devices;
             Q_EMIT stateChanged();
