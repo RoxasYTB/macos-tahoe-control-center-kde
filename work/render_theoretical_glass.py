@@ -32,16 +32,16 @@ PANEL_CROP = (1615, 41, 1907, 530)
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--wallpaper", type=pathlib.Path, default=DEFAULT_WALLPAPER)
-    parser.add_argument("--scales", default="50,60,65,70,75,80,90,100",
-                        help="Comma-separated theoretical refraction scales; -1 preserves each QML surface's value")
+    parser.add_argument("--scales", default="-1",
+                        help="Default -1 preserves each QML surface's refraction scale; provide a list only for a sweep")
     parser.add_argument("--thickness", type=float,
                         help="Refraction band width in pixels; default keeps each QML surface's existing width")
     parser.add_argument("--thicknesses",
                         help="Comma-separated band widths to sweep; overrides --thickness")
-    parser.add_argument("--iors", default="1.3,1.5,1.7,1.9,2.1",
-                        help="Comma-separated theoretical Snell refraction indices to sweep")
-    parser.add_argument("--blur", type=float, default=6.0,
-                        help="Light accessibility blur radius in pixels; -1 preserves each QML surface's value")
+    parser.add_argument("--iors", default="1.7",
+                        help="Default theoretical Snell refraction index; provide a list only for a sweep")
+    parser.add_argument("--blur", type=float, default=-1.0,
+                        help="Default -1 preserves each QML surface's blur radius; positive values override it")
     parser.add_argument("--chroma", type=float, default=0.0,
                         help="Chromatic separation; keep at zero for normal refraction")
     parser.add_argument("--profile", type=pathlib.Path,
@@ -197,9 +197,11 @@ def main() -> int:
                     for scale in scales for thickness in thicknesses for ior in iors]
         for index, (scale, thickness, ior, material_config) in enumerate(variants, 1):
             band_label = f"bande {thickness:g}px" if thickness is not None else "largeurs QML"
-            label = f"{material_config.get('name', f'variante {index}')} · réfraction {scale:g}"
+            scale_label = "profil QML" if scale < 0 else f"réfraction {scale:g}"
+            label = f"{material_config.get('name', f'variante {index}')} · {scale_label}"
             thickness_label = f"{thickness:g}" if thickness is not None else "qml-default"
-            filename = f"{index:02d}-{material_config.get('name', 'variant')}-scale-{scale:g}-thickness-{thickness_label}-ior-{ior:g}.png"
+            scale_token = "qml" if scale < 0 else f"{scale:g}"
+            filename = f"{index:02d}-{material_config.get('name', 'variant')}-scale-{scale_token}-thickness-{thickness_label}-ior-{ior:g}.png"
             path = batch_dir / filename
             print(f"Rendu {index}/{len(variants)} · {label}", flush=True)
             material_file = batch_dir / f"material-{index:02d}.json"
