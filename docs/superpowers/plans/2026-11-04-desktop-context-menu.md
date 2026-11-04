@@ -57,6 +57,16 @@
 - A nested `kwin_wayland --virtual` render was also attempted with an isolated D-Bus session and temporary XDG configuration. KWin logged that the configured compositor was unsupported and fell back; Spectacle could not connect to PipeWire and did not produce a capture. The isolated processes were stopped, and this route does not resolve the alpha-render question.
 - The reference has more rows than the native empty-folder menu; compare like-for-like surface behavior separately from the KDE action inventory.
 
+#### Corrected isolated render — 4 November 2026
+
+- The earlier palette and Kvantum hover experiments copied Kvantum files under the temporary `HOME/.config` while the session used a separate `XDG_CONFIG_HOME`; those runs did not prove that the selected Kvantum variant was being read. Do not use them as evidence for source-level hover behavior.
+- The corrected private Xvfb session installs the dark Plasma theme under its temporary `XDG_DATA_HOME/plasma/desktoptheme`, installs the Kvantum variant under `XDG_CONFIG_HOME/Kvantum`, selects it with `Kvantum/kvantum.kvconfig`, and verifies `libkvantum.so` in the isolated plasmashell process map. It does not touch the active desktop.
+- X11 inspection of the live popup in that harness confirms `_NET_WM_WINDOW_TYPE_POPUP_MENU`, a 350 × 240 `plasmashell` window at the click position, and a non-empty `_KDE_NET_WM_BLUR_BEHIND_REGION`. This is the native Plasma containment popup, not the taskbar menu or the Folder View file menu.
+- The actual blank-desktop containment menu renders with the expected translucent purple surface and rounded panel. The saturated blue hover (`#315bef`) came from Kvantum's fallback to the nine `menuitem-normal` slices when no dedicated state slice exists. A direct `QStyle::CE_MenuItem` probe reproduced it even with Kvantum's highlight palette set to lavender.
+- Previous tests that serialized temporary state variants through Python `ElementTree` were invalid: QtSvg reported unresolved local `use` references. A targeted text edit preserving the original SVG structure produced a valid and visible fallback override. The dark theme changes only those nine `menuitem-normal` slices to a translucent lavender (`#b65cda`, 0.36 opacity); the actual Plasma screenshot is `/tmp/tahoe-plasma-menu-safe-hover-20261104/desktop-context-menu-hover.png`.
+- The target screenshot retains the real Plasma context menu, transparent surface, row separators and submenu arrows, with hover changing 8,054 pixels in the menu crop. The install processing path was run against the modified SVG before the `QStyle` probe. This validates the isolated theme rendering; the active desktop remains untouched and still needs a later visual check.
+- Theme checkpoint pushed to `checkpoint/glass-effects-controls-20261103`: `60e0c9778476d6a3f67d7bb87b5cfa5873f09007` (`fix(kvantum): soften menu hover fill`). Only the dark Kvantum SVG was included; the unrelated dirty files in `macos-tahoe-liquid-kde` were left out.
+
 ### Task 2: Tune the desktop menu surface and rows
 
 **Files:**
