@@ -64,6 +64,10 @@ Item {
         function onMenuBarControlActivated(name) {
             if (name === "Wi-Fi") root.openWifiDetails()
             else if (name === "Bluetooth") root.openBluetoothDetails()
+            else if ((name === "Appearance" || name === "Dark Mode") && root.controlController)
+                root.controlController.toggleAppearance()
+            else if (name === "Screenshot" && root.controlController)
+                root.controlController.launchScreenshot()
         }
     }
 

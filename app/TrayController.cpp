@@ -100,13 +100,26 @@ QString TrayController::iconNameForControl(const QString &name)
     if (name == QStringLiteral("Wi-Fi")) return QStringLiteral("network-wireless-signal-excellent");
     if (name == QStringLiteral("Bluetooth")) return QStringLiteral("bluetooth-active");
     if (name == QStringLiteral("Sound")) return QStringLiteral("audio-volume-high");
-    if (name == QStringLiteral("Display") || name == QStringLiteral("Keyboard Brightness")) return QStringLiteral("display-brightness-high");
+    if (name == QStringLiteral("Display")) return QStringLiteral("brightness-high");
+    if (name == QStringLiteral("Keyboard Brightness")) return QStringLiteral("input-keyboard");
     if (name == QStringLiteral("Battery")) return QStringLiteral("battery-full");
     if (name == QStringLiteral("Focus")) return QStringLiteral("notifications-disabled");
     if (name == QStringLiteral("Appearance") || name == QStringLiteral("Dark Mode")) return QStringLiteral("weather-clear-night");
     if (name == QStringLiteral("Screenshot")) return QStringLiteral("camera-photo");
     if (name == QStringLiteral("Now Playing") || name == QStringLiteral("Recognize Music")) return QStringLiteral("audio-x-generic");
     if (name == QStringLiteral("AirDrop")) return QStringLiteral("network-transmit-receive");
+    if (name == QStringLiteral("Stage Manager") || name == QStringLiteral("Application Windows")) return QStringLiteral("view-grid");
+    if (name == QStringLiteral("Screen Mirroring")) return QStringLiteral("video-display");
+    if (name == QStringLiteral("Mission Control")) return QStringLiteral("view-fullscreen");
+    if (name == QStringLiteral("Show Desktop")) return QStringLiteral("user-desktop");
+    if (name.startsWith(QStringLiteral("Tile Windows"))) return QStringLiteral("view-split-left-right");
+    if (name == QStringLiteral("Dock Auto-hide")) return QStringLiteral("preferences-system-windows");
+    if (name == QStringLiteral("Fast User Switching")) return QStringLiteral("system-switch-user");
+    if (name == QStringLiteral("Home")) return QStringLiteral("go-home");
+    if (name == QStringLiteral("Notes") || name == QStringLiteral("Quick Note")) return QStringLiteral("accessories-text-editor");
+    if (name == QStringLiteral("Lock Screen")) return QStringLiteral("system-lock-screen");
+    if (name == QStringLiteral("Utilities")) return QStringLiteral("applications-utilities");
+    if (name == QStringLiteral("Alarm") || name == QStringLiteral("Stopwatch") || name == QStringLiteral("Timer")) return QStringLiteral("appointment-new");
     return QStringLiteral("preferences-desktop");
 }
 
