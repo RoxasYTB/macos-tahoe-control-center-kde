@@ -6,8 +6,8 @@ import QtCore
 
 Window {
     id: root
-    width: Math.min(820, Screen.width - 48)
-    height: Math.min(937, Screen.height - 48)
+    width: Math.min(735, Screen.width - 48)
+    height: Math.min(900, Screen.height - 48)
     minimumWidth: 650
     minimumHeight: 600
     color: "transparent"
@@ -79,6 +79,48 @@ Window {
         const term = searchText.trim().toLowerCase()
         return (!term || entry.name.toLowerCase().indexOf(term) >= 0 || entry.category.toLowerCase().indexOf(term) >= 0)
             && (selectedCategory === "All Controls" || selectedCategory === entry.category || entry.category === "Suggestions")
+    }
+    function catalogIcon(name) {
+        if (name === "Scene or Accessory" || name === "Home") return "cupertino-font-house_fill"
+        if (["Alarm", "Stopwatch", "Timer"].indexOf(name) >= 0) return "cupertino-font-clock"
+        if (name.indexOf("Tile Windows") === 0 || name === "Application Windows" || name === "Mission Control" || name === "Dock Auto-hide") return "stage-manager"
+        if (name === "Show Desktop" || name === "Screen Mirroring") return "screen-mirroring"
+        if (name === "Run Shortcut" || name === "Shortcuts" || name === "Fast User Switching" || name === "Microsoft Teams") return "cupertino-font-square_grid_2x2_fill"
+        if (name === "Voice Memo") return "cupertino-font-waveform"
+        if (name === "Quick Note" || name === "Notes") return "note"
+        if (name === "Recognize Music" || name === "Now Playing") return "cupertino-font-music_note"
+        if (name === "Start Screen Saver") return "moon"
+        if (name === "Battery") return "cupertino-font-battery_100"
+        if (name === "AirDrop") return "airdrop-muted"
+        if (name === "Bluetooth") return "cupertino-font-bluetooth"
+        if (name === "Wi-Fi") return "cupertino-font-wifi"
+        if (name === "Dark Mode") return "appearance"
+        if (name === "Display") return "brightness-high"
+        if (name === "Focus") return "cupertino-font-moon_fill"
+        if (name === "Keyboard Brightness") return "cupertino-font-keyboard"
+        if (name === "Lock Screen") return "cupertino-font-lock_fill"
+        if (name === "Screenshot") return "screenshot"
+        if (name === "Sound") return "cupertino-font-speaker_3_fill"
+        if (name === "Utilities") return "cupertino-font-wrench_fill"
+        return "cupertino-font-square_grid_2x2_fill"
+    }
+    function categoryIcon(name) {
+        if (name === "All Controls") return "cupertino-font-square_grid_2x2_fill"
+        if (name === "Battery") return "cupertino-font-battery_100"
+        if (name === "Clock") return "cupertino-font-clock"
+        if (name === "Connectivity") return "cupertino-font-wifi"
+        if (name === "Desktop & Finder") return "stage-manager"
+        if (name === "Display & Brightness") return "brightness-high"
+        if (name === "Focus") return "cupertino-font-moon_fill"
+        if (name === "Home") return "cupertino-font-house_fill"
+        if (name === "Keyboards") return "cupertino-font-keyboard"
+        if (name === "Lock Screen") return "cupertino-font-lock_fill"
+        if (name === "Notes") return "note"
+        if (name === "Now Playing") return "cupertino-font-music_note"
+        if (name === "Screenshot") return "screenshot"
+        if (name === "Sounds") return "cupertino-font-speaker_3_fill"
+        if (name === "Utilities") return "cupertino-font-wrench_fill"
+        return "cupertino-font-square_grid_2x2_fill"
     }
     function addTo(target, name) {
         let list = target === "menu" ? draftMenuBarItems.slice() : draftControlCenterItems.slice()
@@ -183,10 +225,16 @@ Window {
                                     color: root.selectedCategory === modelData ? "#914ac0" : "transparent"
                                     Row {
                                         anchors.fill: parent; anchors.leftMargin: 12; spacing: 11
-                                        Text {
-                                            width: 25; anchors.verticalCenter: parent.verticalCenter
-                                            text: ["●●", "▰", "◷", "◉", "▣", "☼", "◎", "☾", "⌂", "⌨", "▣", "T", "▤", "♫", "◎", "◆", "◖", "⚒"][index]
-                                            color: "white"; font.pixelSize: 15; horizontalAlignment: Text.AlignHCenter
+                                        Rectangle {
+                                            width: 27; height: 27; radius: 7
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            color: ["#8b55cf", "#35b867", "#746a7c", "#2789ee", "#35353b", "#2489ee", "#8b8b91", "#8158ed", "#f7a916", "#96969c", "#202024", "#5869d8", "#f4f0e8", "#ff496e", "#74747b", "#9d54d2", "#eb405b", "#85858c"][index]
+                                            MacIcon {
+                                                anchors.centerIn: parent
+                                                width: 18; height: 18
+                                                iconName: root.categoryIcon(modelData)
+                                                glyphColor: "white"
+                                            }
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
@@ -227,33 +275,80 @@ Window {
                                     width: parent.width; height: 21
                                     text: modelData; color: "#d1b4e9"; font.pixelSize: 12; font.weight: Font.DemiBold
                                 }
-                                Grid {
-                                    id: sectionGrid
+                                Flow {
+                                    id: sectionFlow
                                     width: parent.width
-                                    columns: Math.max(2, Math.floor(width / 126))
-                                    rowSpacing: 10; columnSpacing: 8
+                                    spacing: 12
                                     Repeater {
                                         id: sectionItems
                                         model: root.catalog.filter(function(e) { return e.category === modelData && root.matches(e) })
                                         delegate: Item {
                                             id: tile
                                             required property var modelData
-                                            width: (sectionGrid.width - (sectionGrid.columns - 1) * sectionGrid.columnSpacing) / sectionGrid.columns
+                                            width: modelData.shape === "circle" ? 62 : 138
                                             height: modelData.shape === "large" ? 100 : 99
                                             Column {
                                                 anchors.fill: parent; spacing: 5
                                                 Item {
-                                                    width: tile.modelData.shape === "pill" ? Math.min(parent.width, 138) : (tile.modelData.shape === "large" ? 138 : 62)
+                                                    width: tile.modelData.shape === "circle" ? 62 : 138
                                                     height: tile.modelData.shape === "large" ? 74 : 62
                                                     anchors.horizontalCenter: parent.horizontalCenter
                                                     Rectangle {
                                                         anchors.fill: parent
                                                         radius: tile.modelData.shape === "pill" ? height / 2 : (tile.modelData.shape === "circle" ? width / 2 : 28)
-                                                        color: tile.modelData.shape === "large" ? "#801783" : "#55216d9a"
+                                                        color: tile.modelData.shape === "large" ? "#851187" :
+                                                            tile.modelData.category === "Connectivity" ? "#59417d" :
+                                                            tile.modelData.category === "Display & Brightness" ? "#682390" :
+                                                            tile.modelData.category === "Fast User Switching" ? "#38558d" : "#941081"
                                                         border.color: "#42d687ee"; border.width: 1
-                                                        Text {
+                                                        RowLayout {
+                                                            anchors.fill: parent
+                                                            anchors.leftMargin: tile.modelData.shape === "pill" ? 8 : 0
+                                                            anchors.rightMargin: tile.modelData.shape === "pill" ? 7 : 0
+                                                            spacing: 7
+                                                            visible: tile.modelData.shape === "pill"
+                                                            Item {
+                                                                Layout.preferredWidth: 37; Layout.preferredHeight: 37
+                                                                Rectangle {
+                                                                    anchors.fill: parent
+                                                                    radius: width / 2
+                                                                    color: ["Wi-Fi", "Bluetooth"].indexOf(tile.modelData.name) >= 0 ? "white"
+                                                                        : tile.modelData.name === "AirDrop" ? "#405d6876" : "transparent"
+                                                                }
+                                                                MacIcon {
+                                                                    anchors.centerIn: parent
+                                                                    width: 22; height: 22
+                                                                    iconName: root.catalogIcon(tile.modelData.name)
+                                                                    glyphColor: ["Wi-Fi", "Bluetooth"].indexOf(tile.modelData.name) >= 0 ? "#1687f8" : "white"
+                                                                }
+                                                            }
+                                                            ColumnLayout {
+                                                                Layout.fillWidth: true
+                                                                spacing: 1
+                                                                Text {
+                                                                    Layout.fillWidth: true
+                                                                    text: tile.modelData.name
+                                                                    color: "white"; font.pixelSize: 11; font.weight: Font.DemiBold
+                                                                    elide: Text.ElideRight
+                                                                }
+                                                                Text {
+                                                                    Layout.fillWidth: true
+                                                                    visible: ["Wi-Fi", "Bluetooth", "AirDrop", "Battery"].indexOf(tile.modelData.name) >= 0
+                                                                    text: tile.modelData.name === "Wi-Fi" ? "SannWifi-\nFreebox"
+                                                                        : tile.modelData.name === "Bluetooth" ? "On"
+                                                                        : tile.modelData.name === "AirDrop" ? "Off" : "100 %"
+                                                                    color: "#e4dbea"; font.pixelSize: 9
+                                                                    elide: Text.ElideRight
+                                                                }
+                                                            }
+                                                        }
+                                                        MacIcon {
                                                             anchors.centerIn: parent
-                                                            text: tile.modelData.icon; color: "white"; font.pixelSize: tile.modelData.shape === "large" ? 26 : 23
+                                                            width: tile.modelData.shape === "large" ? 28 : 25
+                                                            height: tile.modelData.shape === "large" ? 28 : 25
+                                                            visible: tile.modelData.shape !== "pill"
+                                                            iconName: root.catalogIcon(tile.modelData.name)
+                                                            glyphColor: "white"
                                                         }
                                                     }
                                                 }
@@ -285,7 +380,7 @@ Window {
                 }
 
                 Rectangle {
-                    Layout.fillWidth: true; Layout.preferredHeight: 76
+                    Layout.fillWidth: true; Layout.preferredHeight: 56
                     color: "#251e405f"
                     ColumnLayout {
                         anchors.fill: parent; anchors.leftMargin: 20; anchors.rightMargin: 18; spacing: 3
@@ -373,12 +468,15 @@ Window {
                     }
                 }
                 Rectangle {
-                    Layout.fillWidth: true; Layout.preferredHeight: 52
+                    Layout.fillWidth: true; Layout.preferredHeight: 68
                     color: "#211d3d61"
                     RowLayout {
                         anchors.fill: parent; anchors.leftMargin: 20; anchors.rightMargin: 18
                         Text { Layout.fillWidth: true; text: qsTr("Drag a control to place it in Control Center or Menu Bar…"); color: "#fffaff"; font.pixelSize: 12; elide: Text.ElideRight }
                         Button {
+                            id: doneButton
+                            Layout.preferredWidth: 60
+                            Layout.preferredHeight: 28
                             text: qsTr("Done")
                             onClicked: root.applyAndClose()
                             background: Rectangle { radius: 15; color: "#4783ff" }

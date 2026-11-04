@@ -72,6 +72,8 @@
 
 **Deliverable:** An editor view with a fixed bottom action bar, independently scrolling category rail and control catalog, search box, selected category row, section headers, suggestions and the controls shown in both references. Include the visible category names in the order in the reference map; do not invent rows below the cropped region. Support keyboard navigation and screen-reader names.
 
+For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px with a 244 px category rail and a 60 × 28 px Done button. Let the catalog flow variable-width tiles across each row: about 62 px for circles and 138 px for capsules/large controls. This lets the Suggestions row fit the large accessory tile, two circular clock controls and the wide window-tiling capsule, as shown. Use the existing Cupertino font and project-owned SVG icons rather than generic Unicode symbols. The selected-layout chips are an implementation affordance absent from the reference, retained for removal/reordering; keep them compact and verify that the Connectivity section remains reachable below the fixed footer by scrolling.
+
 **Verification:** Compare the initial view against `image5.png` and the scrolled view against `image6.png` at their original dimensions. Check clipping, scroll ownership, fixed Done footer, and no shared panel in the main Control Center.
 
 ### Task 5: Make controls editable and persistent

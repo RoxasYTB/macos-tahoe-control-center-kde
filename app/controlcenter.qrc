@@ -29,6 +29,7 @@
     <file alias="contents/ui/components/icons/control-centre-iconscout-white.png">../contents/ui/components/icons/control-centre-iconscout-white.png</file>
     <file alias="contents/ui/components/icons/control-centre-iconscout.webp">../contents/ui/components/icons/control-centre-iconscout.webp</file>
     <file alias="contents/ui/components/icons/moon.svg">../contents/ui/components/icons/moon.svg</file>
+    <file alias="contents/ui/components/icons/note.svg">../contents/ui/components/icons/note.svg</file>
     <file alias="contents/ui/components/icons/screen-mirroring.svg">../contents/ui/components/icons/screen-mirroring.svg</file>
     <file alias="contents/ui/components/icons/screenshot.svg">../contents/ui/components/icons/screenshot.svg</file>
     <file alias="contents/ui/components/icons/stage-manager.svg">../contents/ui/components/icons/stage-manager.svg</file>
