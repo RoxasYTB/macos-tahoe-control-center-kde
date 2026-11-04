@@ -197,6 +197,7 @@ Item {
         x: 76; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
+        glassTintStrength: 1.0
         glassRefractionThickness: 25
         iconName: "screenshot"
         iconSize: 27.5
@@ -213,6 +214,7 @@ Item {
         x: 152; y: 229; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
+        glassTintStrength: 1.0
         iconName: "cupertino-font-moon_fill"
         iconBadge: true
         badgeSize: 40
