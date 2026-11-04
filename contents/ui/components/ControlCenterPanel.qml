@@ -73,7 +73,7 @@ Item {
         roundness: 2.0
         glassRefractionThickness: 36
         glassRefractionScale: 75
-        glassBlurRadius: 6
+        glassBlurRadius: 8
         glassBlurAlgorithm: 1
         glassTintStrength: 1.0
         iconName: "airdrop-muted"
@@ -99,7 +99,7 @@ Item {
         x: 152; y: 0; width: 140; height: 139
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassBlurRadius: 6
+        glassBlurRadius: 8
         glassRefractionThickness: 36
         glassTintStrength: 1.0
         glassChromaStrength: 0.0

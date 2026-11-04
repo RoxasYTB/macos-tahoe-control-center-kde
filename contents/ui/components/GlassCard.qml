@@ -15,7 +15,7 @@ Item {
     property color solidColor: "#ffffff"
     // Keep a restrained live backdrop blur inside each capsule; the faint
     // exterior falloff below softens edges without adding a specular flare.
-    property real glassBlurRadius: 6
+    property real glassBlurRadius: 8
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0
     property real glassRefractionThickness: 35
