@@ -8,6 +8,33 @@
 #include <QTimer>
 #include <QVariant>
 
+namespace {
+
+QStringList splitNmcliRow(const QString &row)
+{
+    QStringList fields;
+    QString field;
+    bool escaped = false;
+    for (const QChar ch : row) {
+        if (escaped) {
+            field += ch;
+            escaped = false;
+        } else if (ch == QLatin1Char('\\')) {
+            escaped = true;
+        } else if (ch == QLatin1Char(':')) {
+            fields.push_back(field);
+            field.clear();
+        } else {
+            field += ch;
+        }
+    }
+    if (escaped) field += QLatin1Char('\\');
+    fields.push_back(field);
+    return fields;
+}
+
+} // namespace
+
 SystemControlController::SystemControlController(QObject *parent)
     : QObject(parent)
 {
@@ -67,6 +94,40 @@ void SystemControlController::refresh()
     }
 }
 
+void SystemControlController::refreshWifiNetworks()
+{
+    auto *query = new QProcess(this);
+    connect(query, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+            [this, query](int exitCode, QProcess::ExitStatus status) {
+        QString activeNetwork;
+        QStringList otherNetworks;
+        if (exitCode == 0 && status == QProcess::NormalExit) {
+            const QString output = QString::fromUtf8(query->readAllStandardOutput());
+            for (const QString &line : output.split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
+                const QStringList fields = splitNmcliRow(line);
+                if (fields.size() < 2 || fields.at(1).trimmed().isEmpty()) continue;
+                const QString ssid = fields.at(1).trimmed();
+                if (fields.at(0) == QStringLiteral("*")) {
+                    activeNetwork = ssid;
+                } else if (!otherNetworks.contains(ssid)) {
+                    otherNetworks.push_back(ssid);
+                }
+            }
+        }
+        query->deleteLater();
+        if (m_wifiNetworkName != activeNetwork || m_wifiOtherNetworks != otherNetworks) {
+            m_wifiNetworkName = activeNetwork;
+            m_wifiOtherNetworks = otherNetworks;
+            Q_EMIT stateChanged();
+        }
+    });
+    query->start(QStringLiteral("nmcli"), {
+        QStringLiteral("-t"), QStringLiteral("-f"), QStringLiteral("IN-USE,SSID"),
+        QStringLiteral("device"), QStringLiteral("wifi"), QStringLiteral("list"),
+        QStringLiteral("--rescan"), QStringLiteral("no")
+    });
+}
+
 void SystemControlController::callMedia(const QString &method)
 {
     if (m_mediaService.isEmpty()) return;
@@ -97,6 +158,12 @@ void SystemControlController::setVolume(int percent)
 void SystemControlController::launchScreenshot()
 {
     QProcess::startDetached(QStringLiteral("spectacle"), {});
+}
+
+void SystemControlController::openWifiSettings()
+{
+    QProcess::startDetached(QStringLiteral("systemsettings"),
+                            {QStringLiteral("kcm_networkmanagement")});
 }
 
 void SystemControlController::toggleAppearance()

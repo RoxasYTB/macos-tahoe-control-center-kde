@@ -1,4 +1,5 @@
 import QtQuick
+import QtCore
 
 Item {
     id: root
@@ -10,8 +11,21 @@ Item {
     property Item backdropOverride: null
     property bool useLiquidGlass: true
     property var controlController: typeof systemControls !== "undefined" ? systemControls : null
+    signal editControlsRequested()
+    Settings {
+        id: savedControlLayout
+        category: "ControlCenter"
+        property var controlCenterItems: ["AirDrop", "Bluetooth", "Wi-Fi", "Stage Manager", "Screen Mirroring", "Appearance", "Screenshot", "Focus", "Display", "Sound", "Now Playing"]
+    }
+    function controlIsSelected(name) {
+        return savedControlLayout.controlCenterItems.indexOf(name) >= 0
+    }
+
+    function openWifiDetails() { wifiDetails.open() }
 
     QuickTile {
+        id: wifiTile
+        visible: root.controlIsSelected("Wi-Fi")
         x: 0; y: 0; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -19,6 +33,7 @@ Item {
         glassRefractionScale: 85
         glassRefractionThickness: 25
         iconName: "cupertino-font-wifi"
+        hasSubmenu: true
         iconColor: "#007aff"
         iconBadge: true
         badgeSize: 36
@@ -32,14 +47,27 @@ Item {
         active: true
         title: "Wi-Fi"
         subtitle: root.controlController
-            ? (root.controlController.wifiEnabled ? "SannWifi-\nFreebox" : "Off")
+            ? (root.controlController.wifiEnabled
+               ? (root.controlController.wifiNetworkName.length
+                  ? root.controlController.wifiNetworkName : qsTr("On"))
+               : qsTr("Off"))
             : "SannWifi-\nFreebox"
         interactive: root.controlController !== null
-        onActivated: if (root.controlController) root.controlController.toggleWifi()
+        onActivated: wifiDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
     }
+
+    ControlDetailsPopup {
+        id: wifiDetails
+        ownerItem: root
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        controlController: root.controlController
+    }
+
     QuickTile {
+        visible: root.controlIsSelected("Bluetooth")
         x: 0; y: 77; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -67,6 +95,7 @@ Item {
         tileFill: Qt.rgba(1, 1, 1, 0.07)
     }
     QuickTile {
+        visible: root.controlIsSelected("AirDrop")
         x: 0; y: 153; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -96,6 +125,7 @@ Item {
 
     GlassCard {
         objectName: "Media"
+        visible: root.controlIsSelected("Now Playing")
         x: 152; y: 0; width: 140; height: 139
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -167,6 +197,7 @@ Item {
     }
 
     QuickTile {
+        visible: root.controlIsSelected("Stage Manager")
         x: 152; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -185,6 +216,7 @@ Item {
         Accessible.name: "Stage Manager"
     }
     QuickTile {
+        visible: root.controlIsSelected("Screen Mirroring")
         x: 228; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -201,6 +233,7 @@ Item {
     }
 
     QuickTile {
+        visible: root.controlIsSelected("Appearance")
         x: -1; y: 230; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -219,6 +252,7 @@ Item {
         Accessible.name: "Appearance"
     }
     QuickTile {
+        visible: root.controlIsSelected("Screenshot")
         x: 76; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -238,6 +272,7 @@ Item {
         Accessible.name: "Screenshot"
     }
     QuickTile {
+        visible: root.controlIsSelected("Focus")
         x: 152; y: 229; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -262,6 +297,7 @@ Item {
     }
 
     SliderCard {
+        visible: root.controlIsSelected("Display")
         x: 0; y: 306; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -278,6 +314,7 @@ Item {
         foreground: root.foreground
     }
     SliderCard {
+        visible: root.controlIsSelected("Sound")
         x: 0; y: 383; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -305,6 +342,9 @@ Item {
         roundness: 2.0
         fillColor: Qt.rgba(1, 1, 1, 0.07)
         borderColor: Qt.rgba(1, 1, 1, 0.32)
+        TapHandler { onTapped: root.editControlsRequested() }
+        Accessible.role: Accessible.Button
+        Accessible.name: qsTr("Edit Controls")
         Text {
             anchors.centerIn: parent
             text: "Edit Controls"

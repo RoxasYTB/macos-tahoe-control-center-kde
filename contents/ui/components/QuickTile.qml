@@ -10,6 +10,7 @@ GlassCard {
     property bool active: false
     property bool circular: false
     property bool compact: false
+    property bool hasSubmenu: false
     property bool iconBadge: false
     property real badgeSize: 36
     property real badgeIconSize: 24
@@ -34,6 +35,8 @@ GlassCard {
     // content without imposing a pink/purple tint on the sampled backdrop.
     property color tileFill: Qt.rgba(1, 1, 1, 0.07)
     property color tileBorder: Qt.rgba(1, 1, 1, 0.28)
+    property color tileHoverFill: Qt.rgba(1, 1, 1, 0.14)
+    property color tileHoverBorder: Qt.rgba(1, 1, 1, 0.42)
     property bool interactive: false
     signal activated()
 
@@ -41,13 +44,34 @@ GlassCard {
     // Tahoe capsules have semicircular ends; circular controls remain exact
     // circles through the same exponent.
     roundness: 2.0
-    fillColor: appearanceControl ? "transparent" : tileFill
-    borderColor: appearanceControl ? "transparent" : tileBorder
+    readonly property bool submenuEmphasized: submenuHover.hovered || activeFocus
+    fillColor: appearanceControl ? "transparent"
+                                 : (hasSubmenu && submenuEmphasized ? tileHoverFill : tileFill)
+    borderColor: appearanceControl ? "transparent"
+                                   : (hasSubmenu && submenuEmphasized ? tileHoverBorder : tileBorder)
     borderWidth: appearanceControl ? 0 : 1
     solidMode: appearanceControl
     solidColor: "#ffffff"
     Accessible.role: Accessible.Button
     Accessible.name: subtitle.length ? title + ", " + subtitle : title
+    Accessible.description: hasSubmenu ? qsTr("Press Enter to show details") : ""
+    activeFocusOnTab: hasSubmenu
+
+    HoverHandler {
+        id: submenuHover
+        cursorShape: root.hasSubmenu ? Qt.PointingHandCursor : Qt.ArrowCursor
+    }
+
+    Keys.onReturnPressed: function(event) {
+        if (!root.hasSubmenu) return
+        root.activated()
+        event.accepted = true
+    }
+    Keys.onEnterPressed: function(event) {
+        if (!root.hasSubmenu) return
+        root.activated()
+        event.accepted = true
+    }
 
     Item {
         anchors.fill: parent
@@ -60,7 +84,8 @@ GlassCard {
         RowLayout {
             anchors.fill: parent
             anchors.leftMargin: root.iconBadge ? root.badgeLeftMargin : (root.compact ? 7 : 4)
-            anchors.rightMargin: root.compact ? 7 : 8
+            // Reserve the chevron slot even at rest so hover never shifts text.
+            anchors.rightMargin: root.hasSubmenu ? 22 : (root.compact ? 7 : 8)
             spacing: root.compact ? 6 : (root.iconBadge ? 6 : 12)
             visible: !root.circular || root.title.length > 0 || root.iconBadge
 
@@ -129,6 +154,20 @@ GlassCard {
             stretch: root.iconHeight > 0
             iconName: root.iconName
             glyphColor: root.iconColor
+        }
+
+        Text {
+            anchors.right: parent.right
+            anchors.rightMargin: 13
+            anchors.verticalCenter: parent.verticalCenter
+            text: "›"
+            color: root.foreground
+            opacity: root.hasSubmenu && root.submenuEmphasized ? 0.88 : 0.0
+            visible: root.hasSubmenu
+            font.family: "SF Pro Text"
+            font.pixelSize: 16
+            font.weight: Font.Medium
+            Accessible.ignored: true
         }
 
     }

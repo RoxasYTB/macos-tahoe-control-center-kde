@@ -37,9 +37,20 @@ Window {
     }
 
     ControlCenterPanel {
+        id: controlCenterPanel
         x: 0
         y: 0
         useLiquidGlass: false
+        onEditControlsRequested: {
+            popup.stayOpen = true
+            controlEditor.showEditor()
+        }
+    }
+
+    ControlEditor {
+        id: controlEditor
+        objectName: "controlEditorWindow"
+        onEditorClosed: popup.stayOpen = false
     }
 
     BlurBehindRegion {

@@ -52,6 +52,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--renderer", type=pathlib.Path, default=RENDERER)
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--settle-ms", type=int, default=1800)
+    parser.add_argument("--state", choices=("panel", "wifi-hover", "wifi-menu"), default="panel",
+                        help="Render the resting panel or one interaction state")
     return parser.parse_args()
 
 
@@ -76,13 +78,14 @@ def start_xvfb() -> tuple[subprocess.Popen[str], str]:
 def render(renderer: pathlib.Path, env: dict[str, str], wallpaper: pathlib.Path,
            output: pathlib.Path, scale: float, thickness: float | None, blur: float,
            chroma: float, ior: float, settle_ms: int, expected_wallpaper: Image.Image,
-           profile: pathlib.Path | None, material: pathlib.Path | None) -> None:
+           profile: pathlib.Path | None, material: pathlib.Path | None,
+           state: str) -> None:
     command = [
         str(renderer), "--qml", str(QML), "--output", str(output),
         "--wallpaper", str(wallpaper), "--scale", str(scale),
         "--thickness", str(thickness if thickness is not None else -1), "--blur", str(blur),
         "--chroma", str(chroma), "--settle-ms", str(settle_ms),
-        "--ior", str(ior),
+        "--ior", str(ior), "--state", state,
     ]
     if profile:
         command += ["--profile", str(profile)]
@@ -207,8 +210,8 @@ def main() -> int:
             material_file = batch_dir / f"material-{index:02d}.json"
             material_file.write_text(json.dumps(material_config.get("parameters", {}), indent=2) + "\n")
             render(renderer, env, wallpaper, path, scale, thickness, args.blur, args.chroma, ior,
-                   args.settle_ms, expected_wallpaper, profile, material_file)
-            captures.append((label, path))
+                   args.settle_ms, expected_wallpaper, profile, material_file, args.state)
+            captures.append((f"{label} · {args.state}", path))
     finally:
         xvfb.terminate()
         try:
@@ -224,6 +227,7 @@ def main() -> int:
         "scales": scales, "thicknesses": thicknesses, "iors": iors, "blur": args.blur,
         "material_sweep": str(sweep_path) if sweep_path else None,
         "chroma": args.chroma, "profile": str(profile) if profile else None,
+        "state": args.state,
         "display": "private Xvfb 1920x1080; no live desktop capture",
         "images": [str(path) for _, path in captures], "comparison": str(comparison),
     }, indent=2) + "\n")

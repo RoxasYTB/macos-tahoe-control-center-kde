@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
+#include <QCursor>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
     parser.addOption({QStringLiteral("chroma"), QStringLiteral("Chromatic separation (0 disables it)"), QStringLiteral("value"), QStringLiteral("0")});
     parser.addOption({QStringLiteral("profile"), QStringLiteral("Optional JSON map of QML surface name to refraction scale"), QStringLiteral("path")});
     parser.addOption({QStringLiteral("material"), QStringLiteral("Optional JSON map of material properties to sweep"), QStringLiteral("path")});
+    parser.addOption({QStringLiteral("state"), QStringLiteral("Interaction state to render"), QStringLiteral("name"), QStringLiteral("panel")});
     parser.addOption({QStringLiteral("settle-ms"), QStringLiteral("Wait for QML shaders to settle"), QStringLiteral("value"), QStringLiteral("1800")});
     parser.process(app);
 
@@ -54,10 +56,13 @@ int main(int argc, char *argv[])
             materialParametersJson = QString::fromUtf8(materialFile.readAll());
     }
     engine.rootContext()->setContextProperty(QStringLiteral("renderMaterialParametersJson"), materialParametersJson);
+    engine.rootContext()->setContextProperty(QStringLiteral("renderState"), parser.value(QStringLiteral("state")));
     const QUrl url = QUrl::fromLocalFile(parser.value(QStringLiteral("qml")));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
                      &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
     engine.load(url);
+    if (parser.value(QStringLiteral("state")) == QStringLiteral("wifi-hover"))
+        QCursor::setPos(QPoint(1660, 70));
     const int settleMs = parser.value(QStringLiteral("settle-ms")).toInt();
     QTimer::singleShot(settleMs, &app, [&] {
         auto *window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));

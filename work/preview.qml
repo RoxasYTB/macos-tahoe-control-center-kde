@@ -91,6 +91,10 @@ Window {
         interval: 100
         running: true
         repeat: false
-        onTriggered: preview.applyGlassParameters(controlCenter)
+        onTriggered: {
+            preview.applyGlassParameters(controlCenter)
+            if (renderState === "wifi-menu")
+                controlCenter.openWifiDetails()
+        }
     }
 }

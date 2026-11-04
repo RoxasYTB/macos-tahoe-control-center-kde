@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
                                       "BlurBehindRegion");
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("Tahoe Control Center"));
+    QCoreApplication::setOrganizationName(QStringLiteral("RoxasYTB"));
+    QCoreApplication::setOrganizationDomain(QStringLiteral("roxasytb.github.io"));
     QCoreApplication::setApplicationVersion(QStringLiteral("0.1.0"));
     QGuiApplication::setQuitOnLastWindowClosed(false);
 
@@ -35,6 +37,9 @@ int main(int argc, char *argv[])
     const QCommandLineOption stayOpenOption(QStringList{QStringLiteral("stay-open")},
                                             QStringLiteral("Keep the popup open when it loses activation for visual debugging."));
     parser.addOption(stayOpenOption);
+    const QCommandLineOption editorPreviewOption(QStringList{QStringLiteral("editor-preview")},
+                                                  QStringLiteral("Open the Controls editor for an isolated visual check."));
+    parser.addOption(editorPreviewOption);
     parser.process(app);
 
     QSystemTrayIcon trayIcon(QIcon(QStringLiteral(":/contents/ui/components/icons/control-centre-iconscout-white.png")));
@@ -58,6 +63,12 @@ int main(int argc, char *argv[])
     }
 
     window->setProperty("stayOpen", parser.isSet(stayOpenOption));
+
+    if (parser.isSet(editorPreviewOption)) {
+        QObject *editor = window->findChild<QObject *>(QStringLiteral("controlEditorWindow"));
+        if (editor)
+            QMetaObject::invokeMethod(editor, "showEditor");
+    }
 
     controller.setWindow(window);
     trayIcon.setVisible(true);
