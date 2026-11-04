@@ -158,6 +158,7 @@ void SystemControlController::refreshWifiNetworks()
     connect(query, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
             [this, query](int exitCode, QProcess::ExitStatus status) {
         QString activeNetwork;
+        bool activeNetworkSecured = false;
         QStringList otherNetworks;
         if (exitCode == 0 && status == QProcess::NormalExit) {
             const QString output = QString::fromUtf8(query->readAllStandardOutput());
@@ -167,20 +168,26 @@ void SystemControlController::refreshWifiNetworks()
                 const QString ssid = fields.at(1).trimmed();
                 if (fields.at(0) == QStringLiteral("*")) {
                     activeNetwork = ssid;
+                    activeNetworkSecured = fields.size() >= 3
+                            && !fields.at(2).trimmed().isEmpty()
+                            && fields.at(2).trimmed() != QStringLiteral("--");
                 } else if (!otherNetworks.contains(ssid)) {
                     otherNetworks.push_back(ssid);
                 }
             }
         }
         query->deleteLater();
-        if (m_wifiNetworkName != activeNetwork || m_wifiOtherNetworks != otherNetworks) {
+        if (m_wifiNetworkName != activeNetwork
+                || m_wifiNetworkSecured != activeNetworkSecured
+                || m_wifiOtherNetworks != otherNetworks) {
             m_wifiNetworkName = activeNetwork;
+            m_wifiNetworkSecured = activeNetworkSecured;
             m_wifiOtherNetworks = otherNetworks;
             Q_EMIT stateChanged();
         }
     });
     query->start(QStringLiteral("nmcli"), {
-        QStringLiteral("-t"), QStringLiteral("-f"), QStringLiteral("IN-USE,SSID"),
+        QStringLiteral("-t"), QStringLiteral("-f"), QStringLiteral("IN-USE,SSID,SECURITY"),
         QStringLiteral("device"), QStringLiteral("wifi"), QStringLiteral("list"),
         QStringLiteral("--rescan"), QStringLiteral("no")
     });

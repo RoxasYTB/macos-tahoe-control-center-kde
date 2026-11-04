@@ -28,7 +28,7 @@
 - Read: `docs/reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png`
 - Read: all original paths listed in `docs/macos-tahoe-reference-map.md`
 
-**Deliverable:** Every editor, network menu, hover and desktop context-menu acceptance point is traceable to a supplied image and SHA-256. Use the local hover crop when testing the tiny chevron.
+**Deliverable:** Every editor, network menu, hover and desktop context-menu acceptance point is traceable to a supplied image and SHA-256. Use the local hover crop when testing the tiny chevron. The map records that hover also brightens the capsule subtly, while its icon/text stay centered and the geometry does not shift.
 
 **Verification:** Recompute the six listed hashes and confirm dimensions with Pillow. Do not add the five desktop screenshots to public product artwork or overwrite them.
 
@@ -40,7 +40,7 @@
 - Modify: `contents/ui/components/icons/` only for a small project-owned chevron if Qt's standard chevron does not match
 - Modify: `docs/macos-tahoe-reference-map.md` only if a measured behavior is clarified
 
-**Deliverable:** Wi‑Fi and Bluetooth capsules brighten subtly on hover/focus without resizing or moving their icon/text. Wi‑Fi shows a small right-facing chevron aligned to the capsule end while hovered/focused; clicking it or pressing Enter opens details. Preserve normal tile activation for non-menu controls.
+**Deliverable:** Wi‑Fi and Bluetooth capsules brighten subtly on hover/focus without resizing or moving their icon/text. Wi‑Fi shows a small right-facing chevron aligned to the capsule end while hovered/focused; hide it at rest, and do not let it shift the centered icon or label. Clicking the capsule or pressing Enter opens details. Preserve normal tile activation for non-menu controls.
 
 **Verification:** Render resting, hover, keyboard-focus and pressed states in the offline harness. Confirm there is no permanent chevron and no geometry shift when it appears.
 
@@ -54,7 +54,7 @@
 - Modify: `app/controlcenter.qrc`
 - Modify: `app/CMakeLists.txt` only if new C++ model sources are needed
 
-**Deliverable:** Anchored glass popovers match the supplied right-top screenshots. Wi‑Fi shows its power switch, known network and lock, expandable “Other Networks”, and “Wi‑Fi Settings…”. Bluetooth shows its power switch, paired/available device rows with truthful states, and “Bluetooth Settings…”. Escape and outside click dismiss; opening one popover closes the other. All toggles act on NetworkManager/BlueZ.
+**Deliverable:** Anchored glass popovers match the supplied right-top screenshots. Wi‑Fi shows its power switch, known network and a lock only when NetworkManager reports security for the active network, expandable “Other Networks”, and “Wi‑Fi Settings…”. Bluetooth shows its power switch, paired/available device rows with truthful states, and “Bluetooth Settings…”. Escape and outside click dismiss; opening one popover closes the other. All toggles act on NetworkManager/BlueZ.
 
 **Verification:** Check QML rendering for connected, disconnected, no-network, powered-off, no-adapter and unavailable-command states. Verify device/network labels come from the system controller and settings actions launch the appropriate KDE settings module where installed.
 
@@ -97,6 +97,8 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 - Dragged Run Shortcut before Scene or Accessory and confirmed the changed order in `menuBarItems` after Done.
 - Relaunched the app with each temporary settings directory and captured the editor; both changed chip orders were restored on startup.
 - These checks used `/tmp/tahoe-*-config*`; the user's real KDE settings were not read or changed.
+- In a separate Xvfb display (`:137`) with its own D-Bus session and KWin, opened Wi‑Fi, expanded “Other Networks”, then clicked the blank panel area; the details popup closed and the independent capsules returned. Clicking a separate target window in normal mode closed the Control Center window as well. The live network state was shown as “Not Connected”; no network toggle was used.
+- The same temporary Xvfb checks were repeated after adding a background click target behind the detail popup. Its interior remained interactive, while a click outside the popup dismissed it.
 
 ### Task 6: Verify and checkpoint the Control Center work
 

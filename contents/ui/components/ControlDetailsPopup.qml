@@ -126,6 +126,8 @@ Popup {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 14
                 height: 16
+                visible: root.controlController
+                         ? root.controlController.wifiNetworkSecured : true
                 iconName: "cupertino-font-lock_fill"
                 glyphColor: Qt.rgba(1, 1, 1, 0.78)
                 Accessible.name: qsTr("Secured network")

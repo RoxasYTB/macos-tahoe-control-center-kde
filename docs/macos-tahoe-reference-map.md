@@ -26,7 +26,7 @@ Les deux menus sont des panneaux étroits, séparés du Control Center, placés 
 
 | Source | Dimensions | Empreinte SHA-256 | Contenu et éléments à reproduire |
 | --- | ---: | --- | --- |
-| [`wifi-hover-chevron.png`](reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png) (copie conservée de la capture fournie) | 101 × 67 | `56ae543d0d5ba04d90bcd576a48a042c520589a02b4211207464517389917ec6` | Capsule Wi‑Fi survolée : fond de capsule éclairci, petit chevron pointant à droite visible à l’extrémité. Le chevron ouvre le sous-menu Wi‑Fi. |
+| [`wifi-hover-chevron.png`](reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png) (copie conservée de la capture fournie) | 101 × 67 | `56ae543d0d5ba04d90bcd576a48a042c520589a02b4211207464517389917ec6` | Capsule Wi‑Fi survolée : la capsule est légèrement éclaircie, un petit chevron pointant à droite apparaît à son extrémité et ouvre le sous-menu Wi‑Fi. Garder l’icône et le texte centrés, sans déplacement ni changement de géométrie; masquer le chevron au repos. Le focus clavier reçoit le même indice visuel. |
 
 Le survol doit éclaircir la capsule sans changer sa taille, son texte ou son alignement. Le même retour doit fonctionner au focus clavier ; l’ouverture reste possible au clic/Entrée.
 
@@ -43,4 +43,5 @@ Cette dernière référence relève de `macos-tahoe-liquid-kde`, tandis que l’
 - Les cinq captures originales restent dans le dossier utilisateur `Images`; seules leurs empreintes, chemins et descriptions sont catalogués ici.
 - La petite capture de survol reçue dans `/tmp` a été copiée dans `docs/reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png` pour préserver le détail de la flèche.
 - Ces captures servent de références de travail. Ne pas les intégrer comme illustrations produit ou captures publiques du thème sans décision distincte de Yohan.
-- Les images montrent des détails variables du bureau (fond, widgets, applications et date/heure). Utiliser les menus et contrôles décrits ci-dessus comme critères pertinents; ne pas recopier ces détails personnels dans les interfaces.
+- Les images montrent des détails variables du bureau (fond, widgets, applications et date/heure). Utiliser les menus et contrôles décrits ci-dessus comme critères pertinents; ne pas recopier ces détails personnels dans les interfaces. Le fond d’écran est un contexte de comparaison : les surfaces en verre doivent réfracter le contenu réellement visible derrière elles, jamais une capture pré-calculée.
+- Les cinq captures d’écran et le crop de survol ont été revérifiés avec leurs dimensions et empreintes SHA-256 le 4 novembre 2026; les sources n’ont pas été modifiées.

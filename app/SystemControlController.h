@@ -10,6 +10,7 @@ class SystemControlController final : public QObject
     Q_OBJECT
     Q_PROPERTY(bool wifiEnabled READ wifiEnabled NOTIFY stateChanged)
     Q_PROPERTY(QString wifiNetworkName READ wifiNetworkName NOTIFY stateChanged)
+    Q_PROPERTY(bool wifiNetworkSecured READ wifiNetworkSecured NOTIFY stateChanged)
     Q_PROPERTY(QStringList wifiOtherNetworks READ wifiOtherNetworks NOTIFY stateChanged)
     Q_PROPERTY(bool bluetoothEnabled READ bluetoothEnabled NOTIFY stateChanged)
     Q_PROPERTY(QVariantList bluetoothDevices READ bluetoothDevices NOTIFY stateChanged)
@@ -21,6 +22,7 @@ public:
     explicit SystemControlController(QObject *parent = nullptr);
     bool wifiEnabled() const { return m_wifiEnabled; }
     QString wifiNetworkName() const { return m_wifiNetworkName; }
+    bool wifiNetworkSecured() const { return m_wifiNetworkSecured; }
     QStringList wifiOtherNetworks() const { return m_wifiOtherNetworks; }
     bool bluetoothEnabled() const { return m_bluetoothEnabled; }
     QVariantList bluetoothDevices() const { return m_bluetoothDevices; }
@@ -50,6 +52,7 @@ private:
     void run(const QString &program, const QStringList &arguments);
     bool m_wifiEnabled = false;
     QString m_wifiNetworkName;
+    bool m_wifiNetworkSecured = false;
     QStringList m_wifiOtherNetworks;
     bool m_bluetoothEnabled = false;
     QVariantList m_bluetoothDevices;

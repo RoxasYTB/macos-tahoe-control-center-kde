@@ -541,4 +541,16 @@ Item {
             }
         }
     }
+
+    MouseArea {
+        anchors.fill: parent
+        visible: root.detailsOpen
+        z: 1000
+        acceptedButtons: Qt.AllButtons
+        onClicked: {
+            wifiDetails.close()
+            bluetoothDetails.close()
+        }
+        Accessible.ignored: true
+    }
 }
