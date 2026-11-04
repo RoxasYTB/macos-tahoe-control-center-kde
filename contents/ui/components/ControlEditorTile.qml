@@ -112,6 +112,19 @@ Item {
                     glyphColor: "white"
                 }
 
+                Text {
+                    visible: root.entry.name === "Start Screen Saver"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 14
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 13
+                    width: parent.width - 28
+                    text: qsTr("Start Screen Saver")
+                    color: "white"
+                    font.pixelSize: 11
+                    font.weight: Font.DemiBold
+                }
+
                 Column {
                     anchors.left: parent.left
                     anchors.leftMargin: 14
