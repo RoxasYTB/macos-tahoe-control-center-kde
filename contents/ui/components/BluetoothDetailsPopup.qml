@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
+pragma ComponentBehavior: Bound
+
 Popup {
     id: root
     property Item ownerItem: null
