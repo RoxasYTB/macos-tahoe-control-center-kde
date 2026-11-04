@@ -9,6 +9,25 @@ Popup {
     property Item backdropOverride: null
     property bool useLiquidGlass: false
     property var controlController: null
+
+    function deviceIcon(deviceName) {
+        const name = deviceName.toLowerCase()
+        if (name.indexOf("head") >= 0 || name.indexOf("earbud") >= 0
+                || name.indexOf("airpod") >= 0 || name.indexOf("rebel") >= 0)
+            return "cupertino-font-headphones"
+        if (name.indexOf("phone") >= 0 || name.indexOf("iphone") >= 0
+                || name.indexOf("bv5300") >= 0)
+            return "cupertino-font-phone_fill"
+        if (name.indexOf("speaker") >= 0 || name.indexOf("sound") >= 0
+                || name.indexOf("flow") >= 0)
+            return "cupertino-font-speaker_2_fill"
+        if (name.indexOf("keyboard") >= 0) return "cupertino-font-keyboard"
+        if (name.indexOf("mouse") >= 0 || name.indexOf("trackpad") >= 0
+                || name.indexOf("mx ") >= 0)
+            return "cupertino-font-cursor_rays"
+        return "cupertino-font-desktopcomputer"
+    }
+
     parent: ownerItem
     x: -11
     y: -4
@@ -64,12 +83,12 @@ Popup {
                         Rectangle {
                             width: 24; height: 24; anchors.verticalCenter: parent.verticalCenter; radius: 12
                             color: "#b9a6d7"
-                            Text {
+                            MacIcon {
                                 anchors.centerIn: parent
-                                text: modelData.name.toLowerCase().indexOf("head") >= 0
-                                      || modelData.name.toLowerCase().indexOf("rebel") >= 0
-                                      || modelData.name.toLowerCase().indexOf("sound") >= 0 ? "♬" : "ᛒ"
-                                color: "#ffffff"; font.pixelSize: 14
+                                width: 14
+                                height: 14
+                                iconName: root.deviceIcon(modelData.name)
+                                glyphColor: "#ffffff"
                             }
                         }
                         Text {
