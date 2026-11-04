@@ -240,7 +240,7 @@ Item {
         glassRefractionThickness: 25
         glassTintStrength: 1.0
         title: "Display"
-        titleOffsetY: 4
+        titleOffsetY: 3
         titlePixelSize: 12.25
         titleLetterSpacing: 0.15
         value: 1

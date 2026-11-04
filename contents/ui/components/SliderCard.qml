@@ -31,7 +31,7 @@ GlassCard {
 
         Text {
             Layout.fillWidth: true
-            Layout.leftMargin: 2
+            Layout.leftMargin: 1
             text: root.title
             color: root.foreground
             font.family: "SF Pro Text"
