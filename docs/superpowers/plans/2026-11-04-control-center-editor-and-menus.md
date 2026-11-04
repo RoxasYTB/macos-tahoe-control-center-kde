@@ -131,3 +131,8 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 **Deliverable:** A compact comparison sheet for editor top/bottom views, Wi‑Fi/Bluetooth submenus and hover states, with the corresponding references alongside. A GitHub checkpoint contains only reviewed changes for this app; no pull request until the overall work is finished.
 
 **Verification:** Build `tahoe-control-center` and `controlcenter_visual_preview`; render each view in Xvfb and check shader diagnostics; inspect the complete diff and Git status to ensure unrelated work remains untouched. Never enable or test KWin effects on the user's active desktop; an isolated Xvfb/KWin compositor render is allowed and must be labeled as isolated evidence.
+
+### Follow-up: explain an empty editor search
+
+- Added a centered `No Controls Found` / `Try a different search term.` state when a non-empty search has no catalog matches.
+- Validation: `tahoe-control-center` builds successfully; an isolated Xvfb editor preview with the actual query `zzzz-no-such-control` displayed the empty state. This validates the search-empty UI only, not the live Plasma host or visual glass.

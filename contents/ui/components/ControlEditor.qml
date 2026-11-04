@@ -82,6 +82,8 @@ Window {
         return (!term || entry.name.toLowerCase().indexOf(term) >= 0 || entry.category.toLowerCase().indexOf(term) >= 0)
             && (selectedCategory === "All Controls" || selectedCategory === entry.category || entry.category === "Suggestions")
     }
+    readonly property bool noSearchResults: searchText.trim().length > 0
+        && catalog.filter(function(entry) { return root.matches(entry) }).length === 0
     function catalogIcon(name) {
         if (name === "Scene or Accessory") return "cupertino-font-lightbulb_fill"
         if (name === "Home") return "cupertino-font-house_fill"
@@ -390,6 +392,32 @@ Window {
                                     }
                                 }
                                 Rectangle { width: parent.width; height: 1; color: "#42ded0eb" }
+                            }
+                        }
+
+                        Item {
+                            width: parent.width
+                            height: root.noSearchResults ? 170 : 0
+                            visible: root.noSearchResults
+                            Column {
+                                anchors.centerIn: parent
+                                spacing: 7
+                                Text {
+                                    width: 300
+                                    text: qsTr("No Controls Found")
+                                    color: "#fffaff"
+                                    font.pixelSize: 15
+                                    font.weight: Font.DemiBold
+                                    horizontalAlignment: Text.AlignHCenter
+                                    Accessible.name: text
+                                }
+                                Text {
+                                    width: 300
+                                    text: qsTr("Try a different search term.")
+                                    color: "#d1b4e9"
+                                    font.pixelSize: 12
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
                             }
                         }
                     }
