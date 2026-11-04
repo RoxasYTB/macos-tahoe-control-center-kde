@@ -22,7 +22,9 @@ Item {
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
     property real glassOuterBlurRadius: 6
-    property real glassOuterBlurStrength: 0.80
+    // The prototype's soft flare outside each capsule was dropped; keep the
+    // sampled wallpaper and subtle blur confined to the glass surface.
+    property real glassOuterBlurStrength: 0.0
     property real glassInnerBlurMix: 1.0
     default property alias contentData: content.data
 
