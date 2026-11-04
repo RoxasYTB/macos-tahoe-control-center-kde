@@ -200,8 +200,8 @@ Item {
         glassTintStrength: 1.0
         glassRefractionThickness: 25
         iconName: "screenshot"
-        iconSize: 27.5
-        iconHeight: 27.5
+        iconSize: 28.5
+        iconHeight: 28.5
         iconOffsetX: -1.5
         iconOffsetY: 1.0
         circular: true
