@@ -95,7 +95,7 @@ Window {
         if (name === "Voice Memo") return "cupertino-font-waveform"
         if (name === "Quick Note" || name === "Notes") return "note"
         if (name === "Recognize Music" || name === "Now Playing") return "cupertino-font-music_note"
-        if (name === "Start Screen Saver") return "moon"
+        if (name === "Start Screen Saver") return "screen-saver"
         if (name === "Battery") return "cupertino-font-battery_100"
         if (name === "AirDrop") return "airdrop-muted"
         if (name === "Bluetooth") return "cupertino-font-bluetooth"

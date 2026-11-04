@@ -33,6 +33,7 @@
     <file alias="contents/ui/components/icons/moon.svg">../contents/ui/components/icons/moon.svg</file>
     <file alias="contents/ui/components/icons/note.svg">../contents/ui/components/icons/note.svg</file>
     <file alias="contents/ui/components/icons/screen-mirroring.svg">../contents/ui/components/icons/screen-mirroring.svg</file>
+    <file alias="contents/ui/components/icons/screen-saver.svg">../contents/ui/components/icons/screen-saver.svg</file>
     <file alias="contents/ui/components/icons/screenshot.svg">../contents/ui/components/icons/screenshot.svg</file>
     <file alias="contents/ui/components/icons/stage-manager.svg">../contents/ui/components/icons/stage-manager.svg</file>
     <file alias="contents/ui/components/icons/volume-high.svg">../contents/ui/components/icons/volume-high.svg</file>
