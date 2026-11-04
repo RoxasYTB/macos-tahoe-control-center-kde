@@ -62,8 +62,8 @@ Popup {
                 width: 48
                 height: 30
                 anchors.verticalCenter: parent.verticalCenter
-                // In the offline design preview, show the supplied connected
-                // state; the live app always binds this to NetworkManager.
+                // Keep unavailable hardware visibly off and prevent a toggle
+                // from being offered when NetworkManager has no Wi-Fi device.
                 checked: root.controlController && root.controlController.wifiAvailable
                          && root.controlController.wifiEnabled
                 enabled: root.controlController !== null && root.controlController.wifiAvailable

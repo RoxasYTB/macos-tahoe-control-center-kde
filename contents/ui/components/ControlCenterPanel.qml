@@ -55,7 +55,8 @@ Item {
     function customIsDisabled(name) {
         if (name === "Wi-Fi") return !root.controlController || !root.controlController.wifiAvailable
         if (name === "Bluetooth") return !root.controlController || !root.controlController.bluetoothAvailable
-        return ["AirDrop", "Focus", "Battery", "Alarm", "Stopwatch", "Timer", "Application Windows", "Dock Auto-hide", "Mission Control", "Show Desktop", "Tile Windows Left & Corners", "Tile Windows Left & Right", "Tile Windows to Corners", "Fast User Switching", "Home", "Keyboard Brightness", "Lock Screen", "Microsoft Teams", "Notes", "Shortcuts", "Utilities", "Scene or Accessory", "Run Shortcut", "Voice Memo", "Quick Note", "Recognize Music", "Start Screen Saver"].indexOf(name) >= 0
+        if (name === "Battery") return !root.controlController || !root.controlController.batteryAvailable
+        return ["AirDrop", "Focus", "Alarm", "Stopwatch", "Timer", "Application Windows", "Dock Auto-hide", "Mission Control", "Show Desktop", "Tile Windows Left & Corners", "Tile Windows Left & Right", "Tile Windows to Corners", "Fast User Switching", "Home", "Keyboard Brightness", "Lock Screen", "Microsoft Teams", "Notes", "Shortcuts", "Utilities", "Scene or Accessory", "Run Shortcut", "Voice Memo", "Quick Note", "Recognize Music", "Start Screen Saver"].indexOf(name) >= 0
     }
     function customStatus(name) {
         if (name === "Wi-Fi") {
@@ -67,6 +68,10 @@ Item {
         if (name === "Bluetooth") {
             if (!root.controlController || !root.controlController.bluetoothAvailable) return qsTr("Unavailable")
             return root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off")
+        }
+        if (name === "Battery") {
+            if (!root.controlController || !root.controlController.batteryAvailable) return qsTr("Unavailable")
+            return root.controlController.batteryPercent + " %"
         }
         return root.customIsDisabled(name) ? qsTr("Unavailable") : ""
     }
