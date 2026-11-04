@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE void refreshWifiNetworks();
     Q_INVOKABLE void refreshBluetoothDevices();
     Q_INVOKABLE void toggleWifi();
+    Q_INVOKABLE void connectWifiNetwork(const QString &ssid);
     Q_INVOKABLE void toggleBluetooth();
     Q_INVOKABLE void setVolume(int percent);
     Q_INVOKABLE void launchScreenshot();

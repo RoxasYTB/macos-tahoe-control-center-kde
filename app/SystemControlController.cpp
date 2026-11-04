@@ -276,6 +276,23 @@ void SystemControlController::toggleWifi()
     run(QStringLiteral("nmcli"), {QStringLiteral("radio"), QStringLiteral("wifi"), m_wifiEnabled ? QStringLiteral("off") : QStringLiteral("on")});
 }
 
+void SystemControlController::connectWifiNetwork(const QString &ssid)
+{
+    if (!m_wifiAvailable || !m_wifiEnabled || ssid.trimmed().isEmpty()) return;
+
+    auto *process = new QProcess(this);
+    connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+            [this, process](int exitCode, QProcess::ExitStatus status) {
+        const bool connected = status == QProcess::NormalExit && exitCode == 0;
+        process->deleteLater();
+        if (!connected) openWifiSettings();
+        QTimer::singleShot(150, this, &SystemControlController::refresh);
+    });
+    process->start(QStringLiteral("nmcli"), {
+        QStringLiteral("device"), QStringLiteral("wifi"), QStringLiteral("connect"), ssid
+    });
+}
+
 void SystemControlController::toggleBluetooth()
 {
     run(QStringLiteral("bluetoothctl"), {QStringLiteral("power"), m_bluetoothEnabled ? QStringLiteral("off") : QStringLiteral("on")});

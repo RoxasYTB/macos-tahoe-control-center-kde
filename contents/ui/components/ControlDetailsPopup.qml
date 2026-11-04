@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
+pragma ComponentBehavior: Bound
+
 Popup {
     id: root
 
@@ -207,16 +209,48 @@ Popup {
             visible: root.expandedNetworks && root.controlController
             Repeater {
                 model: root.controlController ? root.controlController.wifiOtherNetworks.slice(0, 5) : []
-                delegate: Text {
+                delegate: Item {
+                    id: networkRow
                     required property string modelData
                     width: parent.width
                     height: 27
-                    text: modelData
-                    color: Qt.rgba(1, 1, 1, 0.85)
-                    font.family: "SF Pro Text"
-                    font.pixelSize: 11
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 6
+                        color: Qt.rgba(1, 1, 1, 0.10)
+                        visible: networkHover.hovered || parent.activeFocus
+                    }
+                    Text {
+                        anchors.fill: parent
+                        leftPadding: 4
+                        text: networkRow.modelData
+                        color: Qt.rgba(1, 1, 1, 0.88)
+                        font.family: "SF Pro Text"
+                        font.pixelSize: 11
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+                    HoverHandler { id: networkHover }
+                    TapHandler {
+                        enabled: root.controlController && root.controlController.wifiAvailable
+                                 && root.controlController.wifiEnabled
+                        onTapped: root.controlController.connectWifiNetwork(networkRow.modelData)
+                    }
+                    activeFocusOnTab: root.controlController && root.controlController.wifiAvailable
+                                      && root.controlController.wifiEnabled
+                    Keys.onReturnPressed: function(event) {
+                        if (!activeFocusOnTab) return
+                        root.controlController.connectWifiNetwork(networkRow.modelData)
+                        event.accepted = true
+                    }
+                    Keys.onEnterPressed: function(event) {
+                        if (!activeFocusOnTab) return
+                        root.controlController.connectWifiNetwork(networkRow.modelData)
+                        event.accepted = true
+                    }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: qsTr("Connect to %1").arg(networkRow.modelData)
                 }
             }
         }
