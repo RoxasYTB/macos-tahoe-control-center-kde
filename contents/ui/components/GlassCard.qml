@@ -13,8 +13,8 @@ Item {
     property Item backdropOverride: null
     property bool solidMode: false
     property color solidColor: "#ffffff"
-    // Keep a restrained live backdrop blur inside each capsule. The optional
-    // exterior halo is disabled by default to avoid the dropped soft flare.
+    // Keep a restrained live backdrop blur inside each capsule; the faint
+    // exterior falloff below softens edges without adding a specular flare.
     property real glassBlurRadius: 6
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0
@@ -22,7 +22,7 @@ Item {
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
     // Fine, background-aware edge contour fitted against the macOS capture.
-    property real glassEdgeRimStrength: 0.16
+    property real glassEdgeRimStrength: 0.24
     property real glassOuterBlurRadius: 6
     // A faint progressive 6 px backdrop blur softens the silhouette without
     // adding the bright flare/reflection that was removed from the prototype.
