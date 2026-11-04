@@ -15,7 +15,7 @@ Item {
     property color solidColor: "#ffffff"
     // Keep a restrained live backdrop blur inside each capsule; the masked
     // outer halo adds a separate progressive accessibility-softening band.
-    property real glassBlurRadius: 8
+    property real glassBlurRadius: 6
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0
     property real glassRefractionThickness: 35
