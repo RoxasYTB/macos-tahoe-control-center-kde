@@ -4,7 +4,7 @@ import QtCore
 Item {
     id: root
     width: 292
-    height: 489
+    height: 484
     implicitWidth: width
     implicitHeight: height
     property color foreground: "#f8f5ff"

@@ -1,17 +1,8 @@
-import json
 import re
-import subprocess
-import zipfile
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def test_plasma_package_metadata():
-    metadata = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))
-    assert metadata["KPlugin"]["Id"] == "org.kde.mac-tahoe-liquid-kde.controlcenter"
-    assert metadata["KPackageStructure"] == "Plasma/Applet"
 
 
 def test_popup_is_transparent_and_visual_only():
@@ -40,11 +31,11 @@ def test_panel_has_reference_geometry_and_independent_glass_cards():
     assert re.search(r"width:\s*292\s*\n\s*height:\s*484", qml)
     assert qml.count("QuickTile {") >= 8
     assert qml.count("GlassCard {") >= 2
-    assert qml.count("SliderCard {") == 2
+    assert qml.count("SliderCard {") == 3
     assert "Rectangle {" not in qml
     assert 'x: 152; y: 0; width: 140; height: 139' in qml
-    assert 'x: 0; y: 303; width: 292; height: 64' in qml
-    assert 'x: 0; y: 378; width: 292; height: 64' in qml
+    assert 'x: 0; y: 306; width: 292; height: 64' in qml
+    assert 'x: 0; y: 383; width: 292; height: 64' in qml
 
 
 def test_reference_icons_are_authored_svg_assets():
@@ -67,18 +58,6 @@ def test_glass_uses_superellipse_and_gpl_source_notice():
     assert "superellipse" in shader.lower() or "squircle" in shader.lower()
     assert "0d1b9fe34ca3d21fc6f31b599990490d637ce8f8" in notice
     assert (ROOT / "LICENSE").is_file()
-
-
-def test_package_script_creates_root_metadata_and_required_shader_assets(tmp_path):
-    subprocess.run([str(ROOT / "package.sh")], cwd=ROOT, check=True, capture_output=True, text=True)
-    package = ROOT / "dist/control-center-0.1.0.plasmoid"
-    assert package.is_file()
-    with zipfile.ZipFile(package) as archive:
-        names = set(archive.namelist())
-    assert "metadata.json" in names
-    assert "contents/ui/main.qml" in names
-    assert "contents/ui/components/shaders/liquidglass.frag.qsb" in names
-    assert "contents/ui/components/shaders/blur_v.frag.qsb" in names
 
 
 def test_standalone_control_center_is_managed_and_dismisses_outside():

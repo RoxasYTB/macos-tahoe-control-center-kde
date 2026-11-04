@@ -9,7 +9,9 @@ Window {
     // Keep only the 12 px reference inset on the right. The former 60 px
     // empty gutter was inherited from the plasmoid's wider popup window.
     width: 304
-    height: 544
+    // The panel is 484 px tall; keep only a 12 px transparent safety margin
+    // below it so the popup does not capture clicks in an unused 60 px strip.
+    height: 496
     visible: trayController.popupVisible
     color: "transparent"
     property bool stayOpen: false
@@ -56,7 +58,7 @@ Window {
     BlurBehindRegion {
         window: popup
         maskSource: Qt.resolvedUrl("qrc:/app/control-center-blur-window-region.png")
-        alphaThreshold: 8
+        alphaThreshold: 24
         // The native helper applies/removes the property on visibleChanged;
         // keep it enabled so QML binding order cannot race the QWindow map.
         enabled: true
