@@ -72,9 +72,13 @@ void TrayController::positionWindow()
     m_window->setScreen(screen);
     const QRect available = screen->availableGeometry();
     const int rightEdge = available.x() + available.width() - 1;
-    // The popup is panel-sized, so this keeps the panel's right edge 12 px
-    // from the display edge, matching the design reference.
-    const int x = rightEdge - m_window->width();
+    // The transparent window includes a 12 px right gutter after the
+    // 292 px panel. The reference panel itself sits about 13 px from the
+    // display edge, so account for that gutter when positioning the window.
+    constexpr int panelRightGutter = 12;
+    constexpr int referencePanelRightInset = 13;
+    const int panelWidth = m_window->width() - panelRightGutter;
+    const int x = rightEdge - panelWidth - referencePanelRightInset + 1;
     const int y = trayGeometry.isValid() && !trayGeometry.isEmpty()
         ? trayGeometry.y() + trayGeometry.height() + 5
         : screen->geometry().y() + 41;
