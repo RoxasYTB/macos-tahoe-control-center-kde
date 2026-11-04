@@ -73,13 +73,17 @@ Popup {
                         Text {
                             width: parent.width - 38; height: parent.height
                             text: modelData.name
-                            color: modelData.connected ? "#fffaff" : Qt.rgba(1, 1, 1, 0.68)
+                            color: root.controlController && root.controlController.bluetoothAvailable
+                                   && root.controlController.bluetoothEnabled && modelData.connected
+                                   ? "#fffaff" : Qt.rgba(1, 1, 1, 0.68)
                             font.family: "SF Pro Text"; font.pixelSize: 12
                             verticalAlignment: Text.AlignVCenter; elide: Text.ElideRight
                         }
                     }
                     TapHandler {
                         enabled: root.controlController !== null
+                                 && root.controlController.bluetoothAvailable
+                                 && root.controlController.bluetoothEnabled
                         onTapped: root.controlController.toggleBluetoothDevice(
                                       modelData.address, modelData.connected)
                     }
