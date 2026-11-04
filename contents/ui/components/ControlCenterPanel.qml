@@ -31,7 +31,9 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Wi-Fi"
-        subtitle: root.controlController && root.controlController.wifiEnabled ? "On" : "Off"
+        subtitle: root.controlController
+            ? (root.controlController.wifiEnabled ? "SannWifi-\nFreebox" : "Off")
+            : "SannWifi-\nFreebox"
         interactive: root.controlController !== null
         onActivated: if (root.controlController) root.controlController.toggleWifi()
         foreground: root.foreground
@@ -55,7 +57,9 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Bluetooth"
-        subtitle: root.controlController && root.controlController.bluetoothEnabled ? "On" : "Off"
+        subtitle: root.controlController
+            ? (root.controlController.bluetoothEnabled ? "On" : "Off")
+            : "On"
         interactive: root.controlController !== null
         onActivated: if (root.controlController) root.controlController.toggleBluetooth()
         foreground: root.foreground

@@ -24,9 +24,9 @@ Item {
     // Fine, background-aware edge contour fitted against the macOS capture.
     property real glassEdgeRimStrength: 0.16
     property real glassOuterBlurRadius: 6
-    // The prototype's soft flare outside each capsule was dropped; keep the
-    // sampled wallpaper and subtle blur confined to the glass surface.
-    property real glassOuterBlurStrength: 0.0
+    // A faint progressive 6 px backdrop blur softens the silhouette without
+    // adding the bright flare/reflection that was removed from the prototype.
+    property real glassOuterBlurStrength: 0.20
     property real glassInnerBlurMix: 1.0
     default property alias contentData: content.data
 
