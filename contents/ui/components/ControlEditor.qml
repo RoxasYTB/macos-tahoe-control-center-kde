@@ -176,6 +176,10 @@ Window {
     function showEditor() {
         draftControlCenterItems = savedLayout.controlCenterItems.slice()
         draftMenuBarItems = savedLayout.menuBarItems.slice()
+        // Reopen at the top-level reference view, regardless of the previous
+        // editing session's category, search query, or scroll position.
+        selectedCategory = "All Controls"
+        searchText = ""
         applyingChanges = false
         showAssignmentEditor = false
         x = Math.round((Screen.width - width) / 2)
@@ -229,7 +233,10 @@ Window {
                                 id: search
                                 Layout.fillWidth: true
                                 text: root.searchText
-                                onTextChanged: root.searchText = text
+                                onTextChanged: {
+                                    root.searchText = text
+                                    catalogScroll.ScrollBar.vertical.position = 0
+                                }
                                 placeholderText: qsTr("Search Controls")
                                 color: "white"
                                 placeholderTextColor: "#aaa4b6"
@@ -275,7 +282,12 @@ Window {
                                             text: modelData; color: "#f5f0fa"; font.pixelSize: 13
                                         }
                                     }
-                                    TapHandler { onTapped: root.selectedCategory = modelData }
+                                    TapHandler {
+                                        onTapped: {
+                                            root.selectedCategory = modelData
+                                            catalogScroll.ScrollBar.vertical.position = 0
+                                        }
+                                    }
                                 }
                             }
                         }
