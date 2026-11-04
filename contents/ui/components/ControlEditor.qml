@@ -213,6 +213,11 @@ Window {
                         Layout.fillWidth: true; Layout.fillHeight: true
                         clip: true
                         ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                        // The reference has a single vertical rail here. Qt's
+                        // default horizontal bar otherwise appears for a few
+                        // sub-pixel Flow overflows and steals height from the
+                        // last visible category rows.
+                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                         Column {
                             width: parent.width
                             spacing: 3
@@ -259,6 +264,7 @@ Window {
                     Layout.fillWidth: true; Layout.fillHeight: true
                     clip: true
                     ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                     Column {
                         width: catalogScroll.availableWidth
                         leftPadding: 20; rightPadding: 20; topPadding: 18; bottomPadding: 14
