@@ -12,22 +12,64 @@ Item {
     property bool useLiquidGlass: true
     property var controlController: typeof systemControls !== "undefined" ? systemControls : null
     readonly property bool detailsOpen: wifiDetails.visible || bluetoothDetails.visible
+    readonly property var defaultControlCenterItems: ["AirDrop", "Bluetooth", "Wi-Fi", "Stage Manager", "Screen Mirroring", "Appearance", "Screenshot", "Focus", "Display", "Sound", "Now Playing"]
+    readonly property bool customLayout: !sameList(savedControlLayout.controlCenterItems, defaultControlCenterItems)
     signal editControlsRequested()
     Settings {
         id: savedControlLayout
         category: "ControlCenter"
         property var controlCenterItems: ["AirDrop", "Bluetooth", "Wi-Fi", "Stage Manager", "Screen Mirroring", "Appearance", "Screenshot", "Focus", "Display", "Sound", "Now Playing"]
     }
+    function sameList(a, b) {
+        if (!a || a.length !== b.length) return false
+        for (let i = 0; i < a.length; ++i) if (a[i] !== b[i]) return false
+        return true
+    }
     function controlIsSelected(name) {
         return savedControlLayout.controlCenterItems.indexOf(name) >= 0
+    }
+    function customIcon(name) {
+        switch (name) {
+        case "Wi-Fi": return "cupertino-font-wifi"
+        case "Bluetooth": return "cupertino-font-bluetooth"
+        case "AirDrop": return "airdrop-muted"
+        case "Stage Manager": return "stage-manager"
+        case "Screen Mirroring": return "screen-mirroring"
+        case "Appearance": case "Dark Mode": return "appearance"
+        case "Screenshot": return "screenshot"
+        case "Focus": return "cupertino-font-moon_fill"
+        case "Display": return "brightness-high"
+        case "Sound": return "cupertino-font-speaker_3_fill"
+        case "Now Playing": case "Recognize Music": return "cupertino-font-music_note"
+        case "Battery": return "cupertino-font-battery_100"
+        case "Clock": case "Alarm": case "Stopwatch": case "Timer": return "cupertino-font-clock"
+        case "Notes": case "Quick Note": return "cupertino-font-note_text"
+        case "Voice Memo": return "cupertino-font-waveform"
+        case "Keyboard Brightness": return "cupertino-font-keyboard"
+        case "Lock Screen": return "cupertino-font-lock_fill"
+        case "Home": return "cupertino-font-house_fill"
+        case "Utilities": return "cupertino-font-wrench_fill"
+        default: return "cupertino-font-square_grid_2x2_fill"
+        }
+    }
+    function customIsDisabled(name) {
+        return ["AirDrop", "Focus", "Battery", "Alarm", "Stopwatch", "Timer", "Application Windows", "Dock Auto-hide", "Mission Control", "Show Desktop", "Tile Windows Left & Corners", "Tile Windows Left & Right", "Tile Windows to Corners", "Fast User Switching", "Home", "Keyboard Brightness", "Lock Screen", "Microsoft Teams", "Notes", "Shortcuts", "Utilities", "Scene or Accessory", "Run Shortcut", "Voice Memo", "Quick Note", "Recognize Music", "Start Screen Saver"].indexOf(name) >= 0
     }
 
     function openWifiDetails() { wifiDetails.open() }
     function openBluetoothDetails() { bluetoothDetails.open() }
 
+    Connections {
+        target: typeof trayController !== "undefined" ? trayController : null
+        function onMenuBarControlActivated(name) {
+            if (name === "Wi-Fi") root.openWifiDetails()
+            else if (name === "Bluetooth") root.openBluetoothDetails()
+        }
+    }
+
     QuickTile {
         id: wifiTile
-        visible: !root.detailsOpen && root.controlIsSelected("Wi-Fi")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Wi-Fi")
         x: 0; y: 0; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -70,7 +112,7 @@ Item {
 
     QuickTile {
         id: bluetoothTile
-        visible: !root.detailsOpen && root.controlIsSelected("Bluetooth")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Bluetooth")
         x: 0; y: 77; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -106,7 +148,7 @@ Item {
         controlController: root.controlController
     }
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("AirDrop")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("AirDrop")
         x: 0; y: 153; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -136,7 +178,7 @@ Item {
 
     GlassCard {
         objectName: "Media"
-        visible: !root.detailsOpen && root.controlIsSelected("Now Playing")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Now Playing")
         x: 152; y: 0; width: 140; height: 139
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -208,7 +250,7 @@ Item {
     }
 
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("Stage Manager")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Stage Manager")
         x: 152; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -227,7 +269,7 @@ Item {
         Accessible.name: "Stage Manager"
     }
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("Screen Mirroring")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Screen Mirroring")
         x: 228; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -244,7 +286,7 @@ Item {
     }
 
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("Appearance")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Appearance")
         x: -1; y: 230; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -263,7 +305,7 @@ Item {
         Accessible.name: "Appearance"
     }
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("Screenshot")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Screenshot")
         x: 76; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -283,7 +325,7 @@ Item {
         Accessible.name: "Screenshot"
     }
     QuickTile {
-        visible: !root.detailsOpen && root.controlIsSelected("Focus")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Focus")
         x: 152; y: 229; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -308,7 +350,7 @@ Item {
     }
 
     SliderCard {
-        visible: !root.detailsOpen && root.controlIsSelected("Display")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Display")
         x: 0; y: 306; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -325,7 +367,7 @@ Item {
         foreground: root.foreground
     }
     SliderCard {
-        visible: !root.detailsOpen && root.controlIsSelected("Sound")
+        visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Sound")
         x: 0; y: 383; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -364,6 +406,135 @@ Item {
             font.family: "SF Pro Text"
             font.pixelSize: 11
             Accessible.name: text
+        }
+    }
+
+    // A changed selection/order is rendered from the saved list itself. This
+    // keeps the carefully fitted reference layout untouched until the user
+    // edits it, while making added controls and their order visible at once.
+    Flickable {
+        id: customControlsViewport
+        visible: root.customLayout && !root.detailsOpen
+        x: 0; y: 0; width: root.width; height: 451
+        clip: true
+        contentWidth: width
+        contentHeight: customControlsFlow.implicitHeight
+        boundsBehavior: Flickable.StopAtBounds
+
+        Flow {
+            id: customControlsFlow
+            width: customControlsViewport.width
+            spacing: 12
+            Repeater {
+                model: savedControlLayout.controlCenterItems
+                delegate: Item {
+                    id: customControl
+                    required property string modelData
+                    width: (modelData === "Display" || modelData === "Sound") ? 292
+                         : (modelData === "Now Playing" ? 140 : 140)
+                    height: modelData === "Now Playing" ? 139 : 64
+
+                    QuickTile {
+                        anchors.fill: parent
+                        visible: customControl.modelData !== "Display" && customControl.modelData !== "Sound" && customControl.modelData !== "Now Playing"
+                        backdropOverride: root.backdropOverride
+                        useLiquidGlass: root.useLiquidGlass
+                        iconName: root.customIcon(customControl.modelData)
+                        iconBadge: true
+                        badgeSize: 36
+                        badgeIconSize: 22
+                        iconColor: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth" ? "#007aff" : root.foreground
+                        badgeColor: "#ffffff"
+                        title: customControl.modelData
+                        subtitle: customControl.modelData === "Wi-Fi"
+                            ? (root.controlController && root.controlController.wifiEnabled
+                               ? (root.controlController.wifiNetworkName.length ? root.controlController.wifiNetworkName : qsTr("On")) : qsTr("Off"))
+                            : customControl.modelData === "Bluetooth"
+                              ? (root.controlController && root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off"))
+                              : root.customIsDisabled(customControl.modelData) ? qsTr("Unavailable") : ""
+                        hasSubmenu: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
+                        disabled: root.customIsDisabled(customControl.modelData)
+                        interactive: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
+                            || customControl.modelData === "Appearance" || customControl.modelData === "Screenshot"
+                        onActivated: {
+                            if (customControl.modelData === "Wi-Fi") wifiDetails.open()
+                            else if (customControl.modelData === "Bluetooth") bluetoothDetails.open()
+                            else if (customControl.modelData === "Appearance" && root.controlController) root.controlController.toggleAppearance()
+                            else if (customControl.modelData === "Screenshot" && root.controlController) root.controlController.launchScreenshot()
+                        }
+                        foreground: root.foreground
+                        tileFill: Qt.rgba(1, 1, 1, 0.07)
+                    }
+                    GlassCard {
+                        anchors.fill: parent
+                        visible: customControl.modelData === "Now Playing"
+                        backdropOverride: root.backdropOverride
+                        useLiquidGlass: root.useLiquidGlass
+                        glassBlurRadius: 10
+                        glassRefractionThickness: 36
+                        glassTintStrength: 1.0
+                        glassChromaStrength: 0.0
+                        cornerRadius: 33
+                        roundness: 3.0
+                        fillColor: Qt.rgba(1, 1, 1, 0.07)
+                        borderColor: Qt.rgba(1, 1, 1, 0.35)
+                        SquircleSurface {
+                            x: 14; y: 12; width: 42; height: 42
+                            radius: 14; cornerExponent: 3.0
+                            fillColor: Qt.rgba(1, 1, 1, 0.06)
+                            strokeColor: Qt.rgba(1, 1, 1, 0.04)
+                            strokeWidth: 0.5
+                        }
+                        Text {
+                            x: 14; y: 73; width: parent.width - 26
+                            text: root.controlController && root.controlController.mediaAvailable
+                                ? qsTr("Now Playing") : qsTr("Not Playing")
+                            color: root.foreground
+                            font.family: "SF Pro Text"; font.pixelSize: 12; font.weight: Font.DemiBold
+                            elide: Text.ElideRight
+                        }
+                        Row {
+                            x: 10; y: 98; width: parent.width - 20; height: 26
+                            Repeater {
+                                model: ["cupertino-font-backward_fill", "cupertino-font-play_fill", "cupertino-font-forward_fill"]
+                                delegate: Item {
+                                    required property string modelData
+                                    required property int index
+                                    width: 40; height: 26
+                                    MacIcon {
+                                        anchors.centerIn: parent
+                                        width: 21; height: modelData === "cupertino-font-play_fill" ? 21 : 11
+                                        stretch: modelData !== "cupertino-font-play_fill"
+                                        glyphScale: modelData === "cupertino-font-play_fill" ? 1.35 : 2.0
+                                        iconName: modelData
+                                        opacity: root.controlController && root.controlController.mediaAvailable ? 0.55 : 0.28
+                                    }
+                                    TapHandler {
+                                        enabled: root.controlController && root.controlController.mediaAvailable
+                                        onTapped: {
+                                            if (index === 0) root.controlController.mediaPrevious()
+                                            else if (index === 1) root.controlController.mediaTogglePlayback()
+                                            else root.controlController.mediaNext()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    SliderCard {
+                        anchors.fill: parent
+                        visible: customControl.modelData === "Display" || customControl.modelData === "Sound"
+                        backdropOverride: root.backdropOverride
+                        useLiquidGlass: root.useLiquidGlass
+                        title: customControl.modelData
+                        sound: customControl.modelData === "Sound"
+                        value: sound && root.controlController ? root.controlController.volume / 100 : 1
+                        interactive: sound && root.controlController !== null
+                        onValueEdited: if (root.controlController) root.controlController.setVolume(Math.round(value * 100))
+                        foreground: root.foreground
+                    }
+                }
+            }
         }
     }
 }

@@ -106,6 +106,8 @@ Window {
     function applyAndClose() {
         savedLayout.controlCenterItems = draftControlCenterItems.slice()
         savedLayout.menuBarItems = draftMenuBarItems.slice()
+        if (typeof trayController !== "undefined")
+            trayController.setMenuBarItems(draftMenuBarItems.join("\n"))
         applyingChanges = true
         close()
     }

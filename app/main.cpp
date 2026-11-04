@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QUrl>
 #include <QDebug>
+#include <QSettings>
 #include <qqml.h>
 
 int main(int argc, char *argv[])
@@ -72,6 +73,11 @@ int main(int argc, char *argv[])
 
     controller.setWindow(window);
     trayIcon.setVisible(true);
+    QSettings controlSettings;
+    controlSettings.beginGroup(QStringLiteral("ControlCenter"));
+    const QStringList configuredMenuBarItems = controlSettings.value(QStringLiteral("menuBarItems")).toStringList();
+    controlSettings.endGroup();
+    controller.setMenuBarItems(configuredMenuBarItems.join(QLatin1Char('\n')));
     QTimer::singleShot(500, &app, [&trayIcon, &controller] {
         QObject::connect(&trayIcon, &QSystemTrayIcon::activated, &controller,
                          [&controller](QSystemTrayIcon::ActivationReason reason) {
