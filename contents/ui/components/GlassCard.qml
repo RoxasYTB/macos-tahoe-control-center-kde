@@ -22,7 +22,7 @@ Item {
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
     property real glassOuterBlurRadius: 6
-    property real glassOuterBlurStrength: 0.20
+    property real glassOuterBlurStrength: 0.40
     property real glassInnerBlurMix: 1.0
     default property alias contentData: content.data
 
