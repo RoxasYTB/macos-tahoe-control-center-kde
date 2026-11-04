@@ -53,7 +53,7 @@ GlassCard {
                 id: leadingIcon
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 2.5
+                anchors.verticalCenterOffset: 0.5
                 width: root.sound ? 20 : 17
                 height: root.sound ? 20 : 17
                 iconName: root.sound ? "volume-low" : "brightness-low"
@@ -68,7 +68,7 @@ GlassCard {
                 anchors.leftMargin: root.sound ? 0 : 6
                 anchors.rightMargin: root.sound ? 5 : 6
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 2.5
+                anchors.verticalCenterOffset: 0.5
                 height: 4
 
                 Rectangle {
@@ -91,7 +91,7 @@ GlassCard {
                 visible: !root.sound
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 1
+                anchors.verticalCenterOffset: -1
                 width: 19
                 height: 19
                 iconName: "brightness-high"
@@ -106,7 +106,7 @@ GlassCard {
                 anchors.right: audioOutput.left
                 anchors.rightMargin: 8.25
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 2
+                anchors.verticalCenterOffset: 0
                 width: 21
                 height: 16
                 iconName: "cupertino-font-speaker_3_fill"
@@ -122,7 +122,7 @@ GlassCard {
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 4
+                anchors.verticalCenterOffset: 2
                 width: 27
                 height: 27
                 Rectangle {
