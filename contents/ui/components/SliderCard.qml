@@ -66,7 +66,7 @@ GlassCard {
                 id: track
                 anchors.left: leadingIcon.right
                 anchors.right: root.sound ? volumeIcon.left : trailingIcon.left
-                anchors.leftMargin: root.sound ? -1 : 6
+                anchors.leftMargin: root.sound ? -1 : 3
                 anchors.rightMargin: root.sound ? 10 : 6
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0.5
