@@ -94,6 +94,8 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 
 - Status rendering now distinguishes adapter availability from radio power: the main panel, editor previews, and Wi-Fi/Bluetooth detail popovers use actual `SystemControlController` state and say “Unavailable” when the host has no corresponding device. Battery preview reads `/sys/class/power_supply/*/{type,capacity}` and no longer invents “100 %”. AirDrop stays unavailable as agreed.
 - Read-only host snapshot during this pass: NetworkManager reports Wi-Fi radio enabled but no Wi-Fi device, `bluetoothctl show` reports an available powered controller, and `/sys/class/power_supply` has no battery entry. These values are machine-specific; the UI remains bound to live queries.
+- Read-only brightness capability check: `/sys/class/backlight` has no entries and `brightnessctl` is not installed; the controller has no brightness setter. The default and custom Display sliders now show “Unavailable” with no fabricated filled level and remain non-interactive on this host.
+- After the Display availability change, `tahoe-control-center` builds and `qmllint` reports zero syntax/error diagnostics for `SliderCard.qml` and `ControlCenterPanel.qml`. No live UI render was used for this change.
 - `cmake --build .build/app --target tahoe-control-center -j2` completed successfully after the availability changes; `git diff --check` reported no whitespace errors. No active Plasma/KWin session was restarted or altered.
 
 - In Xvfb with a temporary `XDG_CONFIG_HOME`, dragged a catalog tile into the Control Center chips and into Menu Bar; each appeared in the saved settings after Done.

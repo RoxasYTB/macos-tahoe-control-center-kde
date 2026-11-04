@@ -385,10 +385,12 @@ Item {
         glassRefractionThickness: 25
         glassTintStrength: 1.0
         title: "Display"
+        status: !root.controlController || !root.controlController.brightnessAvailable
+                ? qsTr("Unavailable") : ""
         titleOffsetY: 3
         titlePixelSize: 12.25
         titleLetterSpacing: 0.15
-        value: 1
+        value: 0
         interactive: false
         trackColor: Qt.rgba(1, 1, 1, 0.14)
         levelColor: Qt.rgba(1, 1, 1, 0.14)
@@ -550,10 +552,19 @@ Item {
                         backdropOverride: root.backdropOverride
                         useLiquidGlass: root.useLiquidGlass
                         title: customControl.modelData
+                        status: customControl.modelData === "Display"
+                                && (!root.controlController || !root.controlController.brightnessAvailable)
+                                ? qsTr("Unavailable") : ""
                         sound: customControl.modelData === "Sound"
-                        value: sound && root.controlController ? root.controlController.volume / 100 : 1
+                        value: sound && root.controlController ? root.controlController.volume / 100 : 0
                         interactive: sound && root.controlController !== null
                         onValueEdited: if (root.controlController) root.controlController.setVolume(Math.round(value * 100))
+                        trackColor: customControl.modelData === "Display"
+                            && (!root.controlController || !root.controlController.brightnessAvailable)
+                            ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(1, 1, 1, 0.30)
+                        levelColor: customControl.modelData === "Display"
+                            && (!root.controlController || !root.controlController.brightnessAvailable)
+                            ? Qt.rgba(1, 1, 1, 0.14) : "#ffffff"
                         foreground: root.foreground
                     }
                 }

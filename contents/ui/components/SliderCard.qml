@@ -5,6 +5,7 @@ GlassCard {
     id: root
 
     property string title: ""
+    property string status: ""
     property real value: 0.5
     property bool sound: false
     property real titleOffsetY: 0
@@ -31,17 +32,29 @@ GlassCard {
         anchors.bottomMargin: 7
         spacing: 2
 
-        Text {
+        RowLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 1
-            text: root.title
-            color: root.foreground
-            font.family: "SF Pro Text"
-            font.pixelSize: root.titlePixelSize
-            font.weight: Font.DemiBold
-            font.letterSpacing: root.titleLetterSpacing
-            verticalAlignment: Text.AlignVCenter
-            transform: Translate { y: root.titleOffsetY }
+            spacing: 4
+            Text {
+                Layout.fillWidth: true
+                Layout.leftMargin: 1
+                text: root.title
+                color: root.foreground
+                font.family: "SF Pro Text"
+                font.pixelSize: root.titlePixelSize
+                font.weight: Font.DemiBold
+                font.letterSpacing: root.titleLetterSpacing
+                verticalAlignment: Text.AlignVCenter
+                transform: Translate { y: root.titleOffsetY }
+            }
+            Text {
+                visible: root.status.length > 0
+                text: root.status
+                color: Qt.rgba(1, 1, 1, 0.58)
+                font.family: "SF Pro Text"
+                font.pixelSize: 10
+                verticalAlignment: Text.AlignVCenter
+            }
         }
 
         Item {
