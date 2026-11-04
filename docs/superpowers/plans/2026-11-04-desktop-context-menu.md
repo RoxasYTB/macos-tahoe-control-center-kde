@@ -32,7 +32,9 @@
 
 #### Verified implementation map — 4 November 2026
 
-- Installed Plasma 6.7.4 routes a blank desktop right-click through `org.kde.desktopcontainment/contents/ui/FolderView.qml`, which calls `dir.openContextMenu(main, modifiers)`. The loaded `org.kde.private.desktopcontainment.folder/FolderModel` plugin owns the native file actions.
+- Installed Plasma 6.7.4 routes a blank desktop right-click through `org.kde.desktopcontainment/contents/ui/FolderView.qml`. `FolderModel.usedByContainment` is true for the desktop root, so the folder view deliberately skips `dir.openContextMenu()` there and lets the event fall through to the desktop containment action.
+- The desktop default maps `RightButton;NoModifier` to `org.kde.contextmenu` (`/usr/share/plasma/shells/org.kde.plasma.desktop/contents/defaults`). `Plasma::ContainmentItem` gathers the configured plugin's `QAction`s and opens a native `QMenu`; the corresponding libplasma implementation is documented in [containmentitem.cpp](https://api.kde.org/legacy/plasma/libplasma/html/containmentitem_8cpp_source.html#l1944). The `org.kde.contextmenu` plugin supplies the action order, separators, and actions such as wallpaper, desktop edit mode, and display settings; its source is [menu.cpp](https://github.com/KDE/plasma-workspace/blob/master/containmentactions/contextmenu/menu.cpp#L970-L999).
+- `FolderModel::openContextMenu` is a separate native `QMenu` path for right-clicks on files/folders and folder widgets. It is useful for checking the same QMenu style, but it is not the blank-desktop containment menu.
 - `FolderModel::openContextMenu` creates a `QMenu`, marks it `Qt::WA_TranslucentBackground`, attaches it to the originating `QQuickWindow`, and opens it at the pointer. The KDE upstream source is [foldermodel.cpp](https://github.com/KDE/plasma-desktop/blob/master/containments/desktop/plugins/folder/foldermodel.cpp#L1881-L2029).
 - The menu is styled by the configured Kvantum style and `src/offline/kvantum/mac-tahoe-liquid-kde/mac-tahoe-liquid-kdeDark.kvconfig` plus `mac-tahoe-liquid-kdeDark.svg`. The install staging hook is `src/scripts/glass_surfaces.py`, called by `src/scripts/steps/kvantum.py`.
 - An isolated Xvfb + KWin harness loaded the installed FolderModel plugin, opened its real empty-folder context menu and verified the native `Create New`, `Paste`, `Undo`, `Open Folder With` actions, icons, submenu arrows, hover row and translucent rounded surface. The harness uses the same Kvantum assets without installing or reloading the active desktop.
@@ -41,7 +43,7 @@
 
 #### Remaining verification limits
 
-- The isolated harness verifies the real `FolderModel` menu and its style integration. It does not include Plasma's desktop containment-specific actions such as wallpaper or widget configuration, and it is not a live screenshot of Yohan's full desktop.
+- The isolated harness verifies the real `FolderModel` menu and the shared native QMenu style integration. It does not execute Plasma's desktop containment action plugin or its wallpaper/widget configuration actions, and it is not a live screenshot of Yohan's full desktop. The blank-desktop route is now identified; its own isolated integration render remains to be done.
 - The reference has more rows than the native empty-folder menu; compare like-for-like surface behavior separately from the KDE action inventory.
 
 ### Task 2: Tune the desktop menu surface and rows
