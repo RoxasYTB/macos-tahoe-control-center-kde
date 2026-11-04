@@ -103,7 +103,7 @@ Item {
             x: 14; y: 12; width: 42; height: 42
             radius: 14
             cornerExponent: 3.0
-            fillColor: Qt.rgba(1, 1, 1, 0.10)
+            fillColor: Qt.rgba(1, 1, 1, 0.06)
             strokeColor: Qt.rgba(1, 1, 1, 0.04)
             strokeWidth: 0.5
         }
