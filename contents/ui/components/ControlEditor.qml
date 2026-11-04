@@ -83,11 +83,15 @@ Window {
             && (selectedCategory === "All Controls" || selectedCategory === entry.category || entry.category === "Suggestions")
     }
     function catalogIcon(name) {
-        if (name === "Scene or Accessory" || name === "Home") return "cupertino-font-house_fill"
-        if (["Alarm", "Stopwatch", "Timer"].indexOf(name) >= 0) return "cupertino-font-clock"
+        if (name === "Scene or Accessory") return "cupertino-font-lightbulb_fill"
+        if (name === "Home") return "cupertino-font-house_fill"
+        if (name === "Alarm") return "cupertino-font-alarm"
+        if (name === "Stopwatch") return "cupertino-font-stopwatch"
+        if (name === "Timer") return "cupertino-font-timer"
         if (name.indexOf("Tile Windows") === 0 || name === "Application Windows" || name === "Mission Control" || name === "Dock Auto-hide") return "stage-manager"
         if (name === "Show Desktop" || name === "Screen Mirroring") return "screen-mirroring"
-        if (name === "Run Shortcut" || name === "Shortcuts" || name === "Fast User Switching" || name === "Microsoft Teams") return "cupertino-font-square_grid_2x2_fill"
+        if (name === "Run Shortcut") return "cupertino-font-square_stack_3d_up_fill"
+        if (name === "Shortcuts" || name === "Fast User Switching" || name === "Microsoft Teams") return "cupertino-font-square_grid_2x2_fill"
         if (name === "Voice Memo") return "cupertino-font-waveform"
         if (name === "Quick Note" || name === "Notes") return "note"
         if (name === "Recognize Music" || name === "Now Playing") return "cupertino-font-music_note"
@@ -105,6 +109,20 @@ Window {
         if (name === "Sound") return "cupertino-font-speaker_3_fill"
         if (name === "Utilities") return "cupertino-font-wrench_fill"
         return "cupertino-font-square_grid_2x2_fill"
+    }
+    function suggestionTileX(name) {
+        if (["Scene or Accessory", "Voice Memo"].indexOf(name) >= 0) return 0
+        if (["Alarm", "Run Shortcut", "Recognize Music"].indexOf(name) >= 0) return 152
+        if (name === "Stopwatch") return 228
+        if (["Tile Windows Left & Right", "Start Screen Saver"].indexOf(name) >= 0) return 304
+        if (name === "Quick Note") return 76
+        return 0
+    }
+    function suggestionTileY(name) {
+        if (name === "Run Shortcut") return 110
+        if (["Voice Memo", "Quick Note", "Recognize Music"].indexOf(name) >= 0) return 207
+        if (name === "Start Screen Saver") return 120
+        return 0
     }
     function catalogStatus(name) {
         const controller = typeof systemControls !== "undefined" ? systemControls : null
@@ -314,108 +332,60 @@ Window {
                         Repeater {
                             model: root.selectedCategory === "All Controls" ? ["Suggestions", "Battery", "Clock", "Connectivity", "Desktop & Finder", "Display & Brightness", "Fast User Switching", "Focus", "Home", "Keyboards", "Lock Screen", "Microsoft Teams", "Notes", "Now Playing", "Screenshot", "Shortcuts", "Sounds", "Utilities"] : [root.selectedCategory]
                             delegate: Column {
+                                id: sectionColumn
                                 required property string modelData
+                                readonly property var sectionEntries: root.catalog.filter(function(entry) {
+                                    return entry.category === sectionColumn.modelData && root.matches(entry)
+                                })
+                                readonly property bool useSuggestionGrid: sectionColumn.modelData === "Suggestions"
+                                    && root.searchText.trim().length === 0
                                 width: parent.width
                                 spacing: 10
-                                visible: sectionItems.count > 0
+                                visible: sectionEntries.length > 0
                                 Text {
                                     width: parent.width; height: 21
-                                    text: modelData; color: "#d1b4e9"; font.pixelSize: 12; font.weight: Font.DemiBold
+                                    text: sectionColumn.modelData; color: "#d1b4e9"; font.pixelSize: 12; font.weight: Font.DemiBold
                                 }
-                                Flow {
-                                    id: sectionFlow
+                                Item {
+                                    id: sectionContent
                                     width: parent.width
-                                    spacing: 12
+                                    height: sectionColumn.useSuggestionGrid ? 314 : sectionFlow.implicitHeight
+
+                                    Flow {
+                                        id: sectionFlow
+                                        width: parent.width
+                                        height: visible ? implicitHeight : 0
+                                        visible: !sectionColumn.useSuggestionGrid
+                                        spacing: 12
+                                        Repeater {
+                                            id: sectionItems
+                                            model: sectionColumn.useSuggestionGrid ? [] : sectionColumn.sectionEntries
+                                            delegate: ControlEditorTile {
+                                                required property var modelData
+                                                entry: modelData
+                                                iconName: root.catalogIcon(modelData.name)
+                                                statusText: root.catalogStatus(modelData.name)
+                                                onAddRequested: function(controlName) { root.addTo("control", controlName) }
+                                            }
+                                        }
+                                    }
+
                                     Repeater {
-                                        id: sectionItems
-                                        model: root.catalog.filter(function(e) { return e.category === modelData && root.matches(e) })
+                                        id: suggestionItems
+                                        model: sectionColumn.useSuggestionGrid ? sectionColumn.sectionEntries : []
                                         delegate: Item {
-                                            id: tile
                                             required property var modelData
                                             width: modelData.shape === "circle" ? 62 : 138
-                                            height: modelData.shape === "large" ? 100 : 99
-                                            Column {
-                                                anchors.fill: parent; spacing: 5
-                                                Item {
-                                                    width: tile.modelData.shape === "circle" ? 62 : 138
-                                                    height: tile.modelData.shape === "large" ? 74 : 62
-                                                    anchors.horizontalCenter: parent.horizontalCenter
-                                                    Rectangle {
-                                                        anchors.fill: parent
-                                                        radius: tile.modelData.shape === "pill" ? height / 2 : (tile.modelData.shape === "circle" ? width / 2 : 28)
-                                                        color: tile.modelData.shape === "large" ? "#957b1288" :
-                                                            tile.modelData.category === "Connectivity" ? "#804b2872" :
-                                                            tile.modelData.category === "Display & Brightness" ? "#8b6d2294" :
-                                                            tile.modelData.category === "Fast User Switching" ? "#8c36558c" : "#98631788"
-                                                        border.color: "#63d3a8eb"; border.width: 1
-                                                        RowLayout {
-                                                            anchors.fill: parent
-                                                            anchors.leftMargin: tile.modelData.shape === "pill" ? 8 : 0
-                                                            anchors.rightMargin: tile.modelData.shape === "pill" ? 7 : 0
-                                                            spacing: 7
-                                                            visible: tile.modelData.shape === "pill"
-                                                            Item {
-                                                                Layout.preferredWidth: 37; Layout.preferredHeight: 37
-                                                                Rectangle {
-                                                                    anchors.fill: parent
-                                                                    radius: width / 2
-                                                                    color: ["Wi-Fi", "Bluetooth"].indexOf(tile.modelData.name) >= 0 ? "white"
-                                                                        : tile.modelData.name === "AirDrop" ? "#405d6876" : "transparent"
-                                                                }
-                                                                MacIcon {
-                                                                    anchors.centerIn: parent
-                                                                    width: 22; height: 22
-                                                                    iconName: root.catalogIcon(tile.modelData.name)
-                                                                    glyphColor: ["Wi-Fi", "Bluetooth"].indexOf(tile.modelData.name) >= 0 ? "#1687f8" : "white"
-                                                                }
-                                                            }
-                                                            ColumnLayout {
-                                                                Layout.fillWidth: true
-                                                                spacing: 1
-                                                                Text {
-                                                                    Layout.fillWidth: true
-                                                                    text: tile.modelData.name
-                                                                    color: "white"; font.pixelSize: 11; font.weight: Font.DemiBold
-                                                                    elide: Text.ElideRight
-                                                                }
-                                                                Text {
-                                                                    Layout.fillWidth: true
-                                                                    visible: ["Wi-Fi", "Bluetooth", "AirDrop", "Battery"].indexOf(tile.modelData.name) >= 0
-                                                                    text: root.catalogStatus(tile.modelData.name)
-                                                                    color: "#e4dbea"; font.pixelSize: 9
-                                                                    elide: Text.ElideRight
-                                                                }
-                                                            }
-                                                        }
-                                                        MacIcon {
-                                                            anchors.centerIn: parent
-                                                            width: tile.modelData.shape === "large" ? 28 : 25
-                                                            height: tile.modelData.shape === "large" ? 28 : 25
-                                                            visible: tile.modelData.shape !== "pill"
-                                                            iconName: root.catalogIcon(tile.modelData.name)
-                                                            glyphColor: "white"
-                                                        }
-                                                    }
-                                                }
-                                                Text {
-                                                    width: parent.width; height: 31
-                                                    text: tile.modelData.name; color: "#fffaff"; font.pixelSize: 11
-                                                    horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignTop
-                                                    wrapMode: Text.WordWrap
-                                                }
+                                            height: modelData.shape === "large" ? 174 : 98
+                                            x: root.suggestionTileX(modelData.name)
+                                            y: root.suggestionTileY(modelData.name)
+                                            ControlEditorTile {
+                                                anchors.fill: parent
+                                                entry: modelData
+                                                iconName: root.catalogIcon(modelData.name)
+                                                statusText: root.catalogStatus(modelData.name)
+                                                onAddRequested: function(controlName) { root.addTo("control", controlName) }
                                             }
-                                            Drag.active: dragHandler.active
-                                            Drag.hotSpot.x: width / 2
-                                            Drag.hotSpot.y: 30
-                                            Drag.keys: ["text/plain"]
-                                            Drag.mimeData: ({ "text/plain": tile.modelData.name })
-                                            Drag.dragType: Drag.Automatic
-                                            DragHandler { id: dragHandler; acceptedButtons: Qt.LeftButton; target: null }
-                                            TapHandler { onTapped: root.addTo("control", tile.modelData.name) }
-                                            ToolTip.visible: dragHandler.active
-                                            ToolTip.text: qsTr("Drag to Control Center or Menu Bar")
-                                            Accessible.name: tile.modelData.name
-                                            Accessible.role: Accessible.Button
                                         }
                                     }
                                 }

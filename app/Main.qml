@@ -45,6 +45,7 @@ Window {
         useLiquidGlass: false
         onEditControlsRequested: {
             popup.stayOpen = true
+            trayController.setPopupVisible(false)
             controlEditor.showEditor()
         }
     }
