@@ -118,7 +118,7 @@ Item {
             renderType: Text.QtRendering
         }
         Row {
-            x: 10; y: 96; width: parent.width - 20; height: 26
+            x: 10; y: 98; width: parent.width - 20; height: 26
             Repeater {
                 model: ["cupertino-font-backward_fill", "cupertino-font-play_fill", "cupertino-font-forward_fill"]
                 delegate: Item {
