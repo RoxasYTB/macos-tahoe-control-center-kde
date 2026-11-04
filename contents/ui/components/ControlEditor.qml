@@ -18,6 +18,7 @@ Window {
     property var draftControlCenterItems: []
     property var draftMenuBarItems: []
     property bool applyingChanges: false
+    property bool showAssignmentEditor: false
     signal editorClosed()
 
     Settings {
@@ -157,6 +158,7 @@ Window {
         draftControlCenterItems = savedLayout.controlCenterItems.slice()
         draftMenuBarItems = savedLayout.menuBarItems.slice()
         applyingChanges = false
+        showAssignmentEditor = false
         x = Math.round((Screen.width - width) / 2)
         y = Math.round((Screen.height - height) / 2)
         show()
@@ -387,7 +389,9 @@ Window {
                 }
 
                 Rectangle {
-                    Layout.fillWidth: true; Layout.preferredHeight: 56
+                    visible: root.showAssignmentEditor
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: root.showAssignmentEditor ? 56 : 0
                     color: "#251e405f"
                     ColumnLayout {
                         anchors.fill: parent; anchors.leftMargin: 20; anchors.rightMargin: 18; spacing: 3
@@ -486,7 +490,23 @@ Window {
                     color: "#211d3d61"
                     RowLayout {
                         anchors.fill: parent; anchors.leftMargin: 20; anchors.rightMargin: 18
-                        Text { Layout.fillWidth: true; text: qsTr("Drag a control to place it in Control Center or Menu Bar…"); color: "#fffaff"; font.pixelSize: 12; elide: Text.ElideRight }
+                        Text {
+                            id: layoutHint
+                            Layout.fillWidth: true
+                            text: root.showAssignmentEditor
+                                ? qsTr("Click a selected control to remove it; drag to reorder…")
+                                : qsTr("Drag a control to place it in Control Center or Menu Bar…")
+                            color: layoutHintHover.hovered ? "#e8d2ff" : "#fffaff"
+                            font.pixelSize: 12
+                            elide: Text.ElideRight
+                            Accessible.role: Accessible.Button
+                            Accessible.name: qsTr("Show or hide selected control layouts")
+                            HoverHandler { id: layoutHintHover }
+                            TapHandler { onTapped: root.showAssignmentEditor = !root.showAssignmentEditor }
+                            ToolTip.visible: layoutHintHover.hovered
+                            ToolTip.delay: 700
+                            ToolTip.text: qsTr("Click to manage selected controls")
+                        }
                         Button {
                             id: doneButton
                             Layout.preferredWidth: 60
