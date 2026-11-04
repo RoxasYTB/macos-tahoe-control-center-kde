@@ -9,6 +9,7 @@ Item {
     property color foreground: "#f8f5ff"
     property Item backdropOverride: null
     property bool useLiquidGlass: true
+    property var controlController: typeof systemControls !== "undefined" ? systemControls : null
 
     QuickTile {
         x: 0; y: 0; width: 140; height: 62
@@ -30,7 +31,9 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Wi-Fi"
-        subtitle: "SannWifi-\nFreebox"
+        subtitle: root.controlController && root.controlController.wifiEnabled ? "On" : "Off"
+        interactive: root.controlController !== null
+        onActivated: if (root.controlController) root.controlController.toggleWifi()
         foreground: root.foreground
         badgeColor: "#ffffff"
     }
@@ -52,7 +55,9 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Bluetooth"
-        subtitle: "On"
+        subtitle: root.controlController && root.controlController.bluetoothEnabled ? "On" : "Off"
+        interactive: root.controlController !== null
+        onActivated: if (root.controlController) root.controlController.toggleBluetooth()
         foreground: root.foreground
         badgeColor: "#ffffff"
         tileFill: Qt.rgba(1, 1, 1, 0.07)
@@ -124,6 +129,7 @@ Item {
                 delegate: Item {
                     id: mediaControl
                     required property string modelData
+                    required property int index
                     width: 40
                     height: 26
                     MacIcon {
@@ -133,10 +139,19 @@ Item {
                         stretch: mediaControl.modelData !== "cupertino-font-play_fill"
                         glyphScale: mediaControl.modelData === "cupertino-font-play_fill" ? 1.35 : 2.0
                         iconName: mediaControl.modelData
-                        opacity: mediaControl.modelData === "cupertino-font-play_fill" ? 0.61 : 0.40
+                        opacity: root.controlController && root.controlController.mediaAvailable
+                            ? (mediaControl.modelData === "cupertino-font-play_fill" ? 0.61 : 0.40) : 0.22
                         transform: Translate {
                             x: mediaControl.modelData === "cupertino-font-play_fill" ? 2 : (mediaControl.modelData === "cupertino-font-forward_fill" ? 1 : 0)
                             y: mediaControl.modelData === "cupertino-font-play_fill" ? 1 : 2
+                        }
+                    }
+                    TapHandler {
+                        enabled: root.controlController && root.controlController.mediaAvailable
+                        onTapped: {
+                            if (mediaControl.index === 0) root.controlController.mediaPrevious()
+                            else if (mediaControl.index === 1) root.controlController.mediaTogglePlayback()
+                            else root.controlController.mediaNext()
                         }
                     }
                 }
@@ -189,6 +204,8 @@ Item {
         circular: true
         compact: true
         appearanceControl: true
+        interactive: root.controlController !== null
+        onActivated: if (root.controlController) root.controlController.toggleAppearance()
         solidMode: true
         title: ""
         foreground: "#000000"
@@ -201,6 +218,8 @@ Item {
         glassTintStrength: 1.0
         glassRefractionThickness: 25
         iconName: "screenshot"
+        interactive: root.controlController !== null
+        onActivated: if (root.controlController) root.controlController.launchScreenshot()
         iconSize: 28.5
         iconHeight: 28.5
         iconOffsetX: -1.5
@@ -246,6 +265,7 @@ Item {
         titlePixelSize: 12.25
         titleLetterSpacing: 0.15
         value: 1
+        interactive: false
         trackColor: Qt.rgba(1, 1, 1, 0.14)
         levelColor: Qt.rgba(1, 1, 1, 0.14)
         foreground: root.foreground
@@ -259,7 +279,9 @@ Item {
         title: "Sound"
         titleOffsetY: 3
         sound: true
-        value: 0.675
+        value: root.controlController ? root.controlController.volume / 100 : 0.675
+        interactive: root.controlController !== null
+        onValueEdited: if (root.controlController) root.controlController.setVolume(Math.round(value * 100))
         trackColor: Qt.rgba(1, 1, 1, 0.24)
         levelColor: "#ffffff"
         foreground: root.foreground

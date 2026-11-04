@@ -1,4 +1,5 @@
 #include "TrayController.h"
+#include "SystemControlController.h"
 #include "../native/BlurBehindRegion.h"
 
 #include <QCommandLineParser>
@@ -40,9 +41,11 @@ int main(int argc, char *argv[])
     trayIcon.setToolTip(QStringLiteral("Control Center"));
 
     TrayController controller(&trayIcon, &app);
+    SystemControlController systemControls(&app);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("trayController"), &controller);
+    engine.rootContext()->setContextProperty(QStringLiteral("systemControls"), &systemControls);
     const QUrl qmlUrl(QStringLiteral("qrc:/app/Main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
                      &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);

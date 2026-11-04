@@ -34,6 +34,8 @@ GlassCard {
     // content without imposing a pink/purple tint on the sampled backdrop.
     property color tileFill: Qt.rgba(1, 1, 1, 0.07)
     property color tileBorder: Qt.rgba(1, 1, 1, 0.28)
+    property bool interactive: false
+    signal activated()
 
     cornerRadius: circular ? width / 2 : (height / 2)
     // Tahoe capsules have semicircular ends; circular controls remain exact
@@ -49,6 +51,11 @@ GlassCard {
 
     Item {
         anchors.fill: parent
+
+        TapHandler {
+            enabled: root.interactive && !root.disabled
+            onTapped: root.activated()
+        }
 
         RowLayout {
             anchors.fill: parent

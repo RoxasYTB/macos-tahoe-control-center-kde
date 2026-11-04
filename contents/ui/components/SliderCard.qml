@@ -13,6 +13,8 @@ GlassCard {
     property color foreground: "#ffffff"
     property color trackColor: Qt.rgba(1, 1, 1, 0.30)
     property color levelColor: "#ffffff"
+    property bool interactive: false
+    signal valueEdited(real value)
 
     cornerRadius: 29
     // Match the screenshot-fitted squircle profile used by LiquidGlass.
@@ -71,6 +73,22 @@ GlassCard {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0.5
                 height: 4
+
+                TapHandler {
+                    enabled: root.interactive
+                    onTapped: function(point) {
+                        root.valueEdited(Math.max(0, Math.min(1, point.position.x / track.width)))
+                    }
+                }
+                DragHandler {
+                    enabled: root.interactive
+                    target: null
+                    onActiveChanged: if (active) updateValue(centroid.position.x)
+                    onCentroidChanged: if (active) updateValue(centroid.position.x)
+                    function updateValue(x) {
+                        root.valueEdited(Math.max(0, Math.min(1, x / track.width)))
+                    }
+                }
 
                 Rectangle {
                     anchors.fill: parent
