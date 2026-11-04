@@ -26,8 +26,8 @@ Item {
         badgeBackgroundOffsetY: 1
         badgeIconOffsetX: -2.1
         badgeIconOffsetY: 2.4
-        labelOffsetX: -1
-        labelOffsetY: 1
+        labelOffsetX: -2
+        labelOffsetY: 2
         active: true
         title: "Wi-Fi"
         subtitle: "SannWifi-\nFreebox"
@@ -48,8 +48,8 @@ Item {
         badgeBackgroundOffsetX: -2
         badgeIconOffsetX: -2.65
         badgeIconOffsetY: 0.6
-        labelOffsetX: -1
-        labelOffsetY: 1
+        labelOffsetX: -2
+        labelOffsetY: 2
         active: true
         title: "Bluetooth"
         subtitle: "On"
@@ -74,8 +74,8 @@ Item {
         badgeLeftMargin: 15
         badgeIconOffsetX: -1
         badgeIconOffsetY: -0.5
-        labelOffsetX: -1
-        labelOffsetY: 1
+        labelOffsetX: -2
+        labelOffsetY: 2
         title: "AirDrop"
         subtitle: "Off"
         disabled: true

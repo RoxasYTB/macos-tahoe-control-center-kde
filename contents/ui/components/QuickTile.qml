@@ -87,7 +87,7 @@ GlassCard {
                 Layout.topMargin: root.labelOffsetY
                 visible: root.title.length > 0
                 Layout.fillWidth: true
-                spacing: -1
+                spacing: 1
                 Text {
                     Layout.fillWidth: true
                     text: root.title
