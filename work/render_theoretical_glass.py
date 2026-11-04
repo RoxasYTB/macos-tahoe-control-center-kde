@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
-ROOT = pathlib.Path(__file__).resolve().parents[3]
+ROOT = REPO.parents[1]
 QML = REPO / "work" / "preview.qml"
 BUILD = REPO / "work" / "build"
 RENDERER = BUILD / "controlcenter_visual_preview"
