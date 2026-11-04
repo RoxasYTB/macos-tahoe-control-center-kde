@@ -202,7 +202,7 @@ Window {
     Rectangle {
         anchors.fill: parent
         radius: 30
-        color: "#dd311b43"
+        color: "#a63b205f"
         border.color: "#70d5b8fa"
         border.width: 1
         clip: true
@@ -216,16 +216,16 @@ Window {
             Rectangle {
                 Layout.preferredWidth: 244
                 Layout.fillHeight: true
-                color: "#20202b"
+                color: "#44300f4f"
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 18
                     spacing: 9
                     Rectangle {
                         Layout.fillWidth: true; Layout.preferredHeight: 34; radius: 17
-                        color: "#332d37"
-                        border.color: "#8964ff"
-                        border.width: 2
+                        color: "#2a332d37"
+                        border.color: "#aa9d80b3"
+                        border.width: 1.5
                         RowLayout {
                             anchors.fill: parent; anchors.leftMargin: 12; anchors.rightMargin: 10
                             Text { text: "⌕"; color: "#aaa4b6"; font.pixelSize: 21 }
@@ -263,7 +263,7 @@ Window {
                                     required property string modelData
                                     required property int index
                                     width: parent.width; height: 43; radius: 10
-                                    color: root.selectedCategory === modelData ? "#914ac0" : "transparent"
+                                    color: root.selectedCategory === modelData ? "#b37f48a5" : "transparent"
                                     Row {
                                         anchors.fill: parent; anchors.leftMargin: 12; spacing: 11
                                         Rectangle {
@@ -343,11 +343,11 @@ Window {
                                                     Rectangle {
                                                         anchors.fill: parent
                                                         radius: tile.modelData.shape === "pill" ? height / 2 : (tile.modelData.shape === "circle" ? width / 2 : 28)
-                                                        color: tile.modelData.shape === "large" ? "#851187" :
-                                                            tile.modelData.category === "Connectivity" ? "#59417d" :
-                                                            tile.modelData.category === "Display & Brightness" ? "#682390" :
-                                                            tile.modelData.category === "Fast User Switching" ? "#38558d" : "#941081"
-                                                        border.color: "#42d687ee"; border.width: 1
+                                                        color: tile.modelData.shape === "large" ? "#957b1288" :
+                                                            tile.modelData.category === "Connectivity" ? "#804b2872" :
+                                                            tile.modelData.category === "Display & Brightness" ? "#8b6d2294" :
+                                                            tile.modelData.category === "Fast User Switching" ? "#8c36558c" : "#98631788"
+                                                        border.color: "#63d3a8eb"; border.width: 1
                                                         RowLayout {
                                                             anchors.fill: parent
                                                             anchors.leftMargin: tile.modelData.shape === "pill" ? 8 : 0
