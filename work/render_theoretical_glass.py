@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--renderer", type=pathlib.Path, default=RENDERER)
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--settle-ms", type=int, default=1800)
-    parser.add_argument("--state", choices=("panel", "wifi-hover", "wifi-menu"), default="panel",
+    parser.add_argument("--state", choices=("panel", "wifi-hover", "wifi-menu", "bluetooth-menu"), default="panel",
                         help="Render the resting panel or one interaction state")
     return parser.parse_args()
 

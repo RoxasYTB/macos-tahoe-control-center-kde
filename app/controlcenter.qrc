@@ -5,6 +5,7 @@
     <file alias="app/control-center-blur-window-region.png">control-center-blur-window-region.png</file>
     <file alias="contents/ui/components/ControlCenterPanel.qml">../contents/ui/components/ControlCenterPanel.qml</file>
     <file alias="contents/ui/components/ControlDetailsPopup.qml">../contents/ui/components/ControlDetailsPopup.qml</file>
+    <file alias="contents/ui/components/BluetoothDetailsPopup.qml">../contents/ui/components/BluetoothDetailsPopup.qml</file>
     <file alias="contents/ui/components/GlassCard.qml">../contents/ui/components/GlassCard.qml</file>
     <file alias="contents/ui/components/LiquidGlass.qml">../contents/ui/components/LiquidGlass.qml</file>
     <file alias="contents/ui/components/MacIcon.qml">../contents/ui/components/MacIcon.qml</file>

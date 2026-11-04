@@ -11,6 +11,7 @@ Item {
     property Item backdropOverride: null
     property bool useLiquidGlass: true
     property var controlController: typeof systemControls !== "undefined" ? systemControls : null
+    readonly property bool detailsOpen: wifiDetails.visible || bluetoothDetails.visible
     signal editControlsRequested()
     Settings {
         id: savedControlLayout
@@ -22,10 +23,11 @@ Item {
     }
 
     function openWifiDetails() { wifiDetails.open() }
+    function openBluetoothDetails() { bluetoothDetails.open() }
 
     QuickTile {
         id: wifiTile
-        visible: root.controlIsSelected("Wi-Fi")
+        visible: !root.detailsOpen && root.controlIsSelected("Wi-Fi")
         x: 0; y: 0; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -67,13 +69,15 @@ Item {
     }
 
     QuickTile {
-        visible: root.controlIsSelected("Bluetooth")
+        id: bluetoothTile
+        visible: !root.detailsOpen && root.controlIsSelected("Bluetooth")
         x: 0; y: 77; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
         glassRefractionThickness: 25
         iconName: "cupertino-font-bluetooth"
+        hasSubmenu: true
         iconColor: "#007aff"
         iconBadge: true
         badgeSize: 36
@@ -89,13 +93,20 @@ Item {
             ? (root.controlController.bluetoothEnabled ? "On" : "Off")
             : "On"
         interactive: root.controlController !== null
-        onActivated: if (root.controlController) root.controlController.toggleBluetooth()
+        onActivated: bluetoothDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
         tileFill: Qt.rgba(1, 1, 1, 0.07)
     }
+    BluetoothDetailsPopup {
+        id: bluetoothDetails
+        ownerItem: root
+        backdropOverride: root.backdropOverride
+        useLiquidGlass: root.useLiquidGlass
+        controlController: root.controlController
+    }
     QuickTile {
-        visible: root.controlIsSelected("AirDrop")
+        visible: !root.detailsOpen && root.controlIsSelected("AirDrop")
         x: 0; y: 153; width: 140; height: 62
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -125,7 +136,7 @@ Item {
 
     GlassCard {
         objectName: "Media"
-        visible: root.controlIsSelected("Now Playing")
+        visible: !root.detailsOpen && root.controlIsSelected("Now Playing")
         x: 152; y: 0; width: 140; height: 139
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -197,7 +208,7 @@ Item {
     }
 
     QuickTile {
-        visible: root.controlIsSelected("Stage Manager")
+        visible: !root.detailsOpen && root.controlIsSelected("Stage Manager")
         x: 152; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -216,7 +227,7 @@ Item {
         Accessible.name: "Stage Manager"
     }
     QuickTile {
-        visible: root.controlIsSelected("Screen Mirroring")
+        visible: !root.detailsOpen && root.controlIsSelected("Screen Mirroring")
         x: 228; y: 153; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -233,7 +244,7 @@ Item {
     }
 
     QuickTile {
-        visible: root.controlIsSelected("Appearance")
+        visible: !root.detailsOpen && root.controlIsSelected("Appearance")
         x: -1; y: 230; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -252,7 +263,7 @@ Item {
         Accessible.name: "Appearance"
     }
     QuickTile {
-        visible: root.controlIsSelected("Screenshot")
+        visible: !root.detailsOpen && root.controlIsSelected("Screenshot")
         x: 76; y: 229; width: 64; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -272,7 +283,7 @@ Item {
         Accessible.name: "Screenshot"
     }
     QuickTile {
-        visible: root.controlIsSelected("Focus")
+        visible: !root.detailsOpen && root.controlIsSelected("Focus")
         x: 152; y: 229; width: 140; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -297,7 +308,7 @@ Item {
     }
 
     SliderCard {
-        visible: root.controlIsSelected("Display")
+        visible: !root.detailsOpen && root.controlIsSelected("Display")
         x: 0; y: 306; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -314,7 +325,7 @@ Item {
         foreground: root.foreground
     }
     SliderCard {
-        visible: root.controlIsSelected("Sound")
+        visible: !root.detailsOpen && root.controlIsSelected("Sound")
         x: 0; y: 383; width: 292; height: 64
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
@@ -333,6 +344,7 @@ Item {
 
     GlassCard {
         objectName: "Edit Controls"
+        visible: !root.detailsOpen
         x: 99; y: 464; width: 94; height: 25
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass

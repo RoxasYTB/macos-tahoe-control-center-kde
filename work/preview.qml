@@ -11,6 +11,19 @@ Window {
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     title: "Control Center visual comparison"
     readonly property var materialOverrides: JSON.parse(renderMaterialParametersJson)
+    readonly property var previewBluetoothController: ({
+        bluetoothEnabled: true,
+        bluetoothDevices: [
+            {address: "ref-bv5300", name: "BV5300 Pro", connected: true},
+            {address: "ref-rebel", name: "Fresh 'n Rebel 3ATW3001R", connected: true},
+            {address: "ref-flow", name: "MUSIC SOUND FLOW", connected: true},
+            {address: "ref-mx", name: "MX Master", connected: false}
+        ],
+        refreshBluetoothDevices: function() {},
+        toggleBluetooth: function() {},
+        toggleBluetoothDevice: function() {},
+        openBluetoothSettings: function() {}
+    })
 
     // LiquidGlass uses ShaderEffectSource.hideSource for its backdrop. Keep
     // an identical visible copy underneath and sample a separate sibling so
@@ -44,6 +57,7 @@ Window {
         backdropOverride: previewWallpaper
         useLiquidGlass: true
         opacity: 1
+        controlController: renderState === "bluetooth-menu" ? previewBluetoothController : null
     }
 
     function applyGlassParameters(item) {
@@ -95,6 +109,8 @@ Window {
             preview.applyGlassParameters(controlCenter)
             if (renderState === "wifi-menu")
                 controlCenter.openWifiDetails()
+            else if (renderState === "bluetooth-menu")
+                controlCenter.openBluetoothDetails()
         }
     }
 }

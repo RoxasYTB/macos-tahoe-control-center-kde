@@ -5,8 +5,12 @@
 #include <QDBusReply>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QHash>
+#include <QSet>
+#include <QSharedPointer>
 #include <QTimer>
 #include <QVariant>
+#include <algorithm>
 
 namespace {
 
@@ -32,6 +36,12 @@ QStringList splitNmcliRow(const QString &row)
     fields.push_back(field);
     return fields;
 }
+
+struct BluetoothQuerySnapshot {
+    QByteArray paired;
+    QByteArray connected;
+    int pending = 2;
+};
 
 } // namespace
 
@@ -92,6 +102,54 @@ void SystemControlController::refresh()
         m_volume = newVolume;
         Q_EMIT stateChanged();
     }
+    refreshBluetoothDevices();
+}
+
+void SystemControlController::refreshBluetoothDevices()
+{
+    auto *paired = new QProcess(this);
+    auto *connected = new QProcess(this);
+    const auto snapshot = QSharedPointer<BluetoothQuerySnapshot>::create();
+    auto finish = [this, snapshot](QProcess *process, bool connectedQuery) {
+        if (connectedQuery) snapshot->connected = process->readAllStandardOutput();
+        else snapshot->paired = process->readAllStandardOutput();
+        process->deleteLater();
+        if (--snapshot->pending != 0) return;
+        QHash<QString, QString> names;
+        QSet<QString> connectedAddresses;
+        const QRegularExpression row(QStringLiteral("^Device\\s+([0-9A-Fa-f:]{17})\\s+(.+)$"));
+        for (const QString &line : QString::fromUtf8(snapshot->paired).split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
+            const auto match = row.match(line.trimmed());
+            if (match.hasMatch()) names.insert(match.captured(1), match.captured(2).trimmed());
+        }
+        for (const QString &line : QString::fromUtf8(snapshot->connected).split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
+            const auto match = row.match(line.trimmed());
+            if (match.hasMatch()) {
+                names.insert(match.captured(1), match.captured(2).trimmed());
+                connectedAddresses.insert(match.captured(1));
+            }
+        }
+        QVariantList devices;
+        for (auto it = names.cbegin(); it != names.cend(); ++it) {
+            devices.push_back(QVariantMap{{QStringLiteral("address"), it.key()},
+                                          {QStringLiteral("name"), it.value()},
+                                          {QStringLiteral("connected"), connectedAddresses.contains(it.key())}});
+        }
+        std::sort(devices.begin(), devices.end(), [](const QVariant &a, const QVariant &b) {
+            return a.toMap().value(QStringLiteral("name")).toString().localeAwareCompare(
+                       b.toMap().value(QStringLiteral("name")).toString()) < 0;
+        });
+        if (m_bluetoothDevices != devices) {
+            m_bluetoothDevices = devices;
+            Q_EMIT stateChanged();
+        }
+    };
+    connect(paired, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+            [finish, paired](int, QProcess::ExitStatus) { finish(paired, false); });
+    connect(connected, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+            [finish, connected](int, QProcess::ExitStatus) { finish(connected, true); });
+    paired->start(QStringLiteral("bluetoothctl"), {QStringLiteral("devices"), QStringLiteral("Paired")});
+    connected->start(QStringLiteral("bluetoothctl"), {QStringLiteral("devices"), QStringLiteral("Connected")});
 }
 
 void SystemControlController::refreshWifiNetworks()
@@ -164,6 +222,16 @@ void SystemControlController::openWifiSettings()
 {
     QProcess::startDetached(QStringLiteral("systemsettings"),
                             {QStringLiteral("kcm_networkmanagement")});
+}
+
+void SystemControlController::openBluetoothSettings()
+{
+    QProcess::startDetached(QStringLiteral("systemsettings"), {QStringLiteral("kcm_bluetooth")});
+}
+
+void SystemControlController::toggleBluetoothDevice(const QString &address, bool connected)
+{
+    run(QStringLiteral("bluetoothctl"), {connected ? QStringLiteral("disconnect") : QStringLiteral("connect"), address});
 }
 
 void SystemControlController::toggleAppearance()

@@ -66,7 +66,7 @@ Popup {
                 // state; the live app always binds this to NetworkManager.
                 checked: root.controlController ? root.controlController.wifiEnabled : true
                 enabled: root.controlController !== null
-                onToggled: if (root.controlController) root.controlController.toggleWifi()
+                onClicked: if (root.controlController) root.controlController.toggleWifi()
                 Accessible.name: qsTr("Wi-Fi power")
             }
         }
