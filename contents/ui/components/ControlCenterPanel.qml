@@ -108,7 +108,7 @@ Item {
             strokeWidth: 0.5
         }
         Text {
-            x: 14; y: 71; width: parent.width - 26
+            x: 14; y: 73; width: parent.width - 26
             text: "Not Playing"
             color: root.foreground
             font.family: "SF Pro Text"
