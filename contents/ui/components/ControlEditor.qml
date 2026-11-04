@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import QtCore
+import Tahoe.ControlCenter.Native 1.0
 
 Window {
     id: root
@@ -166,6 +167,14 @@ Window {
         requestActivate()
     }
     onClosing: editorClosed()
+
+    BlurBehindRegion {
+        window: root
+        maskSource: Qt.resolvedUrl("qrc:/app/control-editor-blur-window-region.png")
+        alphaThreshold: 24
+        enabled: true
+    }
+
     Shortcut { sequence: "Escape"; onActivated: root.close() }
 
     Rectangle {
