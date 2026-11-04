@@ -3,6 +3,8 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
+#include <QDirIterator>
+#include <QFile>
 #include <QProcess>
 #include <QRegularExpression>
 #include <QHash>
@@ -43,6 +45,28 @@ struct BluetoothQuerySnapshot {
     int pending = 2;
 };
 
+bool readBatteryPercent(int *percent)
+{
+    QDirIterator supplies(QStringLiteral("/sys/class/power_supply"),
+                          QDir::Dirs | QDir::NoDotAndDotDot);
+    while (supplies.hasNext()) {
+        const QString supply = supplies.next();
+        QFile typeFile(supply + QStringLiteral("/type"));
+        if (!typeFile.open(QIODevice::ReadOnly)
+                || typeFile.readAll().trimmed() != QByteArrayLiteral("Battery")) {
+            continue;
+        }
+        QFile capacityFile(supply + QStringLiteral("/capacity"));
+        if (!capacityFile.open(QIODevice::ReadOnly)) continue;
+        bool ok = false;
+        const int value = QString::fromLatin1(capacityFile.readAll().trimmed()).toInt(&ok);
+        if (!ok || value < 0 || value > 100) continue;
+        *percent = value;
+        return true;
+    }
+    return false;
+}
+
 } // namespace
 
 SystemControlController::SystemControlController(QObject *parent)
@@ -82,13 +106,45 @@ void SystemControlController::refresh()
     }
     QProcess wifiQuery;
     wifiQuery.start(QStringLiteral("nmcli"), {QStringLiteral("-t"), QStringLiteral("-f"), QStringLiteral("WIFI"), QStringLiteral("general")});
-    wifiQuery.waitForFinished(500);
-    const bool newWifi = wifiQuery.readAllStandardOutput().trimmed() == "enabled";
+    const bool wifiFinished = wifiQuery.waitForFinished(500);
+    const bool wifiRadioQueryValid = wifiFinished
+            && wifiQuery.exitStatus() == QProcess::NormalExit
+            && wifiQuery.exitCode() == 0;
+    const bool newWifi = wifiRadioQueryValid
+            && wifiQuery.readAllStandardOutput().trimmed() == "enabled";
+
+    QProcess wifiDevicesQuery;
+    wifiDevicesQuery.start(QStringLiteral("nmcli"), {
+        QStringLiteral("-t"), QStringLiteral("-f"), QStringLiteral("TYPE"),
+        QStringLiteral("device")
+    });
+    const bool wifiDevicesQueryValid = wifiDevicesQuery.waitForFinished(500)
+            && wifiDevicesQuery.exitStatus() == QProcess::NormalExit
+            && wifiDevicesQuery.exitCode() == 0;
+    bool hasWifiDevice = false;
+    if (wifiDevicesQueryValid) {
+        for (const QString &line : QString::fromUtf8(wifiDevicesQuery.readAllStandardOutput())
+                 .split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
+            if (line.trimmed() == QStringLiteral("wifi")) {
+                hasWifiDevice = true;
+                break;
+            }
+        }
+    }
+    const bool newWifiAvailable = wifiRadioQueryValid && wifiDevicesQueryValid && hasWifiDevice;
 
     QProcess btQuery;
     btQuery.start(QStringLiteral("bluetoothctl"), {QStringLiteral("show")});
-    btQuery.waitForFinished(500);
-    const bool newBluetooth = QString::fromUtf8(btQuery.readAllStandardOutput()).contains(QRegularExpression(QStringLiteral("Powered:\\s+yes")));
+    const bool bluetoothFinished = btQuery.waitForFinished(500);
+    const bool newBluetoothAvailable = bluetoothFinished
+            && btQuery.exitStatus() == QProcess::NormalExit
+            && btQuery.exitCode() == 0;
+    const bool newBluetooth = newBluetoothAvailable
+            && QString::fromUtf8(btQuery.readAllStandardOutput()).contains(
+                QRegularExpression(QStringLiteral("Powered:\\s+yes")));
+
+    int newBatteryPercent = 0;
+    const bool newBatteryAvailable = readBatteryPercent(&newBatteryPercent);
 
     QProcess volumeQuery;
     volumeQuery.start(QStringLiteral("pactl"), {QStringLiteral("get-sink-volume"), QStringLiteral("@DEFAULT_SINK@")});
@@ -96,12 +152,20 @@ void SystemControlController::refresh()
     const auto match = QRegularExpression(QStringLiteral("(\\d+)%")).match(QString::fromUtf8(volumeQuery.readAllStandardOutput()));
     const int newVolume = match.hasMatch() ? qBound(0, match.captured(1).toInt(), 100) : m_volume;
 
-    if (m_wifiEnabled != newWifi || m_bluetoothEnabled != newBluetooth || m_volume != newVolume || oldMediaService != m_mediaService) {
+    if (m_wifiAvailable != newWifiAvailable || m_wifiEnabled != newWifi
+            || m_bluetoothAvailable != newBluetoothAvailable || m_bluetoothEnabled != newBluetooth
+            || m_batteryAvailable != newBatteryAvailable || m_batteryPercent != newBatteryPercent
+            || m_volume != newVolume || oldMediaService != m_mediaService) {
+        m_wifiAvailable = newWifiAvailable;
         m_wifiEnabled = newWifi;
+        m_bluetoothAvailable = newBluetoothAvailable;
         m_bluetoothEnabled = newBluetooth;
+        m_batteryAvailable = newBatteryAvailable;
+        m_batteryPercent = newBatteryPercent;
         m_volume = newVolume;
         Q_EMIT stateChanged();
     }
+    refreshWifiNetworks();
     refreshBluetoothDevices();
 }
 

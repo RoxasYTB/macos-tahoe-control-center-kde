@@ -18,6 +18,7 @@
 - Keep actions connected to KDE/system APIs; show unavailable data as unavailable, never fabricate device/network states.
 - Preserve Cupertino/project icon licenses and all unrelated local changes. Do not package Apple's SF Symbols or Apple Design Resources as app assets.
 - Keep desktop context-menu implementation in its own plan/repository; this plan only covers the dedicated Control Center app.
+- Treat `docs/macos-tahoe-reference-map.md` as the authoritative inventory for the supplied editor, desktop, Wi-Fi and Bluetooth captures. Preserve the originals and hashes; the small `wifi-hover-chevron.png` crop is the specific reference for the hover arrow and subtle capsule brightening.
 
 ---
 
@@ -90,6 +91,10 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 **Verification:** Save a changed layout, close/reopen the editor and app, and confirm it persists. Exercise drag cancellation, dropping on invalid targets, empty search, no-results search, duplicate drops and Done with no changes.
 
 #### Current isolated interaction checks — 4 November 2026
+
+- Status rendering now distinguishes adapter availability from radio power: the main panel, editor previews, and Wi-Fi/Bluetooth detail popovers use actual `SystemControlController` state and say “Unavailable” when the host has no corresponding device. Battery preview reads `/sys/class/power_supply/*/{type,capacity}` and no longer invents “100 %”. AirDrop stays unavailable as agreed.
+- Read-only host snapshot during this pass: NetworkManager reports Wi-Fi radio enabled but no Wi-Fi device, `bluetoothctl show` reports an available powered controller, and `/sys/class/power_supply` has no battery entry. These values are machine-specific; the UI remains bound to live queries.
+- `cmake --build .build/app --target tahoe-control-center -j2` completed successfully after the availability changes; `git diff --check` reported no whitespace errors. No active Plasma/KWin session was restarted or altered.
 
 - In Xvfb with a temporary `XDG_CONFIG_HOME`, dragged a catalog tile into the Control Center chips and into Menu Bar; each appeared in the saved settings after Done.
 - Clicked the AirDrop chip and confirmed it was removed from the saved Control Center list.

@@ -42,8 +42,9 @@ Popup {
             Switch {
                 id: bluetoothPower
                 width: 48; height: 30; anchors.verticalCenter: parent.verticalCenter
-                checked: root.controlController ? root.controlController.bluetoothEnabled : false
-                enabled: root.controlController !== null
+                checked: root.controlController && root.controlController.bluetoothAvailable
+                         && root.controlController.bluetoothEnabled
+                enabled: root.controlController !== null && root.controlController.bluetoothAvailable
                 onClicked: if (root.controlController) root.controlController.toggleBluetooth()
                 Accessible.name: qsTr("Bluetooth power")
             }
@@ -88,9 +89,12 @@ Popup {
             }
             Text {
                 width: parent.width; height: 64
-                visible: root.controlController && root.controlController.bluetoothDevices.length === 0
-                text: root.controlController && !root.controlController.bluetoothEnabled
-                      ? qsTr("Bluetooth is Off") : qsTr("No paired devices")
+                visible: !root.controlController || !root.controlController.bluetoothAvailable
+                         || root.controlController.bluetoothDevices.length === 0
+                text: !root.controlController || !root.controlController.bluetoothAvailable
+                      ? qsTr("Unavailable")
+                      : !root.controlController.bluetoothEnabled
+                        ? qsTr("Bluetooth is Off") : qsTr("No paired devices")
                 color: Qt.rgba(1, 1, 1, 0.72)
                 font.family: "SF Pro Text"; font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter

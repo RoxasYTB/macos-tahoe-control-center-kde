@@ -64,8 +64,9 @@ Popup {
                 anchors.verticalCenter: parent.verticalCenter
                 // In the offline design preview, show the supplied connected
                 // state; the live app always binds this to NetworkManager.
-                checked: root.controlController ? root.controlController.wifiEnabled : true
-                enabled: root.controlController !== null
+                checked: root.controlController && root.controlController.wifiAvailable
+                         && root.controlController.wifiEnabled
+                enabled: root.controlController !== null && root.controlController.wifiAvailable
                 onClicked: if (root.controlController) root.controlController.toggleWifi()
                 Accessible.name: qsTr("Wi-Fi power")
             }
@@ -108,10 +109,11 @@ Popup {
                 y: 0
                 width: parent.width - 60
                 height: parent.height
-                text: root.controlController
-                      ? (root.controlController.wifiNetworkName.length
-                         ? root.controlController.wifiNetworkName : qsTr("Not Connected"))
-                      : "SannWifi-Freebox"
+                text: !root.controlController || !root.controlController.wifiAvailable
+                      ? qsTr("Unavailable")
+                      : !root.controlController.wifiEnabled ? qsTr("Off")
+                      : root.controlController.wifiNetworkName.length
+                        ? root.controlController.wifiNetworkName : qsTr("Not Connected")
                 color: "#fffaff"
                 font.family: "SF Pro Text"
                 font.pixelSize: 12
@@ -126,8 +128,8 @@ Popup {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 14
                 height: 16
-                visible: root.controlController
-                         ? root.controlController.wifiNetworkSecured : true
+                visible: root.controlController && root.controlController.wifiAvailable
+                         && root.controlController.wifiNetworkSecured
                 iconName: "cupertino-font-lock_fill"
                 glyphColor: Qt.rgba(1, 1, 1, 0.78)
                 Accessible.name: qsTr("Secured network")
@@ -167,6 +169,7 @@ Popup {
             }
 
             TapHandler {
+                enabled: root.controlController && root.controlController.wifiAvailable
                 onTapped: {
                     root.expandedNetworks = !root.expandedNetworks
                     if (root.expandedNetworks && root.controlController)

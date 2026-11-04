@@ -53,7 +53,22 @@ Item {
         }
     }
     function customIsDisabled(name) {
+        if (name === "Wi-Fi") return !root.controlController || !root.controlController.wifiAvailable
+        if (name === "Bluetooth") return !root.controlController || !root.controlController.bluetoothAvailable
         return ["AirDrop", "Focus", "Battery", "Alarm", "Stopwatch", "Timer", "Application Windows", "Dock Auto-hide", "Mission Control", "Show Desktop", "Tile Windows Left & Corners", "Tile Windows Left & Right", "Tile Windows to Corners", "Fast User Switching", "Home", "Keyboard Brightness", "Lock Screen", "Microsoft Teams", "Notes", "Shortcuts", "Utilities", "Scene or Accessory", "Run Shortcut", "Voice Memo", "Quick Note", "Recognize Music", "Start Screen Saver"].indexOf(name) >= 0
+    }
+    function customStatus(name) {
+        if (name === "Wi-Fi") {
+            if (!root.controlController || !root.controlController.wifiAvailable) return qsTr("Unavailable")
+            if (!root.controlController.wifiEnabled) return qsTr("Off")
+            return root.controlController.wifiNetworkName.length
+                ? root.controlController.wifiNetworkName : qsTr("On")
+        }
+        if (name === "Bluetooth") {
+            if (!root.controlController || !root.controlController.bluetoothAvailable) return qsTr("Unavailable")
+            return root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off")
+        }
+        return root.customIsDisabled(name) ? qsTr("Unavailable") : ""
     }
 
     function openWifiDetails() { wifiDetails.open() }
@@ -94,13 +109,14 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Wi-Fi"
-        subtitle: root.controlController
+        disabled: !root.controlController || !root.controlController.wifiAvailable
+        subtitle: root.controlController && root.controlController.wifiAvailable
             ? (root.controlController.wifiEnabled
                ? (root.controlController.wifiNetworkName.length
                   ? root.controlController.wifiNetworkName : qsTr("On"))
                : qsTr("Off"))
-            : "SannWifi-\nFreebox"
-        interactive: root.controlController !== null
+            : qsTr("Unavailable")
+        interactive: root.controlController !== null && root.controlController.wifiAvailable
         onActivated: wifiDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
@@ -135,10 +151,13 @@ Item {
         labelOffsetY: 2
         active: true
         title: "Bluetooth"
+        disabled: !root.controlController || !root.controlController.bluetoothAvailable
         subtitle: root.controlController
-            ? (root.controlController.bluetoothEnabled ? "On" : "Off")
-            : "On"
-        interactive: root.controlController !== null
+            ? (root.controlController.bluetoothAvailable
+                ? (root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off"))
+                : qsTr("Unavailable"))
+            : qsTr("Unavailable")
+        interactive: root.controlController !== null && root.controlController.bluetoothAvailable
         onActivated: bluetoothDetails.open()
         foreground: root.foreground
         badgeColor: "#ffffff"
@@ -172,7 +191,7 @@ Item {
         labelOffsetX: -2
         labelOffsetY: 2
         title: "AirDrop"
-        subtitle: "Off"
+        subtitle: qsTr("Unavailable")
         disabled: true
         foreground: root.foreground
         secondaryForeground: Qt.rgba(1, 1, 1, 0.68)
@@ -450,12 +469,7 @@ Item {
                         iconColor: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth" ? "#007aff" : root.foreground
                         badgeColor: "#ffffff"
                         title: customControl.modelData
-                        subtitle: customControl.modelData === "Wi-Fi"
-                            ? (root.controlController && root.controlController.wifiEnabled
-                               ? (root.controlController.wifiNetworkName.length ? root.controlController.wifiNetworkName : qsTr("On")) : qsTr("Off"))
-                            : customControl.modelData === "Bluetooth"
-                              ? (root.controlController && root.controlController.bluetoothEnabled ? qsTr("On") : qsTr("Off"))
-                              : root.customIsDisabled(customControl.modelData) ? qsTr("Unavailable") : ""
+                        subtitle: root.customStatus(customControl.modelData)
                         hasSubmenu: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
                         disabled: root.customIsDisabled(customControl.modelData)
                         interactive: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"

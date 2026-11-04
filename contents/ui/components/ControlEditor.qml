@@ -106,6 +106,24 @@ Window {
         if (name === "Utilities") return "cupertino-font-wrench_fill"
         return "cupertino-font-square_grid_2x2_fill"
     }
+    function catalogStatus(name) {
+        const controller = typeof systemControls !== "undefined" ? systemControls : null
+        if (name === "Wi-Fi") {
+            if (!controller || !controller.wifiAvailable) return qsTr("Unavailable")
+            if (!controller.wifiEnabled) return qsTr("Off")
+            return controller.wifiNetworkName.length ? controller.wifiNetworkName : qsTr("On")
+        }
+        if (name === "Bluetooth") {
+            if (!controller || !controller.bluetoothAvailable) return qsTr("Unavailable")
+            return controller.bluetoothEnabled ? qsTr("On") : qsTr("Off")
+        }
+        if (name === "Battery") {
+            if (!controller || !controller.batteryAvailable) return qsTr("Unavailable")
+            return controller.batteryPercent + " %"
+        }
+        if (name === "AirDrop") return qsTr("Unavailable")
+        return ""
+    }
     function categoryIcon(name) {
         if (name === "All Controls") return "cupertino-font-square_grid_2x2_fill"
         if (name === "Battery") return "cupertino-font-battery_100"
@@ -351,9 +369,7 @@ Window {
                                                                 Text {
                                                                     Layout.fillWidth: true
                                                                     visible: ["Wi-Fi", "Bluetooth", "AirDrop", "Battery"].indexOf(tile.modelData.name) >= 0
-                                                                    text: tile.modelData.name === "Wi-Fi" ? "SannWifi-\nFreebox"
-                                                                        : tile.modelData.name === "Bluetooth" ? "On"
-                                                                        : tile.modelData.name === "AirDrop" ? "Off" : "100 %"
+                                                                    text: root.catalogStatus(tile.modelData.name)
                                                                     color: "#e4dbea"; font.pixelSize: 9
                                                                     elide: Text.ElideRight
                                                                 }
