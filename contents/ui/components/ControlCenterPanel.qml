@@ -63,7 +63,7 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         roundness: 2.0
         glassRefractionThickness: 30
-        glassRefractionScale: 45
+        glassRefractionScale: 75
         glassBlurRadius: 8
         glassBlurAlgorithm: 1
         glassTintStrength: 1.0
