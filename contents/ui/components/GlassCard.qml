@@ -13,8 +13,8 @@ Item {
     property Item backdropOverride: null
     property bool solidMode: false
     property color solidColor: "#ffffff"
-    // Keep a restrained live backdrop blur inside each capsule; the masked
-    // outer halo adds a separate progressive accessibility-softening band.
+    // Keep a restrained live backdrop blur inside each capsule. The optional
+    // exterior halo is disabled by default to avoid the dropped soft flare.
     property real glassBlurRadius: 6
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0

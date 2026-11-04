@@ -55,7 +55,7 @@ Item {
         subtitle: "On"
         foreground: root.foreground
         badgeColor: "#ffffff"
-        tileFill: Qt.rgba(1, 1, 1, 0.06)
+        tileFill: Qt.rgba(1, 1, 1, 0.07)
     }
     QuickTile {
         x: 0; y: 153; width: 140; height: 62
@@ -82,7 +82,7 @@ Item {
         foreground: root.foreground
         secondaryForeground: Qt.rgba(1, 1, 1, 0.68)
         badgeColor: Qt.rgba(0.76, 0.78, 0.82, 0.14)
-        tileFill: Qt.rgba(1, 1, 1, 0.06)
+        tileFill: Qt.rgba(1, 1, 1, 0.07)
     }
 
     GlassCard {
@@ -96,7 +96,7 @@ Item {
         glassChromaStrength: 0.0
         cornerRadius: 33
         roundness: 3.0
-        fillColor: Qt.rgba(1, 1, 1, 0.06)
+        fillColor: Qt.rgba(1, 1, 1, 0.07)
         borderColor: Qt.rgba(1, 1, 1, 0.35)
 
         SquircleSurface {
@@ -229,7 +229,7 @@ Item {
         subtitle: ""
         disabled: true
         foreground: root.foreground
-        tileFill: Qt.rgba(1, 1, 1, 0.06)
+        tileFill: Qt.rgba(1, 1, 1, 0.07)
         Accessible.name: "Focus"
     }
 
@@ -272,7 +272,7 @@ Item {
         glassTintStrength: 1.0
         cornerRadius: 12.5
         roundness: 2.0
-        fillColor: Qt.rgba(1, 1, 1, 0.06)
+        fillColor: Qt.rgba(1, 1, 1, 0.07)
         borderColor: Qt.rgba(1, 1, 1, 0.32)
         Text {
             anchors.centerIn: parent

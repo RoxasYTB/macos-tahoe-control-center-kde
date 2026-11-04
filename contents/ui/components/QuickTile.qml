@@ -32,7 +32,7 @@ GlassCard {
     property color badgeColor: Qt.rgba(1, 1, 1, 0)
     // A restrained neutral veil keeps the glass legible over dark live
     // content without imposing a pink/purple tint on the sampled backdrop.
-    property color tileFill: Qt.rgba(1, 1, 1, 0.06)
+    property color tileFill: Qt.rgba(1, 1, 1, 0.07)
     property color tileBorder: Qt.rgba(1, 1, 1, 0.14)
 
     cornerRadius: circular ? width / 2 : (height / 2)

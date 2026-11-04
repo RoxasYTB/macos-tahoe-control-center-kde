@@ -48,12 +48,18 @@ Window {
 
     function applyGlassParameters(item) {
         if (!item) return
+        // Material overrides target GlassCard surfaces only. Applying
+        // fillColor recursively also changes nested decorative shapes
+        // (for example the media tile's small placeholder), invalidating
+        // visual material sweeps.
+        const isGlassCard = item.glassTintStrength !== undefined
+                && item.appearanceControl !== true
         const surfaceName = item.objectName || item.title || item.iconName || ""
         const profileScale = renderRefractionProfile[surfaceName]
         const materialKeys = Object.keys(preview.materialOverrides)
         for (let i = 0; i < materialKeys.length; ++i) {
             const propertyName = materialKeys[i]
-            if (item[propertyName] !== undefined)
+            if (isGlassCard && item[propertyName] !== undefined)
                 item[propertyName] = preview.materialOverrides[propertyName]
         }
         if (item.refractIOR !== undefined)
@@ -71,7 +77,7 @@ Window {
         // last so per-candidate blur and tint settings survive.
         for (let i = 0; i < materialKeys.length; ++i) {
             const propertyName = materialKeys[i]
-            if (item[propertyName] !== undefined)
+            if (isGlassCard && item[propertyName] !== undefined)
                 item[propertyName] = preview.materialOverrides[propertyName]
         }
         if (item.children) {
