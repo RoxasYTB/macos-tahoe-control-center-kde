@@ -99,6 +99,7 @@ For the 820 × 937 `image5.png` crop, target an editor panel about 735 × 900 px
 - These checks used `/tmp/tahoe-*-config*`; the user's real KDE settings were not read or changed.
 - In a separate Xvfb display (`:137`) with its own D-Bus session and KWin, opened Wi‑Fi, expanded “Other Networks”, then clicked the blank panel area; the details popup closed and the independent capsules returned. Clicking a separate target window in normal mode closed the Control Center window as well. The live network state was shown as “Not Connected”; no network toggle was used.
 - The same temporary Xvfb checks were repeated after adding a background click target behind the detail popup. Its interior remained interactive, while a click outside the popup dismissed it.
+- In an isolated Xvfb/KWin render, the Wi‑Fi chevron was absent at rest and visible on hover; the capsule changed in 5,668 pixels in the sampled crop. Pressing Tab focused Wi‑Fi and showed the same chevron without moving its icon or label. Captures are `/tmp/tahoe-hover-rest.png`, `/tmp/tahoe-hover-active.png` and `/tmp/tahoe-keyboard-focused-crop.png`.
 
 ### Task 6: Verify and checkpoint the Control Center work
 
