@@ -21,6 +21,8 @@ Item {
     property real glassRefractionThickness: 35
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
+    // Fine, background-aware edge contour fitted against the macOS capture.
+    property real glassEdgeRimStrength: 0.16
     property real glassOuterBlurRadius: 6
     // The prototype's soft flare outside each capsule was dropped; keep the
     // sampled wallpaper and subtle blur confined to the glass surface.
@@ -65,6 +67,7 @@ Item {
             });
             item.tintAlpha = Qt.binding(function() { return root.fillColor.a * root.glassTintStrength; });
             item.chromaStrength = Qt.binding(function() { return root.glassChromaStrength; });
+            item.edgeRimStrength = Qt.binding(function() { return root.glassEdgeRimStrength; });
         }
     }
 

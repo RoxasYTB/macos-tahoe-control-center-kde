@@ -35,6 +35,7 @@ layout(std140, binding = 0) uniform buf {
     vec2  uvScale;
     vec4  overlayDarken;     // rgb = target blend color, a = band height (0 = off)
     float innerBlurMix;      // 0 = crisp backdrop, 1 = current light blur
+    float edgeRimStrength;   // subtle background-aware contour at the inner silhouette
     vec2 crispUvOffset;
     vec2 crispUvScale;
 };
@@ -176,6 +177,18 @@ void main() {
 
         col = mix(col, tintColor, tintAlpha);
 
+    }
+
+    // A very narrow contour follows the live backdrop instead of using a
+    // uniform white stroke. Bias it toward the upper edge and reduce it over
+    // bright wallpaper so the glass outline remains soft and nonuniform.
+    if (edgeRimStrength > 0.0) {
+        float rim = 1.0 - smoothstep(0.0, 1.5, depthPx);
+        float upperEdge = clamp(0.5 - 0.5 * ndir.y, 0.0, 1.0);
+        float backdropLuma = dot(sampleCrispBackdrop(uv), vec3(0.2126, 0.7152, 0.0722));
+        float contrast = mix(1.0, 0.55, smoothstep(0.25, 0.8, backdropLuma));
+        float rimAlpha = edgeRimStrength * rim * mix(0.42, 1.0, upperEdge) * contrast;
+        col = mix(col, vec3(0.94, 0.93, 1.0), clamp(rimAlpha, 0.0, 0.2));
     }
 
     // Overlay darken: bottom gradient blending toward a target color (lyrics mode)

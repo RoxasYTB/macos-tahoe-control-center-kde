@@ -39,6 +39,8 @@ Item {
     property color tint: "#ffffff"
     property real tintAlpha: 0.10
     property real chromaStrength: 0.0
+    // Subtle, background-aware interior contour; 0 leaves the glass unchanged.
+    property real edgeRimStrength: 0.0
 
     // Blur spread in widget pixels; 0 = disabled.
     property real blurRadius: 6
@@ -706,6 +708,7 @@ Item {
             : Qt.vector4d(0, 0, 0, 0)
 
         property real innerBlurMix: glass._blurActive ? glass.innerBlurMix : 0.0
+        property real edgeRimStrength: glass.edgeRimStrength
         property vector4d overlayDarken: glass.overlayDarken
 
         property vector2d uvOffset: glass._blurActive
