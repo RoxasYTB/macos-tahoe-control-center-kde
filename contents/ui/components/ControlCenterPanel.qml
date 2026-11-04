@@ -15,7 +15,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
-        glassRefractionScale: 85
+        glassRefractionScale: 65
         glassRefractionThickness: 25
         iconName: "cupertino-font-wifi"
         iconColor: "#007aff"
