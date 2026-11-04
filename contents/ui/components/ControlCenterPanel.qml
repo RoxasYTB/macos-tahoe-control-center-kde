@@ -143,8 +143,11 @@ Item {
                         stretch: mediaControl.modelData !== "cupertino-font-play_fill"
                         glyphScale: mediaControl.modelData === "cupertino-font-play_fill" ? 1.35 : 2.0
                         iconName: mediaControl.modelData
-                        opacity: root.controlController && root.controlController.mediaAvailable
-                            ? (mediaControl.modelData === "cupertino-font-play_fill" ? 0.61 : 0.40) : 0.22
+                        opacity: {
+                            const referenceOpacity = mediaControl.modelData === "cupertino-font-play_fill" ? 0.61 : 0.40
+                            return !root.controlController || root.controlController.mediaAvailable
+                                ? referenceOpacity : 0.22
+                        }
                         transform: Translate {
                             x: mediaControl.modelData === "cupertino-font-play_fill" ? 2 : (mediaControl.modelData === "cupertino-font-forward_fill" ? 1 : 0)
                             y: mediaControl.modelData === "cupertino-font-play_fill" ? 1 : 2
