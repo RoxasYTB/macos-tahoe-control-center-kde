@@ -64,7 +64,8 @@ Window {
         }
         if (item.refractIOR !== undefined)
             item.refractIOR = renderRefractionIOR
-        if (item.glassRefractionScale !== undefined && renderRefractionScale >= 0)
+        if (item.glassRefractionScale !== undefined
+                && (profileScale !== undefined || renderRefractionScale >= 0))
             item.glassRefractionScale = profileScale !== undefined ? profileScale : renderRefractionScale
         if (item.glassRefractionThickness !== undefined && renderRefractionThickness > 0)
             item.glassRefractionThickness = renderRefractionThickness
