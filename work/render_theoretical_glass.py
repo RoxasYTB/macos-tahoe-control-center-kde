@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--wallpaper", type=pathlib.Path, default=DEFAULT_WALLPAPER)
     parser.add_argument("--scales", default="50,60,65,70,75,80,90,100",
-                        help="Comma-separated theoretical refraction scales")
+                        help="Comma-separated theoretical refraction scales; -1 preserves each QML surface's value")
     parser.add_argument("--thickness", type=float,
                         help="Refraction band width in pixels; default keeps each QML surface's existing width")
     parser.add_argument("--thicknesses",
@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--iors", default="1.3,1.5,1.7,1.9,2.1",
                         help="Comma-separated theoretical Snell refraction indices to sweep")
     parser.add_argument("--blur", type=float, default=6.0,
-                        help="Light accessibility blur radius in pixels")
+                        help="Light accessibility blur radius in pixels; -1 preserves each QML surface's value")
     parser.add_argument("--chroma", type=float, default=0.0,
                         help="Chromatic separation; keep at zero for normal refraction")
     parser.add_argument("--profile", type=pathlib.Path,
