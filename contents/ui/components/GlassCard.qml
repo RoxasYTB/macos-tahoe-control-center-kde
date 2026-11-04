@@ -83,9 +83,6 @@ Item {
                               root.borderColor.b, root.borderColor.a * 0.66)
         strokeWidth: root.borderWidth
         cornerExponent: root.roundness
-        // Keep the capsule edge neutral. Directional contour lighting reads
-        // as a reflection, which this visual pass intentionally omits.
-        directionalStroke: false
     }
 
     Item {

@@ -11,9 +11,6 @@ Shape {
     property color fillColor: Qt.rgba(0.38, 0.25, 0.56, 0.34)
     property color strokeColor: Qt.rgba(1, 1, 1, 0.34)
     property real strokeWidth: 1
-    property bool directionalStroke: false
-    property color contourLightColor: Qt.rgba(1, 1, 1, 0.10)
-    property color contourShadeColor: Qt.rgba(0, 0, 0, 0.10)
 
     preferredRendererType: Shape.CurveRenderer
     antialiasing: true
@@ -48,17 +45,6 @@ Shape {
         add(r, 0);
         return pts;
     }
-    readonly property var upperLeftContour: {
-        const pts = root.outline;
-        if (pts.length < 266) return pts;
-        return pts.slice(199, 266).concat(pts.slice(1, 16));
-    }
-    readonly property var lowerRightContour: {
-        const pts = root.outline;
-        if (pts.length < 266) return pts;
-        return pts.slice(66, 133).concat([Qt.point(width / 2, height)]);
-    }
-
     ShapePath {
         fillColor: root.fillColor
         strokeColor: root.strokeColor
@@ -67,27 +53,5 @@ Shape {
         startX: root.r
         startY: 0
         PathPolyline { path: root.outline }
-    }
-
-    // A fixed, low-contrast contour gives the liquid-glass silhouette some
-    // directional definition without drawing a moving/specular reflection.
-    ShapePath {
-        fillColor: "transparent"
-        strokeColor: root.directionalStroke ? root.contourLightColor : "transparent"
-        strokeWidth: root.strokeWidth
-        capStyle: ShapePath.RoundCap
-        startX: root.upperLeftContour.length ? root.upperLeftContour[0].x : root.r
-        startY: root.upperLeftContour.length ? root.upperLeftContour[0].y : 0
-        PathPolyline { path: root.upperLeftContour }
-    }
-
-    ShapePath {
-        fillColor: "transparent"
-        strokeColor: root.directionalStroke ? root.contourShadeColor : "transparent"
-        strokeWidth: root.strokeWidth
-        capStyle: ShapePath.RoundCap
-        startX: root.lowerRightContour.length ? root.lowerRightContour[0].x : root.r
-        startY: root.lowerRightContour.length ? root.lowerRightContour[0].y : 0
-        PathPolyline { path: root.lowerRightContour }
     }
 }

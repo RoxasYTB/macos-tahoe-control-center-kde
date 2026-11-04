@@ -48,15 +48,17 @@ Item {
     // Progressive blur outside the silhouette, measured in surface pixels.
     property real outerBlurRadius: 6
     property real outerBlurStrength: 0.20
-    property real edgeLightStrength: 0.08
-    property real rimStrength: 0.18
-    property real bodyGlowStrength: 0.08
+    // Keep the surface free of specular reflections by default. Applications
+    // can opt into these material effects explicitly when they need them.
+    property real edgeLightStrength: 0.0
+    property real rimStrength: 0.0
+    property real bodyGlowStrength: 0.0
     // 0 = Dual Kawase (fast), 1 = Gaussian (smoother, heavier).
     property int blurAlgorithm: 0
 
     // Border specular (free-following primary + antipodal secondary).
-    property bool specEnabled: true
-    property real specStrength: 0.70
+    property bool specEnabled: false
+    property real specStrength: 0.0
 
     // When false, the wallpaper remains statically captured except for
     // geometry changes and Plasma wallpaper transitions. Turn on for
