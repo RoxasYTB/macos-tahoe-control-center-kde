@@ -1,6 +1,6 @@
 #version 440
 
-// Liquid-glass fragment shader — Snell-on-a-dome refraction + corner specular.
+// Liquid-glass fragment shader — Snell-on-a-dome refraction.
 //
 // Ported from iyinchao/liquid-glass-studio's fragment-main.glsl with extras.
 // Key ideas:
@@ -12,9 +12,6 @@
 //     corner-AA gate.
 //   * Chromatic dispersion: R/B sampled at an extra offset along the
 //     refraction direction, scaled by how deep we are in the edge band.
-//   * Free-following specular: on hover, a primary highlight follows the
-//     cursor with exponential arc-length taper; a secondary highlight
-//     appears at the antipodal point at ~65% intensity.
 //
 // qt_TexCoord0 is widget-local UV (0..1).
 // uvOffset/uvScale map widget UV -> wallpaper UV.
@@ -36,16 +33,10 @@ layout(std140, binding = 0) uniform buf {
     vec4  tintBottom;
     vec2  uvOffset;
     vec2  uvScale;
-    vec2  mousePos;          // widget-local UV (0..1); (-1,-1) = no mouse
-    float mouseFade;         // 0..1 hover fade
-    float specStrength;      // 0..1 intensity
     vec4  overlayDarken;     // rgb = target blend color, a = band height (0 = off)
     float innerBlurMix;      // 0 = crisp backdrop, 1 = current light blur
-    float edgeLightStrength;
-    float rimStrength;
     vec2 crispUvOffset;
     vec2 crispUvScale;
-    float bodyGlowStrength;
 };
 
 layout(binding = 1) uniform sampler2D backdrop;
@@ -136,49 +127,6 @@ vec3 sampleGlassBackdrop(vec2 localUV) {
     return mix(crisp, lightlyBlurred, clamp(innerBlurMix, 0.0, 1.0));
 }
 
-// Free-following border specular. A primary highlight tracks the
-// cursor (or rests at TL); a secondary highlight appears at the
-// antipodal point at reduced intensity. Both attenuate exponentially
-// from their respective positions.
-vec3 cornerSpec(vec2 p, float depthPx) {
-    if (specStrength <= 0.0) return vec3(0.0);
-
-    const float MAX_STROKE_PX = 3.0;
-    const float FEATHER_PX    = 2.0;
-    const float SECONDARY_INT = 0.65;
-
-    vec2 b = size * 0.5;
-
-    vec2 restLight = vec2(-b.x, b.y) * 1.2;
-    bool hovering  = mouseFade > 0.0 && mousePos.x >= 0.0 && mousePos.y >= 0.0;
-    vec2 cursorPx  = (mousePos - vec2(0.5)) * size;
-    vec2 lightPx   = hovering ? mix(restLight, cursorPx, mouseFade) : restLight;
-
-    vec2 antiLight = -lightPx;
-
-    float taper = max(size.x, size.y) * 0.7;
-    float primaryAtt   = exp(-distance(p, lightPx)   / taper);
-    float secondaryAtt = exp(-distance(p, antiLight)  / taper) * SECONDARY_INT;
-
-    float tPx = max(primaryAtt, secondaryAtt) * MAX_STROKE_PX;
-    float stroke = 1.0 - smoothstep(tPx - FEATHER_PX, tPx, depthPx);
-
-    float I = stroke * specStrength * 0.55;
-    return vec3(1.0, 0.98, 0.94) * I;
-}
-
-vec3 edgeSpec(vec2 ndir, float depthPx) {
-    if (specStrength <= 0.0) return vec3(0.0);
-
-    // A very shallow lip highlight around the silhouette. Directional
-    // weighting keeps it from becoming a flat white outline.
-    float lip = 1.0 - smoothstep(0.0, 3.0, max(depthPx, 0.0));
-    vec2 lightDir = normalize(vec2(-0.45, 0.90));
-    float facing = 0.35 + 0.65 * clamp(dot(ndir, lightDir) * 0.5 + 0.5, 0.0, 1.0);
-    float I = lip * facing * specStrength * 0.10;
-    return vec3(1.0, 0.98, 0.94) * I;
-}
-
 void main() {
     vec2 uv = qt_TexCoord0;
     vec2 p  = (uv - vec2(0.5)) * size;
@@ -234,35 +182,6 @@ void main() {
     if (overlayDarken.a > 0.0) {
         float darkenT = smoothstep(1.0 - overlayDarken.a, 1.0, uv.y);
         col = mix(col, overlayDarken.rgb, darkenT);
-    }
-
-    col += edgeSpec(ndir, depthPx);
-    col += cornerSpec(p, depthPx);
-
-    // A directional rim: the upper-left side catches light while the
-    // opposing lower-right side stays slightly shaded. This replaces the
-    // even outline that made the older glass read like a stroked card.
-    float rim = 1.0 - smoothstep(0.25, 1.85, max(depthPx, 0.0));
-    vec2 rimLight = normalize(vec2(-0.48, -0.88));
-    float lightFacing = pow(max(dot(ndir, rimLight), 0.0), 1.35);
-    float shadowFacing = pow(max(dot(ndir, -rimLight), 0.0), 1.15);
-    col += vec3(1.0, 0.99, 0.97) * rim * lightFacing * edgeLightStrength;
-    col *= 1.0 - rim * shadowFacing * rimStrength * 0.18;
-
-    // Broad interior reflection gives the capsule its softly illuminated
-    // volume; the thin edge rim alone reads like a flat stroked button.
-    vec2 halfSize = size * 0.5;
-    vec2 glowCenter = vec2(-halfSize.x * 0.28, -halfSize.y * 0.62);
-    vec2 glowRadius = max(vec2(halfSize.x * 0.95, halfSize.y * 1.65), vec2(1.0));
-    float bodyGlow = exp(-length((p - glowCenter) / glowRadius) * 1.8);
-    float interior = 1.0 - smoothstep(-0.25, 1.0, d);
-    col += vec3(1.0) * bodyGlow * interior * bodyGlowStrength;
-
-    // A restrained contour remains visible on the illuminated side only.
-    // Keep it off opaque/solid controls, whose edge is defined by their fill.
-    if (tintAlpha < 0.99 && specStrength > 0.0) {
-        float contour = 1.0 - smoothstep(0.15, 1.35, max(depthPx, 0.0));
-        col = mix(col, vec3(1.0), contour * lightFacing * (0.12 + edgeLightStrength * 0.22));
     }
 
     // Final AA mask at the silhouette. ~1px feather centered exactly

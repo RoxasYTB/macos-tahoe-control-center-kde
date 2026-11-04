@@ -21,13 +21,9 @@ Item {
     property real glassRefractionThickness: 35
     property real glassRefractionScale: 75
     property real glassChromaStrength: 0.0
-    property real glassSpecStrength: 0.0
     property real glassOuterBlurRadius: 6
     property real glassOuterBlurStrength: 0.20
     property real glassInnerBlurMix: 1.0
-    property real glassEdgeLightStrength: 0.0
-    property real glassRimStrength: 0.0
-    property real glassBodyGlowStrength: 0.0
     default property alias contentData: content.data
 
     SquircleSurface {
@@ -61,16 +57,12 @@ Item {
             item.outerBlurRadius = Qt.binding(function() { return root.glassOuterBlurRadius; });
             item.outerBlurStrength = Qt.binding(function() { return root.glassOuterBlurStrength; });
             item.innerBlurMix = Qt.binding(function() { return root.glassInnerBlurMix; });
-            item.edgeLightStrength = Qt.binding(function() { return root.glassEdgeLightStrength; });
-            item.rimStrength = Qt.binding(function() { return root.glassRimStrength; });
-            item.bodyGlowStrength = Qt.binding(function() { return root.glassBodyGlowStrength; });
             item.tint = Qt.binding(function() {
                 return Qt.rgba(root.fillColor.r, root.fillColor.g,
                                root.fillColor.b, 1);
             });
             item.tintAlpha = Qt.binding(function() { return root.fillColor.a * root.glassTintStrength; });
             item.chromaStrength = Qt.binding(function() { return root.glassChromaStrength; });
-            item.specStrength = Qt.binding(function() { return root.glassSpecStrength; });
         }
     }
 

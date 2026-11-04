@@ -48,17 +48,9 @@ Item {
     // Progressive blur outside the silhouette, measured in surface pixels.
     property real outerBlurRadius: 6
     property real outerBlurStrength: 0.20
-    // Keep the surface free of specular reflections by default. Applications
-    // can opt into these material effects explicitly when they need them.
-    property real edgeLightStrength: 0.0
-    property real rimStrength: 0.0
-    property real bodyGlowStrength: 0.0
+    // Keep the surface free of specular reflection overlays.
     // 0 = Dual Kawase (fast), 1 = Gaussian (smoother, heavier).
     property int blurAlgorithm: 0
-
-    // Border specular (free-following primary + antipodal secondary).
-    property bool specEnabled: false
-    property real specStrength: 0.0
 
     // When false, the wallpaper remains statically captured except for
     // geometry changes and Plasma wallpaper transitions. Turn on for
@@ -71,9 +63,7 @@ Item {
     property Item backdropOverride: null
 
     // Solid mode: skip wallpaper capture and refraction; render an opaque
-    // squircle filled with `solidColor`. The squircle silhouette + corner
-    // specular still render via the same shader (tint forced opaque), so
-    // the macOS material feel is preserved.
+    // squircle filled with `solidColor`.
     property bool solidMode: false
     property color solidColor: "#1A1B1E"
     property color solidColorBottom: "transparent"
@@ -263,7 +253,6 @@ Item {
     onBlurAlgorithmChanged: markDirty()
     onInnerBlurMixChanged: markDirty()
     onOuterBlurRadiusChanged: markDirty()
-    onBodyGlowStrengthChanged: markDirty()
     onSolidModeChanged: markDirty()
     onWallpaperItemChanged: {
         markDirty()
@@ -279,35 +268,6 @@ Item {
     // one ambiguous), so burst on its three inputs instead.
     onActiveChanged: markDirty()
 
-    // --- Mouse tracking for specular highlight ---
-    // _mouseU/_mouseV are in widget-local UV (0..1). (-1,-1) means no hover.
-    property real _mouseU: -1
-    property real _mouseV: -1
-    property real _mouseFade: 0
-
-    Behavior on _mouseFade {
-        NumberAnimation { duration: 180; easing.type: Easing.OutQuad }
-    }
-
-    MouseArea {
-        id: hoverArea
-        anchors.fill: parent
-        hoverEnabled: glass.specEnabled
-        acceptedButtons: Qt.NoButton   // never consume clicks
-        propagateComposedEvents: true
-
-        onPositionChanged: (mouse) => {
-            glass._mouseU = mouse.x / Math.max(1, glass.width)
-            glass._mouseV = mouse.y / Math.max(1, glass.height)
-            glass._mouseFade = 1
-        }
-        onEntered: glass._mouseFade = 1
-        onExited: {
-            glass._mouseFade = 0
-            glass._mouseU = -1
-            glass._mouseV = -1
-        }
-    }
     // A widget's position can change without any signal we can bind to (an
     // ancestor moves, the containment relayouts), so the offset has to be
     // polled. But it only changes while something is being dragged, and a
@@ -714,7 +674,7 @@ Item {
         property vector2d uvScale: glass._uvSc
     }
 
-    // --- Glass shader (refraction + chroma + tint + specular + mask) ---
+    // --- Glass shader (refraction + chroma + tint + mask) ---
     //
     // When blur is active, backdrop is the blurred crop in widget-local
     // UV (uvOffset=0, uvScale=1). Refraction displaces into the blurred
@@ -745,13 +705,7 @@ Item {
             ? Qt.vector4d(glass.solidColorBottom.r, glass.solidColorBottom.g, glass.solidColorBottom.b, 1.0)
             : Qt.vector4d(0, 0, 0, 0)
 
-        property vector2d mousePos: Qt.vector2d(glass._mouseU, glass._mouseV)
-        property real mouseFade: glass._mouseFade
-        property real specStrength: glass.specEnabled ? glass.specStrength : 0.0
         property real innerBlurMix: glass._blurActive ? glass.innerBlurMix : 0.0
-        property real edgeLightStrength: glass.edgeLightStrength
-        property real rimStrength: glass.rimStrength
-        property real bodyGlowStrength: glass.bodyGlowStrength
         property vector4d overlayDarken: glass.overlayDarken
 
         property vector2d uvOffset: glass._blurActive
