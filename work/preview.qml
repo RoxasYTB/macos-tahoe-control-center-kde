@@ -10,6 +10,7 @@ Window {
     color: "transparent"
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     title: "Control Center visual comparison"
+    readonly property var materialOverrides: JSON.parse(renderMaterialParametersJson)
 
     // LiquidGlass uses ShaderEffectSource.hideSource for its backdrop. Keep
     // an identical visible copy underneath and sample a separate sibling so
@@ -49,9 +50,11 @@ Window {
         if (!item) return
         const surfaceName = item.objectName || item.title || item.iconName || ""
         const profileScale = renderRefractionProfile[surfaceName]
-        for (const propertyName in renderMaterialParameters) {
+        const materialKeys = Object.keys(preview.materialOverrides)
+        for (let i = 0; i < materialKeys.length; ++i) {
+            const propertyName = materialKeys[i]
             if (item[propertyName] !== undefined)
-                item[propertyName] = renderMaterialParameters[propertyName]
+                item[propertyName] = preview.materialOverrides[propertyName]
         }
         if (item.refractIOR !== undefined)
             item.refractIOR = renderRefractionIOR
@@ -60,15 +63,16 @@ Window {
         if (item.glassRefractionThickness !== undefined && renderRefractionThickness > 0)
             item.glassRefractionThickness = renderRefractionThickness
         if (item.glassBlurRadius !== undefined && renderBlurRadius >= 0
-                && renderMaterialParameters.glassBlurRadius === undefined)
+                && preview.materialOverrides.glassBlurRadius === undefined)
             item.glassBlurRadius = renderBlurRadius
-        if (item.glassChromaStrength !== undefined && renderMaterialParameters.glassChromaStrength === undefined)
+        if (item.glassChromaStrength !== undefined && preview.materialOverrides.glassChromaStrength === undefined)
             item.glassChromaStrength = renderChromaStrength
         // Material-sweep values win over global CLI defaults. Apply these
-        // last so per-candidate blur, tint and reflection settings survive.
-        for (const propertyName in renderMaterialParameters) {
+        // last so per-candidate blur and tint settings survive.
+        for (let i = 0; i < materialKeys.length; ++i) {
+            const propertyName = materialKeys[i]
             if (item[propertyName] !== undefined)
-                item[propertyName] = renderMaterialParameters[propertyName]
+                item[propertyName] = preview.materialOverrides[propertyName]
         }
         if (item.children) {
             for (let i = 0; i < item.children.length; ++i)

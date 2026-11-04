@@ -46,14 +46,14 @@ int main(int argc, char *argv[])
             refractionProfile = QJsonDocument::fromJson(profileFile.readAll()).object().toVariantMap();
     }
     engine.rootContext()->setContextProperty(QStringLiteral("renderRefractionProfile"), refractionProfile);
-    QVariantMap materialParameters;
+    QString materialParametersJson = QStringLiteral("{}");
     const QString materialPath = parser.value(QStringLiteral("material"));
     if (!materialPath.isEmpty()) {
         QFile materialFile(materialPath);
         if (materialFile.open(QIODevice::ReadOnly))
-            materialParameters = QJsonDocument::fromJson(materialFile.readAll()).object().toVariantMap();
+            materialParametersJson = QString::fromUtf8(materialFile.readAll());
     }
-    engine.rootContext()->setContextProperty(QStringLiteral("renderMaterialParameters"), materialParameters);
+    engine.rootContext()->setContextProperty(QStringLiteral("renderMaterialParametersJson"), materialParametersJson);
     const QUrl url = QUrl::fromLocalFile(parser.value(QStringLiteral("qml")));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
                      &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
