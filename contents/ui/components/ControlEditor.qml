@@ -362,12 +362,21 @@ Window {
                                         Repeater {
                                             id: sectionItems
                                             model: sectionColumn.useSuggestionGrid ? [] : sectionColumn.sectionEntries
-                                            delegate: ControlEditorTile {
+                                            delegate: Item {
+                                                id: sectionCell
                                                 required property var modelData
-                                                entry: modelData
-                                                iconName: root.catalogIcon(modelData.name)
-                                                statusText: root.catalogStatus(modelData.name)
-                                                onAddRequested: function(controlName) { root.addTo("control", controlName) }
+                                                readonly property int columns: 3
+                                                width: (sectionFlow.width - sectionFlow.spacing * (columns - 1)) / columns
+                                                height: 110
+
+                                                ControlEditorTile {
+                                                    anchors.horizontalCenter: parent.horizontalCenter
+                                                    anchors.top: parent.top
+                                                    entry: sectionCell.modelData
+                                                    iconName: root.catalogIcon(sectionCell.modelData.name)
+                                                    statusText: root.catalogStatus(sectionCell.modelData.name)
+                                                    onAddRequested: function(controlName) { root.addTo("control", controlName) }
+                                                }
                                             }
                                         }
                                     }
