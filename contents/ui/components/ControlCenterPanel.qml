@@ -480,7 +480,13 @@ Item {
                         title: customControl.modelData
                         subtitle: root.customStatus(customControl.modelData)
                         hasSubmenu: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
+                        // Wi-Fi/Bluetooth remain openable when hardware is
+                        // absent so their detail popovers can explain why the
+                        // switch is unavailable. Other unsupported controls
+                        // stay visibly disabled.
                         disabled: root.customIsDisabled(customControl.modelData)
+                            && customControl.modelData !== "Wi-Fi"
+                            && customControl.modelData !== "Bluetooth"
                         interactive: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
                             || customControl.modelData === "Appearance" || customControl.modelData === "Screenshot"
                         onActivated: {
