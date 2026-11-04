@@ -257,7 +257,7 @@ Item {
         title: "Sound"
         titleOffsetY: 3
         sound: true
-        value: 0.664
+        value: 0.675
         trackColor: Qt.rgba(1, 1, 1, 0.24)
         levelColor: "#ffffff"
         foreground: root.foreground
