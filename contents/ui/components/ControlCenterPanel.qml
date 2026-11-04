@@ -62,7 +62,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         roundness: 2.0
-        glassRefractionThickness: 30
+        glassRefractionThickness: 36
         glassRefractionScale: 75
         glassBlurRadius: 6
         glassBlurAlgorithm: 1
@@ -91,7 +91,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassBlurRadius: 6
-        glassRefractionThickness: 25
+        glassRefractionThickness: 36
         glassTintStrength: 1.0
         glassChromaStrength: 0.0
         cornerRadius: 33
@@ -150,6 +150,7 @@ Item {
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
         glassTintStrength: 1.0
+        glassRefractionThickness: 28
         iconSize: 33.5
         iconHeight: 35.2
         iconOffsetX: -1
@@ -215,6 +216,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
+        glassRefractionThickness: 22
         iconName: "cupertino-font-moon_fill"
         iconBadge: true
         badgeSize: 40
