@@ -34,7 +34,9 @@ Popup {
         backdropOverride: root.backdropOverride
         cornerRadius: 20
         roundness: 2.6
-        fillColor: Qt.rgba(1, 1, 1, 0.13)
+        // A neutral charcoal wash lets the live wallpaper supply the hue
+        // while keeping bright content behind the glass readable.
+        fillColor: Qt.rgba(0, 0, 0, 0.22)
         borderColor: Qt.rgba(1, 1, 1, 0.34)
         glassBlurRadius: 10
         glassEdgeRimStrength: 0.20
