@@ -4,6 +4,8 @@
     <file alias="contents/ui/components/ControlEditor.qml">../contents/ui/components/ControlEditor.qml</file>
     <file alias="contents/ui/components/ControlEditorTile.qml">../contents/ui/components/ControlEditorTile.qml</file>
     <file alias="app/control-center-blur-window-region.png">control-center-blur-window-region.png</file>
+    <file alias="app/wifi-details-blur-window-region.png">wifi-details-blur-window-region.png</file>
+    <file alias="app/bluetooth-details-blur-window-region.png">bluetooth-details-blur-window-region.png</file>
     <file alias="app/control-editor-blur-window-region.png">control-editor-blur-window-region.png</file>
     <file alias="contents/ui/components/ControlCenterPanel.qml">../contents/ui/components/ControlCenterPanel.qml</file>
     <file alias="contents/ui/components/ControlDetailsPopup.qml">../contents/ui/components/ControlDetailsPopup.qml</file>

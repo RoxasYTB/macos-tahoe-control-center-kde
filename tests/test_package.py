@@ -1,4 +1,5 @@
 import re
+import struct
 from pathlib import Path
 
 
@@ -66,3 +67,19 @@ def test_standalone_control_center_is_managed_and_dismisses_outside():
     assert "Qt.Popup |" not in qml
     assert "onActiveChanged" in qml
     assert "if (popup.visible && !popup.active)" in qml
+
+
+def test_standalone_detail_menus_use_their_own_blur_masks():
+    qml = (ROOT / "app" / "Main.qml").read_text(encoding="utf-8")
+    resources = (ROOT / "app" / "controlcenter.qrc").read_text(encoding="utf-8")
+    assert 'controlCenterPanel.menuBarOnlyDetails' in qml
+    assert 'controlCenterPanel.menuBarDetailTarget === "Bluetooth"' in qml
+    assert 'qrc:/app/wifi-details-blur-window-region.png' in qml
+    assert 'qrc:/app/bluetooth-details-blur-window-region.png' in qml
+    assert 'qrc:/app/control-center-blur-window-region.png' in qml
+    assert 'alias="app/wifi-details-blur-window-region.png"' in resources
+    assert 'alias="app/bluetooth-details-blur-window-region.png"' in resources
+    wifi_mask = (ROOT / "app" / "wifi-details-blur-window-region.png").read_bytes()
+    bluetooth_mask = (ROOT / "app" / "bluetooth-details-blur-window-region.png").read_bytes()
+    assert struct.unpack(">II", wifi_mask[16:24]) == (304, 180)
+    assert struct.unpack(">II", bluetooth_mask[16:24]) == (304, 218)

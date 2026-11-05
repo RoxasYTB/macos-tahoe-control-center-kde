@@ -61,7 +61,11 @@ Window {
 
     BlurBehindRegion {
         window: popup
-        maskSource: Qt.resolvedUrl("qrc:/app/control-center-blur-window-region.png")
+        maskSource: controlCenterPanel.menuBarOnlyDetails
+                    ? Qt.resolvedUrl(controlCenterPanel.menuBarDetailTarget === "Bluetooth"
+                                     ? "qrc:/app/bluetooth-details-blur-window-region.png"
+                                     : "qrc:/app/wifi-details-blur-window-region.png")
+                    : Qt.resolvedUrl("qrc:/app/control-center-blur-window-region.png")
         alphaThreshold: 24
         // The native helper applies/removes the property on visibleChanged;
         // keep it enabled so QML binding order cannot race the QWindow map.
