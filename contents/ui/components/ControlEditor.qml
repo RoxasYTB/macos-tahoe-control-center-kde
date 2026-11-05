@@ -217,7 +217,7 @@ Window {
         enabled: true
     }
 
-    Shortcut { sequence: "Escape"; onActivated: root.close() }
+    Shortcut { sequence: "Escape"; enabled: root.visible; onActivated: root.close() }
 
     Rectangle {
         anchors.fill: parent
