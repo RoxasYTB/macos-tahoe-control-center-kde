@@ -36,11 +36,13 @@ Le survol doit éclaircir la capsule sans changer sa taille, son texte ou son al
 | --- | ---: | --- | --- |
 | `/mnt/windata/C/Users/Yohan/Images/image2.png` | 1920 × 1080 | `fb5f60acde10cb194c2f3a82e0e574d1e2e33ab07cb0e8725c360b4edaefb0a1` | Bureau avec widgets, Dock et menu contextuel ouvert au centre. Lignes : New Folder, Get Info, Change Wallpaper…, Edit Widgets…, Use Stacks, Sort By ›, Clean Up, Clean Up By ›, Show View Options. Conserver séparateurs, colonne d’icônes, chevrons et surbrillance. |
 
+| [`desktop-context-menu-sort-by-submenu.png`](reference-assets/macos-tahoe-control-center/desktop-context-menu-sort-by-submenu.png) (copie de la capture reçue) | 1011 × 730 | `caeb1b422e7735af763d053e588533934262f7fffadc287c6a9034dab04139e8` | État interactif complémentaire : `Sort By` survolé et sous-menu ouvert à droite. Le parent est éclairci en mauve pâle; dans le sous-menu, `Kind` est sélectionné avec une capsule bleue, `None` porte la coche. Référence requise pour distinguer survol du parent et sélection/survol d’un enfant; conserver le chevauchement et l’alignement des deux panneaux. |
+
 Cette dernière référence relève de `macos-tahoe-liquid-kde`, tandis que l’éditeur et les sous-menus réseau relèvent de `macos-tahoe-contro-center-kde`. La capture est une référence de rendu et de contenu ; chaque entrée doit garder une action KDE correspondante.
 
 ## Provenance et usage
 
-- Les cinq captures originales restent dans le dossier utilisateur `Images`; seules leurs empreintes, chemins et descriptions sont catalogués ici.
+- Les cinq captures originales restent dans le dossier utilisateur `Images`; seules leurs empreintes, chemins et descriptions sont catalogués ici. La capture contextuelle « Sort By » a été copiée dans `docs/reference-assets/macos-tahoe-control-center/` pour préserver cette référence; son empreinte source est cataloguée ci-dessus.
 - La petite capture de survol reçue dans `/tmp` a été copiée dans `docs/reference-assets/macos-tahoe-control-center/wifi-hover-chevron.png` pour préserver le détail de la flèche.
 - Ces captures servent de références de travail. Ne pas les intégrer comme illustrations produit ou captures publiques du thème sans décision distincte de Yohan.
 - Les images montrent des détails variables du bureau (fond, widgets, applications et date/heure). Utiliser les menus et contrôles décrits ci-dessus comme critères pertinents; ne pas recopier ces détails personnels dans les interfaces. Le fond d’écran est un contexte de comparaison : les surfaces en verre doivent réfracter le contenu réellement visible derrière elles, jamais une capture pré-calculée.
