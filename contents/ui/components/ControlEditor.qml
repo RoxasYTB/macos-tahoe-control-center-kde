@@ -163,6 +163,8 @@ Window {
         return "cupertino-font-square_grid_2x2_fill"
     }
     function addTo(target, name) {
+        if (target !== "menu" && target !== "control") return
+        if (!catalog.some(function(entry) { return entry.name === name })) return
         let list = target === "menu" ? draftMenuBarItems.slice() : draftControlCenterItems.slice()
         if (list.indexOf(name) < 0) list.push(name)
         if (target === "menu") draftMenuBarItems = list
