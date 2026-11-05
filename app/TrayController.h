@@ -25,10 +25,10 @@ public Q_SLOTS:
     void toggleWindow();
     void setPopupVisible(bool visible);
     Q_INVOKABLE void setMenuBarItems(const QString &newlineSeparatedItems);
+    Q_INVOKABLE void activateMenuBarControl(const QString &name);
 
 private:
     void positionWindow();
-    void activateMenuBarControl(const QString &name);
     static QString iconNameForControl(const QString &name);
 
     QSystemTrayIcon *m_trayIcon = nullptr;

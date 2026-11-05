@@ -41,6 +41,10 @@ int main(int argc, char *argv[])
     const QCommandLineOption editorPreviewOption(QStringList{QStringLiteral("editor-preview")},
                                                   QStringLiteral("Open the Controls editor for an isolated visual check."));
     parser.addOption(editorPreviewOption);
+    const QCommandLineOption menuPreviewOption(QStringList{QStringLiteral("menu-preview")},
+                                                QStringLiteral("Open a standalone Wi-Fi or Bluetooth tray menu for visual checks."),
+                                                QStringLiteral("wifi|bluetooth"));
+    parser.addOption(menuPreviewOption);
     parser.process(app);
 
     QSystemTrayIcon trayIcon(QIcon(QStringLiteral(":/contents/ui/components/icons/control-centre-iconscout-white.png")));
@@ -69,6 +73,15 @@ int main(int argc, char *argv[])
         QObject *editor = window->findChild<QObject *>(QStringLiteral("controlEditorWindow"));
         if (editor)
             QMetaObject::invokeMethod(editor, "showEditor");
+    }
+
+    const QString menuPreview = parser.value(menuPreviewOption).toLower();
+    if (menuPreview == QStringLiteral("wifi") || menuPreview == QStringLiteral("bluetooth")) {
+        const QString name = menuPreview == QStringLiteral("wifi")
+            ? QStringLiteral("Wi-Fi") : QStringLiteral("Bluetooth");
+        QTimer::singleShot(180, &app, [&controller, name] {
+            controller.activateMenuBarControl(name);
+        });
     }
 
     controller.setWindow(window);

@@ -14,6 +14,8 @@ Item {
     readonly property bool detailsOpen: wifiDetails.visible || bluetoothDetails.visible
     readonly property var defaultControlCenterItems: ["AirDrop", "Bluetooth", "Wi-Fi", "Stage Manager", "Screen Mirroring", "Appearance", "Screenshot", "Focus", "Display", "Sound", "Now Playing"]
     readonly property bool customLayout: !sameList(savedControlLayout.controlCenterItems, defaultControlCenterItems)
+    property bool menuBarOnlyDetails: false
+    property string menuBarDetailTarget: ""
     signal editControlsRequested()
     Settings {
         id: savedControlLayout
@@ -82,8 +84,15 @@ Item {
     Connections {
         target: typeof trayController !== "undefined" ? trayController : null
         function onMenuBarControlActivated(name) {
-            if (name === "Wi-Fi") root.openWifiDetails()
-            else if (name === "Bluetooth") root.openBluetoothDetails()
+            if (name === "Wi-Fi") {
+                root.menuBarOnlyDetails = true
+                root.menuBarDetailTarget = name
+                root.openWifiDetails()
+            } else if (name === "Bluetooth") {
+                root.menuBarOnlyDetails = true
+                root.menuBarDetailTarget = name
+                root.openBluetoothDetails()
+            }
             else if ((name === "Appearance" || name === "Dark Mode") && root.controlController)
                 root.controlController.toggleAppearance()
             else if (name === "Screenshot" && root.controlController)
@@ -135,6 +144,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         controlController: root.controlController
+        onClosed: root.finishMenuBarDetails()
     }
 
     QuickTile {
@@ -176,6 +186,7 @@ Item {
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         controlController: root.controlController
+        onClosed: root.finishMenuBarDetails()
     }
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("AirDrop")
@@ -590,5 +601,14 @@ Item {
             bluetoothDetails.close()
         }
         Accessible.ignored: true
+    }
+
+    function finishMenuBarDetails() {
+        if (!menuBarOnlyDetails || wifiDetails.visible || bluetoothDetails.visible)
+            return
+        menuBarOnlyDetails = false
+        menuBarDetailTarget = ""
+        if (typeof trayController !== "undefined")
+            trayController.setPopupVisible(false)
     }
 }

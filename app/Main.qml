@@ -11,7 +11,9 @@ Window {
     width: 304
     // The panel is 484 px tall; keep only a 12 px transparent safety margin
     // below it so the popup does not capture clicks in an unused 60 px strip.
-    height: 496
+    height: controlCenterPanel.menuBarOnlyDetails
+           ? (controlCenterPanel.menuBarDetailTarget === "Bluetooth" ? 218 : 180)
+           : 496
     visible: trayController.popupVisible
     color: "transparent"
     property bool stayOpen: false
@@ -40,6 +42,7 @@ Window {
 
     ControlCenterPanel {
         id: controlCenterPanel
+        objectName: "controlCenterPanel"
         x: 0
         y: 0
         useLiquidGlass: false
