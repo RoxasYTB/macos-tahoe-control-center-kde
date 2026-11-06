@@ -45,6 +45,9 @@ Window {
         objectName: "controlCenterPanel"
         x: 0
         y: 0
+        // LiquidGlass.qml samples Plasma's wallpaper texture, not arbitrary
+        // windows under this standalone popup. KWin's class-scoped effect
+        // supplies the live composited backdrop and refraction instead.
         useLiquidGlass: false
         onEditControlsRequested: {
             popup.stayOpen = true
