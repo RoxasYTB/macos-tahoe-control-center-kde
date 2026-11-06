@@ -17,7 +17,7 @@ Capture: `/tmp/tahoe-control-center-live-glass-preview-20261106.png` (full 5760x
 
 - `./build-app.sh`: passed.
 - `python3 -m pytest -q tests/test_package.py`: 6 passed.
-- Installed binary SHA-256: `8b98845e85616533faf678da304f6347ca609cd8daec449b4713d6e116ad88f2` (matches `.build/app/tahoe-control-center`).
+- Installed binary SHA-256: `f80f31658926b7a93cf1d0b73cd9c7c492c16eaa521a920583806f225e7c4eb0` (matches `.build/app/tahoe-control-center`).
 - The generated user autostart unit `app-tahoe\x2dcontrol\x2dcenter@autostart.service` is active and runs exactly one hidden tray process after the visual capture.
 - `kwinrc` backup before enabling the plugin: `/tmp/kwinrc-before-tahoe-glass-20261106-163125`.
 
