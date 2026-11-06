@@ -29,9 +29,12 @@ Popup {
     }
 
     parent: ownerItem
-    x: -11
-    y: -4
-    width: 308
+    // Keep details in the Control Center's scene/window so its KWin glass
+    // effect and per-window blur region apply to these submenus too.
+    popupType: Popup.Item
+    x: 0
+    y: 0
+    width: 304
     height: 214
     padding: 0
     modal: false

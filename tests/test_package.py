@@ -74,7 +74,7 @@ def test_standalone_detail_menus_use_their_own_blur_masks():
     resources = (ROOT / "app" / "controlcenter.qrc").read_text(encoding="utf-8")
     wifi_popup = (ROOT / "contents/ui/components/ControlDetailsPopup.qml").read_text(encoding="utf-8")
     bluetooth_popup = (ROOT / "contents/ui/components/BluetoothDetailsPopup.qml").read_text(encoding="utf-8")
-    assert 'controlCenterPanel.menuBarOnlyDetails' in qml
+    assert 'controlCenterPanel.detailsOpen' in qml
     assert 'controlCenterPanel.menuBarDetailTarget === "Bluetooth"' in qml
     assert 'qrc:/app/wifi-details-blur-window-region.png' in qml
     assert 'qrc:/app/bluetooth-details-blur-window-region.png' in qml
@@ -83,7 +83,15 @@ def test_standalone_detail_menus_use_their_own_blur_masks():
     assert 'alias="app/bluetooth-details-blur-window-region.png"' in resources
     assert 'fillColor: Qt.rgba(0, 0, 0, 0.22)' in wifi_popup
     assert 'fillColor: Qt.rgba(0, 0, 0, 0.22)' in bluetooth_popup
+    assert 'popupType: Popup.Item' in wifi_popup
+    assert 'popupType: Popup.Item' in bluetooth_popup
     wifi_mask = (ROOT / "app" / "wifi-details-blur-window-region.png").read_bytes()
     bluetooth_mask = (ROOT / "app" / "bluetooth-details-blur-window-region.png").read_bytes()
     assert struct.unpack(">II", wifi_mask[16:24]) == (304, 180)
     assert struct.unpack(">II", bluetooth_mask[16:24]) == (304, 218)
+
+
+def test_removing_a_default_control_does_not_break_reference_layout():
+    qml = (ROOT / "contents/ui/components/ControlCenterPanel.qml").read_text(encoding="utf-8")
+    assert "followsDefaultOrder(savedControlLayout.controlCenterItems" in qml
+    assert "const expected = defaults.filter(name => items.indexOf(name) >= 0)" in qml

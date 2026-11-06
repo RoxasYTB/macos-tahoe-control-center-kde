@@ -9,10 +9,10 @@ Window {
     // Keep only the 12 px reference inset on the right. The former 60 px
     // empty gutter was inherited from the plasmoid's wider popup window.
     width: 304
-    // The panel is 484 px tall; keep only a 12 px transparent safety margin
-    // below it so the popup does not capture clicks in an unused 60 px strip.
-    height: controlCenterPanel.menuBarOnlyDetails
-           ? (controlCenterPanel.menuBarDetailTarget === "Bluetooth" ? 218 : 180)
+    // Detail views resize the host to their actual content. Keeping the
+    // popup in this scene lets KWin apply the same live glass effect and mask.
+    height: controlCenterPanel.detailsOpen
+           ? controlCenterPanel.detailWindowHeight
            : 496
     visible: trayController.popupVisible
     color: "transparent"
@@ -64,7 +64,7 @@ Window {
 
     BlurBehindRegion {
         window: popup
-        maskSource: controlCenterPanel.menuBarOnlyDetails
+        maskSource: controlCenterPanel.detailsOpen
                     ? Qt.resolvedUrl(controlCenterPanel.menuBarDetailTarget === "Bluetooth"
                                      ? "qrc:/app/bluetooth-details-blur-window-region.png"
                                      : "qrc:/app/wifi-details-blur-window-region.png")

@@ -12,8 +12,11 @@ Item {
     property bool useLiquidGlass: true
     property var controlController: typeof systemControls !== "undefined" ? systemControls : null
     readonly property bool detailsOpen: wifiDetails.visible || bluetoothDetails.visible
+    readonly property int detailWindowHeight: wifiDetails.visible ? wifiDetails.height
+                                                : bluetoothDetails.visible ? bluetoothDetails.height : 0
     readonly property var defaultControlCenterItems: ["AirDrop", "Bluetooth", "Wi-Fi", "Stage Manager", "Screen Mirroring", "Appearance", "Screenshot", "Focus", "Display", "Sound", "Now Playing"]
-    readonly property bool customLayout: !sameList(savedControlLayout.controlCenterItems, defaultControlCenterItems)
+    readonly property bool customLayout: !followsDefaultOrder(savedControlLayout.controlCenterItems,
+                                                               defaultControlCenterItems)
     property bool menuBarOnlyDetails: false
     property string menuBarDetailTarget: ""
     signal editControlsRequested()
@@ -26,6 +29,11 @@ Item {
         if (!a || a.length !== b.length) return false
         for (let i = 0; i < a.length; ++i) if (a[i] !== b[i]) return false
         return true
+    }
+    function followsDefaultOrder(items, defaults) {
+        if (!items || !defaults) return false
+        const expected = defaults.filter(name => items.indexOf(name) >= 0)
+        return sameList(items, expected)
     }
     function controlIsSelected(name) {
         return savedControlLayout.controlCenterItems.indexOf(name) >= 0
@@ -78,8 +86,14 @@ Item {
         return root.customIsDisabled(name) ? qsTr("Unavailable") : ""
     }
 
-    function openWifiDetails() { wifiDetails.open() }
-    function openBluetoothDetails() { bluetoothDetails.open() }
+    function openWifiDetails() {
+        menuBarDetailTarget = "Wi-Fi"
+        wifiDetails.open()
+    }
+    function openBluetoothDetails() {
+        menuBarDetailTarget = "Bluetooth"
+        bluetoothDetails.open()
+    }
 
     Connections {
         target: typeof trayController !== "undefined" ? trayController : null
@@ -133,7 +147,7 @@ Item {
                : qsTr("Off"))
             : qsTr("Unavailable")
         interactive: root.controlController !== null
-        onActivated: wifiDetails.open()
+        onActivated: root.openWifiDetails()
         foreground: root.foreground
         badgeColor: "#ffffff"
     }
@@ -175,7 +189,7 @@ Item {
                 : qsTr("Unavailable"))
             : qsTr("Unavailable")
         interactive: root.controlController !== null
-        onActivated: bluetoothDetails.open()
+        onActivated: root.openBluetoothDetails()
         foreground: root.foreground
         badgeColor: "#ffffff"
         tileFill: Qt.rgba(1, 1, 1, 0.07)
@@ -501,8 +515,8 @@ Item {
                         interactive: customControl.modelData === "Wi-Fi" || customControl.modelData === "Bluetooth"
                             || customControl.modelData === "Appearance" || customControl.modelData === "Screenshot"
                         onActivated: {
-                            if (customControl.modelData === "Wi-Fi") wifiDetails.open()
-                            else if (customControl.modelData === "Bluetooth") bluetoothDetails.open()
+                            if (customControl.modelData === "Wi-Fi") root.openWifiDetails()
+                            else if (customControl.modelData === "Bluetooth") root.openBluetoothDetails()
                             else if (customControl.modelData === "Appearance" && root.controlController) root.controlController.toggleAppearance()
                             else if (customControl.modelData === "Screenshot" && root.controlController) root.controlController.launchScreenshot()
                         }

@@ -13,9 +13,12 @@ Popup {
     property bool expandedNetworks: false
 
     parent: ownerItem
-    x: -11
-    y: -4
-    width: 308
+    // Keep details in the Control Center's scene/window so its KWin glass
+    // effect and per-window blur region apply to these submenus too.
+    popupType: Popup.Item
+    x: 0
+    y: 0
+    width: 304
     height: expandedNetworks && controlController
             ? 176 + Math.min(5, controlController.wifiOtherNetworks.length) * 27
             : 176
