@@ -34,9 +34,9 @@ def test_panel_has_reference_geometry_and_independent_glass_cards():
     assert qml.count("GlassCard {") >= 2
     assert qml.count("SliderCard {") == 3
     assert "Rectangle {" not in qml
-    assert 'x: 152; y: 0; width: 140; height: 139' in qml
-    assert 'x: 0; y: 306; width: 292; height: 64' in qml
-    assert 'x: 0; y: 383; width: 292; height: 64' in qml
+    assert 'x: 158; y: 0; width: 129; height: 131' in qml
+    assert 'x: 16; y: 291; width: 271; height: 63' in qml
+    assert 'x: 16; y: 364; width: 271; height: 63' in qml
 
 
 def test_reference_icons_are_authored_svg_assets():

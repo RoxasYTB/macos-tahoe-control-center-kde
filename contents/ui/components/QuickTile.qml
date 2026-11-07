@@ -85,7 +85,7 @@ GlassCard {
             anchors.fill: parent
             anchors.leftMargin: root.iconBadge ? root.badgeLeftMargin : (root.compact ? 7 : 4)
             // Reserve the chevron slot even at rest so hover never shifts text.
-            anchors.rightMargin: root.hasSubmenu ? 22 : (root.compact ? 7 : 8)
+            anchors.rightMargin: root.hasSubmenu ? 18 : (root.compact ? 7 : 8)
             spacing: root.compact ? 6 : (root.iconBadge ? 6 : 12)
             visible: !root.circular || root.title.length > 0 || root.iconBadge
 

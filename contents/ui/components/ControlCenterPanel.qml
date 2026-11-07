@@ -117,7 +117,7 @@ Item {
     QuickTile {
         id: wifiTile
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Wi-Fi")
-        x: 0; y: 0; width: 140; height: 62
+        x: 17; y: 0; width: 134; height: 60
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
@@ -164,7 +164,7 @@ Item {
     QuickTile {
         id: bluetoothTile
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Bluetooth")
-        x: 0; y: 77; width: 140; height: 64
+        x: 17; y: 70; width: 134; height: 58
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
@@ -204,13 +204,13 @@ Item {
     }
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("AirDrop")
-        x: 0; y: 153; width: 140; height: 62
+        x: 17; y: 142; width: 132; height: 59
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         roundness: 2.0
         glassRefractionThickness: 36
         glassRefractionScale: 62
-        glassBlurRadius: 10
+        glassBlurRadius: 2
         glassBlurAlgorithm: 1
         glassTintStrength: 1.0
         iconName: "airdrop-muted"
@@ -234,10 +234,10 @@ Item {
     GlassCard {
         objectName: "Media"
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Now Playing")
-        x: 152; y: 0; width: 140; height: 139
+        x: 158; y: 0; width: 129; height: 131
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
-        glassBlurRadius: 10
+        glassBlurRadius: 2
         glassRefractionThickness: 36
         glassTintStrength: 1.0
         glassChromaStrength: 0.0
@@ -306,7 +306,7 @@ Item {
 
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Stage Manager")
-        x: 152; y: 153; width: 64; height: 64
+        x: 158; y: 142; width: 63; height: 63
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "stage-manager"
@@ -325,7 +325,7 @@ Item {
     }
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Screen Mirroring")
-        x: 228; y: 153; width: 64; height: 64
+        x: 220; y: 142; width: 65; height: 65
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "screen-mirroring"
@@ -342,7 +342,7 @@ Item {
 
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Appearance")
-        x: -1; y: 230; width: 64; height: 64
+        x: 17; y: 218; width: 59; height: 59
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         iconName: "appearance"
@@ -361,7 +361,7 @@ Item {
     }
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Screenshot")
-        x: 76; y: 229; width: 64; height: 64
+        x: 89; y: 218; width: 59; height: 59
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
@@ -381,7 +381,7 @@ Item {
     }
     QuickTile {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Focus")
-        x: 152; y: 229; width: 140; height: 64
+        x: 158; y: 218; width: 130; height: 59
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassTintStrength: 1.0
@@ -406,7 +406,7 @@ Item {
 
     SliderCard {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Display")
-        x: 0; y: 306; width: 292; height: 64
+        x: 16; y: 291; width: 271; height: 63
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -425,7 +425,7 @@ Item {
     }
     SliderCard {
         visible: !root.customLayout && !root.detailsOpen && root.controlIsSelected("Sound")
-        x: 0; y: 383; width: 292; height: 64
+        x: 16; y: 364; width: 271; height: 63
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -444,7 +444,7 @@ Item {
     GlassCard {
         objectName: "Edit Controls"
         visible: !root.detailsOpen
-        x: 99; y: 464; width: 94; height: 25
+        x: 116; y: 438; width: 100; height: 23
         backdropOverride: root.backdropOverride
         useLiquidGlass: root.useLiquidGlass
         glassRefractionThickness: 25
@@ -528,7 +528,7 @@ Item {
                         visible: customControl.modelData === "Now Playing"
                         backdropOverride: root.backdropOverride
                         useLiquidGlass: root.useLiquidGlass
-                        glassBlurRadius: 10
+                        glassBlurRadius: 2
                         glassRefractionThickness: 36
                         glassTintStrength: 1.0
                         glassChromaStrength: 0.0

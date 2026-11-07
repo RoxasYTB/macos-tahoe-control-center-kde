@@ -1,6 +1,5 @@
 #include "TrayController.h"
 
-#include <QCursor>
 #include <QDebug>
 #include <QGuiApplication>
 #include <QRect>
@@ -135,13 +134,10 @@ void TrayController::activateMenuBarControl(const QString &name)
 
 void TrayController::positionWindow()
 {
-    const QRect trayGeometry = m_trayIcon ? m_trayIcon->geometry() : QRect();
-    QScreen *screen = trayGeometry.isValid() && !trayGeometry.isEmpty()
-        ? QGuiApplication::screenAt(trayGeometry.center())
-        : QGuiApplication::screenAt(QCursor::pos());
-    if (!screen) {
-        screen = QGuiApplication::primaryScreen();
-    }
+    // The Control Center belongs on the primary (center HDMI) display. Tray
+    // geometry can resolve to another screen, and the pointer may be there
+    // while the user works, so neither should choose the popup's destination.
+    QScreen *screen = QGuiApplication::primaryScreen();
     if (!screen) {
         return;
     }
@@ -156,8 +152,6 @@ void TrayController::positionWindow()
     constexpr int referencePanelRightInset = 13;
     const int panelWidth = m_window->width() - panelRightGutter;
     const int x = rightEdge - panelWidth - referencePanelRightInset + 1;
-    const int y = trayGeometry.isValid() && !trayGeometry.isEmpty()
-        ? trayGeometry.y() + trayGeometry.height() + 5
-        : screen->geometry().y() + 41;
+    const int y = available.y() + 5;
     m_window->setPosition(x, y);
 }

@@ -17,20 +17,22 @@ OUTPUT = ROOT / "app/control-center-blur-window-region.png"
 WIDTH, HEIGHT = 304, 496
 SCALE = 4
 
-# Window coordinates match the right-aligned standalone panel.
+# Keep these footprints in sync with the default card positions in
+# contents/ui/components/ControlCenterPanel.qml. A stale mask shifts KWin's
+# blur/refraction away from the visible capsules, most noticeably lower down.
 CARDS = (
-    (0, 0, 140, 62, 31, 2.0),        # Wi-Fi
-    (152, 0, 140, 139, 33, 3.0),     # Media
-    (0, 75, 140, 64, 32, 2.0),       # Bluetooth
-    (0, 151, 140, 62, 31, 2.0),      # AirDrop
-    (152, 151, 64, 64, 32, 2.0),     # Stage Manager
-    (228, 151, 64, 64, 32, 2.0),     # Screen Mirroring
-    (0, 228, 64, 64, 32, 2.0),       # Appearance
-    (76, 228, 64, 64, 32, 2.0),      # Screenshot
-    (152, 228, 140, 64, 32, 2.0),    # Focus
-    (0, 303, 292, 64, 29, 3.0),      # Display
-    (0, 378, 292, 64, 29, 3.0),      # Sound
-    (99, 457, 94, 25, 12.5, 2.0),    # Edit Controls
+    (17, 0, 134, 60, 30, 2.0),       # Wi-Fi
+    (158, 0, 129, 131, 33, 3.0),     # Media
+    (17, 70, 134, 58, 29, 2.0),      # Bluetooth
+    (17, 142, 132, 59, 29.5, 2.0),   # AirDrop
+    (158, 142, 63, 63, 31.5, 2.0),   # Stage Manager
+    (220, 142, 65, 65, 32.5, 2.0),   # Screen Mirroring
+    (17, 218, 59, 59, 29.5, 2.0),    # Appearance
+    (89, 218, 59, 59, 29.5, 2.0),    # Screenshot
+    (158, 218, 130, 59, 29.5, 2.0), # Focus
+    (16, 291, 271, 63, 29, 3.0),    # Display
+    (16, 364, 271, 63, 29, 3.0),    # Sound
+    (116, 438, 100, 23, 11.5, 2.0), # Edit Controls
 )
 
 

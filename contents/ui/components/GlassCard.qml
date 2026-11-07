@@ -15,7 +15,7 @@ Item {
     property color solidColor: "#ffffff"
     // Keep a restrained live backdrop blur inside each capsule; the faint
     // exterior falloff below softens edges without adding a specular flare.
-    property real glassBlurRadius: 10
+    property real glassBlurRadius: 2
     property int glassBlurAlgorithm: 1
     property real glassTintStrength: 0.0
     property real glassRefractionThickness: 35
@@ -27,7 +27,7 @@ Item {
     // A faint progressive 6 px backdrop blur softens the silhouette without
     // adding the bright flare/reflection that was removed from the prototype.
     property real glassOuterBlurStrength: 0.20
-    property real glassInnerBlurMix: 1.0
+    property real glassInnerBlurMix: 0.10
     default property alias contentData: content.data
 
     SquircleSurface {
